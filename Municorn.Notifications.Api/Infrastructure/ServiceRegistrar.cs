@@ -12,7 +12,8 @@ namespace Municorn.Notifications.Api.Infrastructure
     {
         internal static void ConfigureServices(IServiceCollection serviceCollection)
         {
-            serviceCollection.RegisterWaiter()
+            serviceCollection
+                .RegisterWaiter()
                 .AddSingleton<NotificationStatusRepository>()
                 .AddSingleton<AndroidNotificationSender>()
                 .AddSingleton<IosNotificationSender>()
