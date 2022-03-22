@@ -5,8 +5,8 @@ namespace Municorn.Notifications.Api.NotificationFeature.View
     [PrimaryConstructor]
     public partial class NotificationRequestConverter : INotificationRequestConverter
     {
-        private readonly IosNotificationSender iosNotificationSender;
-        private readonly AndroidNotificationSender androidNotificationSender;
+        private readonly INotificationSender<IosNotificationData> iosNotificationSender;
+        private readonly INotificationSender<AndroidNotificationData> androidNotificationSender;
 
         public INotification Visit(IosSendNotificationRequest request)
         {
@@ -15,7 +15,7 @@ namespace Municorn.Notifications.Api.NotificationFeature.View
                 IsBackground = request.IsBackground,
                 Priority = request.Priority,
             };
-            return new IosNotification(this.iosNotificationSender, iosNotification);
+            return Notification.Create(iosNotification, this.iosNotificationSender);
         }
 
         public INotification Visit(AndroidSendNotificationRequest request)
@@ -24,7 +24,7 @@ namespace Municorn.Notifications.Api.NotificationFeature.View
             {
                 Condition = request.Condition,
             };
-            return new AndroidNotification(this.androidNotificationSender, androidNotification);
+            return Notification.Create(androidNotification, this.androidNotificationSender);
         }
     }
 }

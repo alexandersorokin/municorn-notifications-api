@@ -3,10 +3,11 @@
 namespace Municorn.Notifications.Api.NotificationFeature.App
 {
     [PrimaryConstructor]
-    internal partial class IosNotification : INotification
+    internal partial class Notification<TData, TSender> : INotification
+        where TSender : INotificationSender<TData>
     {
-        private readonly IosNotificationSender notificationSender;
-        private readonly IosNotificationData notificationData;
+        private readonly TData notificationData;
+        private readonly TSender notificationSender;
 
         public async Task<SendResult> Send()
         {

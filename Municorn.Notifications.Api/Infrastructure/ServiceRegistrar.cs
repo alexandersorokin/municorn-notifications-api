@@ -3,7 +3,6 @@ using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.Infrastructure.Swagger;
 using Municorn.Notifications.Api.NotificationFeature.App;
-using Municorn.Notifications.Api.NotificationFeature.Data;
 using Municorn.Notifications.Api.NotificationFeature.View;
 
 namespace Municorn.Notifications.Api.Infrastructure
@@ -14,11 +13,7 @@ namespace Municorn.Notifications.Api.Infrastructure
         {
             serviceCollection
                 .RegisterWaiter()
-                .AddSingleton<NotificationStatusRepository>()
-                .AddSingleton<AndroidNotificationSender>()
-                .AddSingleton<IosNotificationSender>()
-                .AddSingleton<INotificationRequestConverter, NotificationRequestConverter>()
-
+                .RegisterRequestConverter()
                 .RegisterSwagger()
 
                 .AddControllers()

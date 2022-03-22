@@ -24,8 +24,8 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
                 .AddSingleton<NotificationStatusRepository>()
                 .RegisterLogSniffer()
                 .RegisterMicrosoftLogger()
-                .AddScoped<AndroidNotificationSender>()
-                .AddScoped<IosNotificationSender>()
+                .AddScoped<INotificationSender<AndroidNotificationData>, AndroidNotificationSender>()
+                .AddScoped<INotificationSender<IosNotificationData>, IosNotificationSender>()
                 .AddScoped<NotificationRequestConverter>();
         }
 

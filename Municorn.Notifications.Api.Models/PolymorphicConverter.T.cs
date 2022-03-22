@@ -58,13 +58,13 @@ namespace Municorn.Notifications.Api
             }
 
             var readerCopy = reader;
-            var discriminatorValue = GetDiscriminatorValue(ref reader);
+            var discriminatorValue = GetDiscriminatorValue(ref readerCopy);
             if (!DiscriminatorToTypeMap.TryGetValue(discriminatorValue, out var targetType))
             {
                 throw new JsonException($"Discriminator value {discriminatorValue} is not supported");
             }
 
-            return (T?)JsonSerializer.Deserialize(ref readerCopy, targetType, options);
+            return (T?)JsonSerializer.Deserialize(ref reader, targetType, options);
         }
 
         private static string GetDiscriminatorValue(ref Utf8JsonReader reader)

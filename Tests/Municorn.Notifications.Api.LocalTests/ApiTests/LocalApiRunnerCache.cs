@@ -5,12 +5,12 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
     [PrimaryConstructor]
     internal partial class LocalApiRunnerCache
     {
-        private readonly SetupFixtureProvider<GlobalCache> lifecycleManagerProvider;
+        private readonly SetupFixtureProvider<GlobalCache> cacheProvider;
         private readonly LocalApiRunner runner;
 
         public async Task<LocalApi> Start()
         {
-            return await this.lifecycleManagerProvider
+            return await this.cacheProvider
                 .GetSetupFixture()
                 .GetOrCreate(() => this.runner.Start())
                 .ConfigureAwait(false);

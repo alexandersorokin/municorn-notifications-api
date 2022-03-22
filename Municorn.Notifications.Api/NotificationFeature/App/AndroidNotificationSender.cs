@@ -7,7 +7,7 @@ using Municorn.Notifications.Api.NotificationFeature.Data;
 namespace Municorn.Notifications.Api.NotificationFeature.App
 {
     [PrimaryConstructor]
-    public partial class AndroidNotificationSender
+    public partial class AndroidNotificationSender : INotificationSender<AndroidNotificationData>
     {
         private readonly ILogger<AndroidNotificationSender> logger;
         private readonly NotificationStatusRepository statusRepository;

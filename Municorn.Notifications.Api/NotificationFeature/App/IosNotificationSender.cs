@@ -7,7 +7,7 @@ using Municorn.Notifications.Api.NotificationFeature.Data;
 namespace Municorn.Notifications.Api.NotificationFeature.App
 {
     [PrimaryConstructor]
-    public partial class IosNotificationSender
+    public partial class IosNotificationSender : INotificationSender<IosNotificationData>
     {
         private readonly ILogger<IosNotificationSender> logger;
         private readonly NotificationStatusRepository statusRepository;
