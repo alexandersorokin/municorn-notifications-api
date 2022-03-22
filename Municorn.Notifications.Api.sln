@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32106.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Municorn.Notifications.Api", "Municorn.Notifications.Api\Municorn.Notifications.Api.csproj", "{C2E967A6-08C1-47DF-B9F3-67BBE9F397B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Municorn.Notifications.Api.Runner", "Municorn.Notifications.Api.Runner\Municorn.Notifications.Api.Runner.csproj", "{98CD1AC0-F6C3-4F9B-9DC0-FE630758B8DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Municorn.Notifications.Api.Client", "Municorn.Notifications.Api.Client\Municorn.Notifications.Api.Client.csproj", "{DF6A188D-DE93-459C-9C9F-532EF97B1FD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Municorn.Notifications.Api.Models", "Municorn.Notifications.Api.Models\Municorn.Notifications.Api.Models.csproj", "{C9F16B0F-D358-471F-ABAD-7DA018BC90C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Municorn.Notifications.Api.LocalTests", "Tests\Municorn.Notifications.Api.LocalTests\Municorn.Notifications.Api.LocalTests.csproj", "{EB5E383B-20FE-4AF3-9896-478D5C27ECE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Municorn.Notifications.Api.RemoteTests", "Tests\Municorn.Notifications.Api.RemoteTests\Municorn.Notifications.Api.RemoteTests.csproj", "{1E287005-322C-45FE-ADCF-301C46B052E2}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Municorn.Notifications.Api.CommonTests", "Tests\Municorn.Notifications.Api.CommonTests\Municorn.Notifications.Api.CommonTests.shproj", "{4FCD9AF7-346B-4C3F-81B0-52E43C9BAA5D}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Tests\Municorn.Notifications.Api.CommonTests\Municorn.Notifications.Api.CommonTests.projitems*{1e287005-322c-45fe-adcf-301c46b052e2}*SharedItemsImports = 5
+		Tests\Municorn.Notifications.Api.CommonTests\Municorn.Notifications.Api.CommonTests.projitems*{4fcd9af7-346b-4c3f-81b0-52e43c9baa5d}*SharedItemsImports = 13
+		Tests\Municorn.Notifications.Api.CommonTests\Municorn.Notifications.Api.CommonTests.projitems*{eb5e383b-20fe-4af3-9896-478d5c27ece1}*SharedItemsImports = 5
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C2E967A6-08C1-47DF-B9F3-67BBE9F397B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2E967A6-08C1-47DF-B9F3-67BBE9F397B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2E967A6-08C1-47DF-B9F3-67BBE9F397B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2E967A6-08C1-47DF-B9F3-67BBE9F397B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98CD1AC0-F6C3-4F9B-9DC0-FE630758B8DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98CD1AC0-F6C3-4F9B-9DC0-FE630758B8DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98CD1AC0-F6C3-4F9B-9DC0-FE630758B8DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98CD1AC0-F6C3-4F9B-9DC0-FE630758B8DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF6A188D-DE93-459C-9C9F-532EF97B1FD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF6A188D-DE93-459C-9C9F-532EF97B1FD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF6A188D-DE93-459C-9C9F-532EF97B1FD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF6A188D-DE93-459C-9C9F-532EF97B1FD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9F16B0F-D358-471F-ABAD-7DA018BC90C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9F16B0F-D358-471F-ABAD-7DA018BC90C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9F16B0F-D358-471F-ABAD-7DA018BC90C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9F16B0F-D358-471F-ABAD-7DA018BC90C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB5E383B-20FE-4AF3-9896-478D5C27ECE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB5E383B-20FE-4AF3-9896-478D5C27ECE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB5E383B-20FE-4AF3-9896-478D5C27ECE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB5E383B-20FE-4AF3-9896-478D5C27ECE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E287005-322C-45FE-ADCF-301C46B052E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E287005-322C-45FE-ADCF-301C46B052E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E287005-322C-45FE-ADCF-301C46B052E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E287005-322C-45FE-ADCF-301C46B052E2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3BDBC8C4-FD2D-4F1E-B959-E37EB831419C}
+	EndGlobalSection
+EndGlobal

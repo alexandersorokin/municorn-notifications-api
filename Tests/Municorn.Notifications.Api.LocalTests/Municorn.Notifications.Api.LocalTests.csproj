@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Municorn.Notifications.Api.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="6.5.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="NUnit" Version="3.13.2" />
+    <PackageReference Include="Vostok.Logging.Microsoft" Version="2.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Municorn.Notifications.Api.Client\Municorn.Notifications.Api.Client.csproj" />
+    <ProjectReference Include="..\..\Municorn.Notifications.Api\Municorn.Notifications.Api.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\Municorn.Notifications.Api.CommonTests\Municorn.Notifications.Api.CommonTests.projitems" Label="Shared" />
+
+</Project>

@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Municorn.Notifications.Api</RootNamespace>
+    <DefineConstants>JETBRAINS_ANNOTATIONS</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
+    <PackageReference Include="Kontur.Results" Version="1.0.1" />
+    <PackageReference Include="PrimaryConstructor" Version="1.4.0" />
+    <PackageReference Include="Vostok.ClusterClient.Core" Version="0.1.41" />
+    <PackageReference Include="Vostok.ClusterClient.Transport" Version="0.1.23" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Municorn.Notifications.Api.Models\Municorn.Notifications.Api.Models.csproj" />
+  </ItemGroup>
+
+</Project>

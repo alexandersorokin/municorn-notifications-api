@@ -1,0 +1,101 @@
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.NotificationFeature.App;
+using Municorn.Notifications.Api.NotificationFeature.Data;
+using Municorn.Notifications.Api.Tests.DependencyInjection;
+using NUnit.Framework;
+
+namespace Municorn.Notifications.Api.Tests.IntegrationTests
+{
+    [TestFixture]
+    [DependencyInjectionContainer]
+    internal class AndroidNotificationSender_Should : IConfigureServices
+    {
+        public void ConfigureServices(IServiceCollection serviceCollection) =>
+            serviceCollection
+                .RegisterWaiter()
+                .AddSingleton<NotificationStatusRepository>()
+                .RegisterLogSniffer()
+                .RegisterMicrosoftLogger()
+                .AddScoped<AndroidNotificationSender>();
+
+        [Test]
+        public async Task Deliver_Message()
+        {
+            var result = await this.ResolveService<AndroidNotificationSender>()
+                .Send(new("token", "message", "title"))
+                .ConfigureAwait(false);
+
+            result.Delivered.Should().BeTrue();
+        }
+
+        [Test]
+        public async Task Not_Deliver_Fifth_Message()
+        {
+            var sender = this.ResolveService<AndroidNotificationSender>();
+            AndroidNotificationData data = new("token", "message", "title");
+
+            await sender.Send(data).ConfigureAwait(false);
+            await sender.Send(data).ConfigureAwait(false);
+            await sender.Send(data).ConfigureAwait(false);
+            await sender.Send(data).ConfigureAwait(false);
+            var result = await sender.Send(data).ConfigureAwait(false);
+
+            result.Delivered.Should().BeFalse();
+        }
+
+        [Test]
+        public async Task Save_Status_To_Repository()
+        {
+            var result = await this.ResolveService<AndroidNotificationSender>()
+                .Send(new("token", "message", "title"))
+                .ConfigureAwait(false);
+
+            var status = this.ResolveService<NotificationStatusRepository>().GetStatus(result.Id);
+
+            status.HasSome.Should().BeTrue();
+        }
+
+        [Test]
+        public async Task Write_Message_To_Log()
+        {
+            var token = Guid.NewGuid().ToString();
+            var message = Guid.NewGuid().ToString();
+            var title = Guid.NewGuid().ToString();
+            var condition = Guid.NewGuid().ToString();
+            AndroidNotificationData data = new(token, message, title)
+            {
+                Condition = condition,
+            };
+
+            await this.ResolveService<AndroidNotificationSender>().Send(data).ConfigureAwait(false);
+
+            var expectedMessages = new[]
+            {
+                token,
+                message,
+                title,
+                condition,
+            };
+            this
+                .ResolveService<LogMessageContainer>()
+                .GetMessages()
+                .Should()
+                .Contain(logMessage => expectedMessages.All(logMessage.Contains));
+        }
+
+        [Test]
+        public async Task Write_Sender_Name_To_Log()
+        {
+            await this.ResolveService<AndroidNotificationSender>()
+                .Send(new("token", "message", "title"))
+                .ConfigureAwait(false);
+
+            var sniffer = this.ResolveService<LogMessageContainer>();
+            sniffer.GetMessages().Should().Contain(logMessage => logMessage.Contains("AndroidSender"));
+        }
+    }
+}

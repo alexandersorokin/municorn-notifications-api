@@ -1,0 +1,5 @@
+[*.{cs,tt}]
+
+dotnet_diagnostic.SA1201.severity = none
+
+dotnet_diagnostic.S3433.severity = none

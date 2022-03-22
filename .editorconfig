@@ -1,0 +1,46 @@
+; 4-column space indentation
+[*]
+indent_style = space
+
+[*.{cs,tt}]
+indent_size = 4
+
+dotnet_diagnostic.CA1000.severity = none
+
+dotnet_diagnostic.CA1032.severity = none
+
+dotnet_diagnostic.CA1062.severity = none
+
+dotnet_diagnostic.CA1303.severity = none
+
+dotnet_diagnostic.CA5394.severity = none
+
+dotnet_diagnostic.CA1812.severity = none
+
+dotnet_diagnostic.CA1822.severity = none
+
+dotnet_diagnostic.IDE0003.severity = none
+
+dotnet_diagnostic.SA1028.severity = error
+
+dotnet_diagnostic.SA1135.severity = none
+
+dotnet_diagnostic.SA1518.severity = error
+
+dotnet_diagnostic.SA1600.severity = none
+
+dotnet_diagnostic.SA1601.severity = none
+
+dotnet_diagnostic.SA1602.severity = none
+
+dotnet_diagnostic.S1128.severity = error
+
+dotnet_diagnostic.S2743.severity = none
+
+dotnet_diagnostic.S3925.severity = none
+
+[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
+indent_size = 2
+
+[*.{props,targets,ruleset,config,nuspec,resx,vsixmanifest,vsct}]
+indent_size = 2
