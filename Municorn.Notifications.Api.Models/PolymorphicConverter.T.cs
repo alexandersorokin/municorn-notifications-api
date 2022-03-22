@@ -19,8 +19,7 @@ namespace Municorn.Notifications.Api
             .ToDictionary(pair => pair.attribute.Value, t => t.type);
 
         private static readonly IReadOnlyDictionary<Type, string> TypeToDiscriminatorMap = DiscriminatorToTypeMap.Keys.ToDictionary(
-            discriminator => DiscriminatorToTypeMap[discriminator],
-            discriminator => discriminator);
+            discriminator => DiscriminatorToTypeMap[discriminator]);
 
         public override bool CanConvert(Type typeToConvert)
         {
