@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
+using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.Tests.DependencyInjection
 {
@@ -50,19 +51,26 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
 
         public void AfterTest(ITest test)
         {
-            if (test.IsSuite)
+            try
             {
-                if (this.serviceProvider is null)
+                if (test.IsSuite)
                 {
-                    throw new InvalidOperationException($"Service provider is not found for test {test}");
-                }
+                    if (this.serviceProvider is null)
+                    {
+                        throw new InvalidOperationException($"Service provider is not found for test {test}");
+                    }
 
-                DisposeAsync(this.serviceProvider).GetAwaiter().GetResult();
+                    DisposeAsync(this.serviceProvider).GetAwaiter().GetResult();
+                }
+                else
+                {
+                    test.GetScope().Dispose();
+                    test.RemoveScope();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                test.GetScope().Dispose();
-                test.RemoveScope();
+                TestExecutionContext.CurrentContext.CurrentResult.RecordTearDownException(ex);
             }
         }
 
