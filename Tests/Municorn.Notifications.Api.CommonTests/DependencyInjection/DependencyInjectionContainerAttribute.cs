@@ -12,6 +12,12 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
     [AttributeUsage(AttributeTargets.Class)]
     internal sealed class DependencyInjectionContainerAttribute : NUnitAttribute, ITestAction
     {
+        private static readonly ServiceProviderOptions Options = new ServiceProviderOptions
+        {
+            ValidateOnBuild = true,
+            ValidateScopes = true,
+        };
+
         private ServiceProvider? serviceProvider;
 
         public ActionTargets Targets => ActionTargets.Suite | ActionTargets.Test;
@@ -27,12 +33,8 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             {
                 ServiceCollection serviceCollection = new();
                 configureServices.ConfigureServices(serviceCollection);
-                this.serviceProvider = serviceCollection.BuildServiceProvider(new ServiceProviderOptions
-                {
-                    ValidateOnBuild = true,
-                    ValidateScopes = true,
-                });
 
+                this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
                 InitializeSingletonFields(configureServices, this.serviceProvider);
             }
             else
