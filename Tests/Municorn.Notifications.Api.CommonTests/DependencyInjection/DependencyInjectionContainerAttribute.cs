@@ -60,7 +60,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
                         throw new InvalidOperationException($"Service provider is not found for test {test}");
                     }
 
-                    DisposeAsync(this.serviceProvider).GetAwaiter().GetResult();
+                    ConvertValueTaskToTask(this.serviceProvider).GetAwaiter().GetResult();
                 }
                 else
                 {
@@ -74,9 +74,9 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             }
         }
 
-        private static async Task DisposeAsync(ServiceProvider serviceProvider)
+        private static async Task ConvertValueTaskToTask(IAsyncDisposable asyncDisposable)
         {
-            await serviceProvider.DisposeAsync().ConfigureAwait(false);
+            await asyncDisposable.DisposeAsync().ConfigureAwait(false);
         }
 
         private static void InitializeSingletonFields(IConfigureServices testFixture, IServiceProvider serviceProvider)
