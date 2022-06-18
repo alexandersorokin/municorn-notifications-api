@@ -12,7 +12,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
     [AttributeUsage(AttributeTargets.Interface)]
     internal sealed class DependencyInjectionContainerAttribute : NUnitAttribute, ITestAction
     {
-        private static readonly ServiceProviderOptions Options = new ServiceProviderOptions
+        private static readonly ServiceProviderOptions Options = new()
         {
             ValidateOnBuild = true,
             ValidateScopes = true,
