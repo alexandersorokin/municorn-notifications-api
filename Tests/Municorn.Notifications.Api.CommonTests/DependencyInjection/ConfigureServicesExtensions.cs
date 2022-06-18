@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.Tests.DependencyInjection
@@ -16,7 +17,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             where TService : notnull
         {
             return Storage
-                .GetOrCreateValue(configureServices)
+                .GetValue(configureServices, _ => throw new InvalidOperationException($"Fixture {configureServices} doesn't contain scopes"))
                 .GetResolveService<TService>(TestExecutionContext.CurrentContext.CurrentTest);
         }
     }
