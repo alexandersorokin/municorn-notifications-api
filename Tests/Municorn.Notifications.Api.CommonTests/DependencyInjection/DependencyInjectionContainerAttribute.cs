@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -18,36 +18,19 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             ValidateScopes = true,
         };
 
-        private ServiceProvider? serviceProvider;
+        private FixtureData? fixtureData;
 
         public ActionTargets Targets => ActionTargets.Suite | ActionTargets.Test;
 
         public void BeforeTest(ITest test)
         {
-            if (test.Fixture is not IConfigureServices configureServices)
-            {
-                throw new InvalidOperationException($"TestFixture {test.Fixture} do not implement {nameof(IConfigureServices)}");
-            }
-
             if (test.IsSuite)
             {
-                ServiceCollection serviceCollection = new();
-                configureServices.ConfigureServices(serviceCollection);
-
-                this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
-                InitializeSingletonFields(configureServices, this.serviceProvider);
+                this.BeforeTestSuite(test);
             }
             else
             {
-                if (this.serviceProvider is null)
-                {
-                    throw new InvalidOperationException($"Service provider is not found in fixture {configureServices}");
-                }
-
-#pragma warning disable CA2000 // Dispose objects before losing scope
-                var serviceScope = this.serviceProvider.CreateScope();
-#pragma warning restore CA2000 // Dispose objects before losing scope
-                test.SaveScope(serviceScope);
+                this.BeforeTestCase(test);
             }
         }
 
@@ -55,31 +38,12 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
         {
             if (test.IsSuite)
             {
-                // workaround https://github.com/nunit/nunit/issues/2938
-                try
-                {
-                    if (this.serviceProvider is null)
-                    {
-                        throw new InvalidOperationException($"Service provider is not found for test {test}");
-                    }
-
-                    ConvertValueTaskToTask(this.serviceProvider).GetAwaiter().GetResult();
-                }
-                catch (Exception ex)
-                {
-                    TestExecutionContext.CurrentContext.CurrentResult.RecordTearDownException(ex);
-                }
+                this.AfterTestSuite(test);
             }
             else
             {
-                test.GetScope().Dispose();
-                test.RemoveScope();
+                this.AfterTestCase(test);
             }
-        }
-
-        private static async Task ConvertValueTaskToTask(IAsyncDisposable asyncDisposable)
-        {
-            await asyncDisposable.DisposeAsync().ConfigureAwait(false);
         }
 
         private static void InitializeSingletonFields(IConfigureServices testFixture, IServiceProvider serviceProvider)
@@ -95,5 +59,63 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
                 field.SetValue(testFixture, value);
             }
         }
+
+        private void BeforeTestSuite(ITest test)
+        {
+            var testFixture = test.Fixture;
+            if (testFixture is not IConfigureServices configureServices)
+            {
+                throw new InvalidOperationException($"Test {test} with fixture {testFixture} do not implement {nameof(IConfigureServices)}");
+            }
+
+            ServiceCollection serviceCollection = new();
+            configureServices.ConfigureServices(serviceCollection);
+
+            var serviceProvider = serviceCollection.BuildServiceProvider(Options);
+            InitializeSingletonFields(configureServices, serviceProvider);
+
+            this.fixtureData = new(configureServices, serviceProvider);
+        }
+
+        private void BeforeTestCase(ITest test)
+        {
+            var (fixture, serviceProvider) = this.EnsureFixtureDataInitialized(test);
+#pragma warning disable CA2000 // Dispose objects before losing scope
+            var serviceScope = serviceProvider.CreateAsyncScope();
+#pragma warning restore CA2000 // Dispose objects before losing scope
+            fixture.AddScope(test, serviceScope);
+        }
+
+        private void AfterTestCase(ITest test)
+        {
+            this.EnsureFixtureDataInitialized(test)
+                .Fixture
+                .DisposeScope(test);
+        }
+
+        private void AfterTestSuite(ITest test)
+        {
+            // workaround https://github.com/nunit/nunit/issues/2938
+            try
+            {
+                this.EnsureFixtureDataInitialized(test)
+                    .ServiceProvider
+                    .DisposeSynchronously();
+            }
+            catch (Exception ex)
+            {
+                TestExecutionContext.CurrentContext.CurrentResult.RecordTearDownException(ex);
+            }
+        }
+
+        [MemberNotNull(nameof(fixtureData))]
+        private FixtureData EnsureFixtureDataInitialized(ITest test)
+        {
+            return this.fixtureData is { } result
+                ? result
+                : throw new InvalidOperationException($"Fixture data is not initialized for {test}");
+        }
+
+        private record FixtureData(IConfigureServices Fixture, ServiceProvider ServiceProvider);
     }
 }
