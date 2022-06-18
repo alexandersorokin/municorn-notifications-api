@@ -17,7 +17,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             }
         }
 
-        internal TService GetResolveService<TService>(ITest test)
+        internal TService ResolveService<TService>(ITest test)
             where TService : notnull
         {
             return this.serviceScopes.TryGetValue(test, out var serviceScope)

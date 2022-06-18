@@ -18,7 +18,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
         {
             return Storage
                 .GetValue(configureServices, _ => throw new InvalidOperationException($"Fixture {configureServices} doesn't contain scopes"))
-                .GetResolveService<TService>(TestExecutionContext.CurrentContext.CurrentTest);
+                .ResolveService<TService>(TestExecutionContext.CurrentContext.CurrentTest);
         }
     }
 }
