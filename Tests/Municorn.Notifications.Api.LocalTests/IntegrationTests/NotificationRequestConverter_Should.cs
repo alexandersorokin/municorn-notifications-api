@@ -16,8 +16,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     [TestFixture]
     internal class NotificationRequestConverter_Should : IConfigureServices
     {
-        public void ConfigureServices(IServiceCollection serviceCollection)
-        {
+        public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
                 .RegisterWaiter()
                 .AddSingleton<NotificationStatusRepository>()
@@ -26,7 +25,6 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
                 .AddScoped<INotificationSender<AndroidNotificationData>, AndroidNotificationSender>()
                 .AddScoped<INotificationSender<IosNotificationData>, IosNotificationSender>()
                 .AddScoped<NotificationRequestConverter>();
-        }
 
         private static IEnumerable<TestCaseData> Cases
         {

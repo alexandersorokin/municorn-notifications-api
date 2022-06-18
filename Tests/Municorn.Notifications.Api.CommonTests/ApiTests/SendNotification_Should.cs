@@ -4,7 +4,6 @@ using Kontur.Results;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.Tests.DependencyInjection;
 using NUnit.Framework;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.Tests.ApiTests
 {
@@ -14,11 +13,7 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
         [TestDependency]
         private readonly ClientFactory clientFactory = default!;
 
-        public void ConfigureServices(IServiceCollection serviceCollection) =>
-            serviceCollection
-                .AddSingleton<ILog>(NUnitLog.CreateContextual())
-                .RegisterClientTopologyFactory()
-                .AddSingleton<ClientFactory>();
+        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterClientFactory();
 
         public static readonly SendNotificationRequest[] CorrectNotifications =
         {

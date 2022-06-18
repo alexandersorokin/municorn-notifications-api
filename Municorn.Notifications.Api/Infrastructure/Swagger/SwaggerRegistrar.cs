@@ -10,9 +10,8 @@ namespace Municorn.Notifications.Api.Infrastructure.Swagger
 {
     internal static class SwaggerRegistrar
     {
-        internal static IServiceCollection RegisterSwagger(this IServiceCollection serviceCollection)
-        {
-            return serviceCollection
+        internal static IServiceCollection RegisterSwagger(this IServiceCollection serviceCollection) =>
+            serviceCollection
                 .AddSingleton<IPropertiesProvider, CachedPropertiesProvider>()
                 .AddSingleton<IPrimaryConstructorProvider, PrimaryConstructorProvider>()
                 .AddSwaggerGen(
@@ -53,6 +52,5 @@ namespace Municorn.Notifications.Api.Infrastructure.Swagger
 
                 .AddFluentValidationRulesToSwagger()
                 .AddSingleton<FluentValidationRule, NotEmptyFluentValidationRule>();
-        }
     }
 }

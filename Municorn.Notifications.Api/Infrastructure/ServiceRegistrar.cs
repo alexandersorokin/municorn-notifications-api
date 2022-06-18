@@ -9,8 +9,7 @@ namespace Municorn.Notifications.Api.Infrastructure
 {
     internal static class ServiceRegistrar
     {
-        internal static void ConfigureServices(IServiceCollection serviceCollection)
-        {
+        internal static void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
                 .RegisterWaiter()
                 .RegisterRequestConverter()
@@ -28,6 +27,5 @@ namespace Municorn.Notifications.Api.Infrastructure
                     x.ImplicitlyValidateChildProperties = true;
                     x.RegisterValidatorsFromAssemblyContaining<NotificationsController>(lifetime: ServiceLifetime.Singleton);
                 });
-        }
     }
 }
