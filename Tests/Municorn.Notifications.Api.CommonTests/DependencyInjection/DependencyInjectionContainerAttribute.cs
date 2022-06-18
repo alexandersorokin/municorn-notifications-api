@@ -53,9 +53,10 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
 
         public void AfterTest(ITest test)
         {
-            try
+            if (test.IsSuite)
             {
-                if (test.IsSuite)
+                // workaround https://github.com/nunit/nunit/issues/2938
+                try
                 {
                     if (this.serviceProvider is null)
                     {
@@ -64,15 +65,15 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
 
                     ConvertValueTaskToTask(this.serviceProvider).GetAwaiter().GetResult();
                 }
-                else
+                catch (Exception ex)
                 {
-                    test.GetScope().Dispose();
-                    test.RemoveScope();
+                    TestExecutionContext.CurrentContext.CurrentResult.RecordTearDownException(ex);
                 }
             }
-            catch (Exception ex)
+            else
             {
-                TestExecutionContext.CurrentContext.CurrentResult.RecordTearDownException(ex);
+                test.GetScope().Dispose();
+                test.RemoveScope();
             }
         }
 
