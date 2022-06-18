@@ -19,7 +19,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
         };
 
         private ServiceProvider? serviceProvider;
-        private FixtureTestCaseServiceScopeMap? scopeMap;
+        private TestCaseServiceScopeMap? scopeMap;
 
         public ActionTargets Targets => ActionTargets.Suite | ActionTargets.Test;
 
@@ -79,7 +79,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             var testFixture = test.Fixture;
             if (testFixture is not IConfigureServices configureServices)
             {
-                throw new InvalidOperationException($"Test {test} with fixture {testFixture} do not implement {nameof(IConfigureServices)}");
+                throw new InvalidOperationException($"Test {test.FullName} with fixture {testFixture} do not implement {nameof(IConfigureServices)}");
             }
 
             ServiceCollection serviceCollection = new();
@@ -118,19 +118,15 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
         }
 
         [MemberNotNull(nameof(scopeMap))]
-        private FixtureTestCaseServiceScopeMap GetScopeMap(ITest test)
+        private TestCaseServiceScopeMap GetScopeMap(ITest test)
         {
-            return this.scopeMap is { } result
-                ? result
-                : throw new InvalidOperationException($"Fixture scope map is not initialized for {test}");
+            return this.scopeMap ?? throw new InvalidOperationException($"Fixture scope map is not initialized for {test.FullName}");
         }
 
         [MemberNotNull(nameof(serviceProvider))]
         private ServiceProvider GetServiceProvider(ITest test)
         {
-            return this.serviceProvider is { } result
-                ? result
-                : throw new InvalidOperationException($"Service provider is not initialized for {test}");
+            return this.serviceProvider ?? throw new InvalidOperationException($"Service provider is not initialized for {test.FullName}");
         }
     }
 }

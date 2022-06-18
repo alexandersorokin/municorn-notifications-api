@@ -17,7 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ApiTests\ServiceCollectionClientFactoryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AsyncEnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ConfigureServicesExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\FixtureTestCaseServiceScopeMap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\TestCaseServiceScopeMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\DependencyInjectionContainerAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\IConfigureServices.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\TestDependencyAttribute.cs" />

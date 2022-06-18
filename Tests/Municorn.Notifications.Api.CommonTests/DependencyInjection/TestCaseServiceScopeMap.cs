@@ -5,7 +5,7 @@ using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.Tests.DependencyInjection
 {
-    internal class FixtureTestCaseServiceScopeMap
+    internal class TestCaseServiceScopeMap
     {
         private readonly ConcurrentDictionary<ITest, AsyncServiceScope> serviceScopes = new();
 
@@ -13,7 +13,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
         {
             if (!this.serviceScopes.TryAdd(test, scope))
             {
-                throw new InvalidOperationException($"Service scope is already added for test {test}");
+                throw new InvalidOperationException($"Service scope is already added for test {test.FullName}");
             }
         }
 
@@ -39,7 +39,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
 
         private static InvalidOperationException CreateNotFoundException(ITest test)
         {
-            return new($"Service scope is not found for test {test}");
+            return new($"Service scope is not found for test {test.FullName}");
         }
     }
 }
