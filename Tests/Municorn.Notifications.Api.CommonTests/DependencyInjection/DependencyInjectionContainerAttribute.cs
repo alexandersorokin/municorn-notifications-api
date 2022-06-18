@@ -18,7 +18,8 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             ValidateScopes = true,
         };
 
-        private FixtureData? fixtureData;
+        private ServiceProvider? serviceProvider;
+        private FixtureTestCaseServiceScopeMap? scopeMap;
 
         public ActionTargets Targets => ActionTargets.Suite | ActionTargets.Test;
 
@@ -71,26 +72,22 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             ServiceCollection serviceCollection = new();
             configureServices.ConfigureServices(serviceCollection);
 
-            var serviceProvider = serviceCollection.BuildServiceProvider(Options);
-            InitializeSingletonFields(configureServices, serviceProvider);
+            this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
+            InitializeSingletonFields(configureServices, this.serviceProvider);
 
-            this.fixtureData = new(configureServices, serviceProvider);
+            this.scopeMap = new();
+            configureServices.SaveMap(this.scopeMap);
         }
 
         private void BeforeTestCase(ITest test)
         {
-            var (fixture, serviceProvider) = this.EnsureFixtureDataInitialized(test);
-#pragma warning disable CA2000 // Dispose objects before losing scope
-            var serviceScope = serviceProvider.CreateAsyncScope();
-#pragma warning restore CA2000 // Dispose objects before losing scope
-            fixture.AddScope(test, serviceScope);
+            var serviceScope = this.GetServiceProvider(test).CreateAsyncScope();
+            this.GetScopeMap(test).AddScope(test, serviceScope);
         }
 
         private void AfterTestCase(ITest test)
         {
-            this.EnsureFixtureDataInitialized(test)
-                .Fixture
-                .DisposeScope(test);
+            this.GetScopeMap(test).DisposeScope(test);
         }
 
         private void AfterTestSuite(ITest test)
@@ -98,9 +95,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             // workaround https://github.com/nunit/nunit/issues/2938
             try
             {
-                this.EnsureFixtureDataInitialized(test)
-                    .ServiceProvider
-                    .DisposeSynchronously();
+                this.GetServiceProvider(test).DisposeSynchronously();
             }
             catch (Exception ex)
             {
@@ -108,14 +103,20 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             }
         }
 
-        [MemberNotNull(nameof(fixtureData))]
-        private FixtureData EnsureFixtureDataInitialized(ITest test)
+        [MemberNotNull(nameof(scopeMap))]
+        private FixtureTestCaseServiceScopeMap GetScopeMap(ITest test)
         {
-            return this.fixtureData is { } result
+            return this.scopeMap is { } result
                 ? result
-                : throw new InvalidOperationException($"Fixture data is not initialized for {test}");
+                : throw new InvalidOperationException($"Fixture scope map is not initialized for {test}");
         }
 
-        private record FixtureData(IConfigureServices Fixture, ServiceProvider ServiceProvider);
+        [MemberNotNull(nameof(serviceProvider))]
+        private ServiceProvider GetServiceProvider(ITest test)
+        {
+            return this.serviceProvider is { } result
+                ? result
+                : throw new InvalidOperationException($"Service provider is not initialized for {test}");
+        }
     }
 }
