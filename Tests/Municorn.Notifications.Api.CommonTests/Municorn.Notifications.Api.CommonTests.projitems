@@ -21,9 +21,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\DependencyInjectionContainerAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\IConfigureServices.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\TestDependencyAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Log\NUnitTextWriterProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Log\ITextWriterProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\NUnitTextWriterProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\ITextWriterProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NUnit.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Log\TextWriterLog.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\TextWriterLog.cs" />
   </ItemGroup>
 </Project>

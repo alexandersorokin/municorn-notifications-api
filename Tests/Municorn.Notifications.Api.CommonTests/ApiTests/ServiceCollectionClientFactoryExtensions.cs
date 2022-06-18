@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.Tests.Log;
+using Municorn.Notifications.Api.Tests.Logging;
 using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.Tests.ApiTests

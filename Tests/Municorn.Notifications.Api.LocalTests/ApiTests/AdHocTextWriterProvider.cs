@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Municorn.Notifications.Api.Tests.Log;
+using Municorn.Notifications.Api.Tests.Logging;
 
 namespace Municorn.Notifications.Api.Tests.ApiTests
 {

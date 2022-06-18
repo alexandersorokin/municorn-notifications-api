@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Municorn.Notifications.Api.Tests.Log;
+using Municorn.Notifications.Api.Tests.Logging;
 using Vostok.Logging.Abstractions;
 using Vostok.Logging.Microsoft;
 
