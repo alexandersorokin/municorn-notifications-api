@@ -9,7 +9,7 @@ using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.Tests.DependencyInjection
 {
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Interface)]
     internal sealed class DependencyInjectionContainerAttribute : NUnitAttribute, ITestAction
     {
         private static readonly ServiceProviderOptions Options = new ServiceProviderOptions

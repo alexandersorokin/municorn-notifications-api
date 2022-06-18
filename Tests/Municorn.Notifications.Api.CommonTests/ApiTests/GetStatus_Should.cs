@@ -10,7 +10,6 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.Tests.ApiTests
 {
     [TestFixture]
-    [DependencyInjectionContainer]
     internal class GetStatus_Should : IConfigureServices
     {
         [TestDependency]

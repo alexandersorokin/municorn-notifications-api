@@ -11,7 +11,6 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
-    [DependencyInjectionContainer]
     internal class AndroidNotificationSender_Should : IConfigureServices
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
