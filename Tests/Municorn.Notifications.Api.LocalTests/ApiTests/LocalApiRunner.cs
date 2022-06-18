@@ -10,22 +10,21 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
     [PrimaryConstructor]
     internal partial class LocalApiRunner
     {
-        private readonly SetupFixtureProvider<GlobalLifetimeManager> lifecycleManagerProvider;
-        private readonly SetupFixtureProvider<GlobalLog> boundLogProvider;
+        private readonly GlobalLifetimeManager lifecycleManager;
+        private readonly GlobalLog globalLog;
 
         public async Task<LocalApi> Start()
         {
             Uri uri = new($"http://localhost:{GetFreePort()}", UriKind.Absolute);
-            var log = this.boundLogProvider.GetSetupFixture().BoundLog;
             HostSettings settings = new(
                 uri,
-                loggerBuilder => loggerBuilder.AddVostok(log));
+                loggerBuilder => loggerBuilder.AddVostok(this.globalLog.BoundLog));
             var host = NotificationApiApplication.CreateHost(settings);
 
 #pragma warning disable CA2000 // Dispose objects before losing scope
             HostDisposeWrapper hostDisposeWrapper = new(host);
 #pragma warning restore CA2000 // Dispose objects before losing scope
-            this.lifecycleManagerProvider.GetSetupFixture().RegisterForDispose(hostDisposeWrapper);
+            this.lifecycleManager.RegisterForDispose(hostDisposeWrapper);
 
             await host.StartAsync().ConfigureAwait(false);
 

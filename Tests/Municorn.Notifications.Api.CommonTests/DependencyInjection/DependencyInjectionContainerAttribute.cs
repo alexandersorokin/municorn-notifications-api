@@ -47,6 +47,19 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             }
         }
 
+        private static void RegisterFixtures(ITest? currentTest, IServiceCollection serviceCollection)
+        {
+            while (currentTest != null)
+            {
+                if (currentTest.Fixture is { } fixture)
+                {
+                    serviceCollection.AddSingleton(fixture.GetType(), fixture);
+                }
+
+                currentTest = currentTest.Parent;
+            }
+        }
+
         private static void InitializeSingletonFields(IConfigureServices testFixture, IServiceProvider serviceProvider)
         {
             var fields = testFixture
@@ -70,6 +83,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             }
 
             ServiceCollection serviceCollection = new();
+            RegisterFixtures(test, serviceCollection);
             configureServices.ConfigureServices(serviceCollection);
 
             this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
