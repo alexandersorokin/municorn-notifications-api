@@ -19,7 +19,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
         };
 
         private ServiceProvider? serviceProvider;
-        private TestCaseServiceScopeMap? scopeMap;
 
         public ActionTargets Targets => ActionTargets.Suite | ActionTargets.Test;
 
@@ -69,30 +68,29 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
                 throw new InvalidOperationException($"Test {test.FullName} with fixture {testFixture} do not implement {nameof(IConfigureServices)}");
             }
 
-            this.scopeMap = new();
-
             var serviceCollection = new ServiceCollection()
-                .AddSingleton(this.scopeMap)
+                .AddSingleton(new TestCaseServiceScopeMap())
                 .AddSingleton<TestCaseServiceResolver>()
                 .RegisterFixtures(test);
-
             configureServices.ConfigureServices(serviceCollection);
 
             this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
             InitializeSingletonFields(configureServices, this.serviceProvider);
-
             configureServices.SaveServiceResolver(this.serviceProvider.GetRequiredService<TestCaseServiceResolver>());
         }
 
         private void BeforeTestCase(ITest test)
         {
-            var serviceScope = this.GetServiceProvider(test).CreateAsyncScope();
-            this.GetScopeMap(test).AddScope(test, serviceScope);
+            var sp = this.GetServiceProvider(test);
+            var serviceScope = sp.CreateAsyncScope();
+            sp.GetRequiredService<TestCaseServiceScopeMap>().AddScope(test, serviceScope);
         }
 
         private void AfterTestCase(ITest test)
         {
-            this.GetScopeMap(test).DisposeScope(test);
+            this.GetServiceProvider(test)
+                .GetRequiredService<TestCaseServiceScopeMap>()
+                .DisposeScope(test);
         }
 
         private void AfterTestSuite(ITest test)
@@ -106,12 +104,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             {
                 TestExecutionContext.CurrentContext.CurrentResult.RecordTearDownException(ex);
             }
-        }
-
-        [MemberNotNull(nameof(scopeMap))]
-        private TestCaseServiceScopeMap GetScopeMap(ITest test)
-        {
-            return this.scopeMap ?? throw new InvalidOperationException($"Fixture scope map is not initialized for {test.FullName}");
         }
 
         [MemberNotNull(nameof(serviceProvider))]
