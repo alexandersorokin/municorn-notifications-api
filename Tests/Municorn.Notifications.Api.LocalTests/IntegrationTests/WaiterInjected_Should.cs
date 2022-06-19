@@ -20,7 +20,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         [TestCaseInjected(10)]
         [TestCaseInjected(11)]
         [Repeat(3)]
-        public async Task Wait_Less_Than_N_Seconds([Inject] Waiter waiter2, int n, [Inject] Waiter waiter)
+        public async Task Wait_Less_Than_N_Seconds([Inject] Waiter waiter, int n)
         {
             Func<Task> action = waiter.Wait;
 
@@ -36,9 +36,18 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
             await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
         }
 
+        [TestCaseInjected]
+        [Repeat(3)]
+        public async Task Wait_Less_Than_11_Seconds()
+        {
+            Func<Task> action = this.ResolveService<Waiter>().Wait;
+
+            await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(11)).ConfigureAwait(false);
+        }
+
         [TestInjected]
         [Repeat(3)]
-        public async Task Wait_More_Than_N_Milliseconds([Inject] Waiter waiter2, [Values(450, 400)] int milliseconds, [Inject] Waiter waiter)
+        public async Task Wait_More_Than_N_Milliseconds([Inject] Waiter waiter, [Values(450, 400)] int milliseconds)
         {
             var stopwatch = Stopwatch.StartNew();
 

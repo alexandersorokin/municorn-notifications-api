@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework.Interfaces;
 
@@ -9,6 +10,8 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
 {
     internal class TypeInfoWrapper : ITypeInfo
     {
+        private static readonly ConditionalWeakTable<object, ServiceProvider> ServiceProviders = new();
+
         private static readonly ServiceProviderOptions Options = new()
         {
             ValidateOnBuild = true,
@@ -56,17 +59,17 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
 
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);
 
-            var ps = this.implementation.Type
+            var ctorArgs = this.implementation.Type
                 .GetConstructors()
                 .First()
                 .GetParameters()
-                .Select(p => p.ParameterType);
-
-            var ctorArgs = ps
+                .Select(p => p.ParameterType)
                 .Select(type => serviceProvider.GetRequiredService(type))
                 .ToArray();
 
             var fixture = this.implementation.Construct(ctorArgs);
+
+            ServiceProviders.Add(fixture, serviceProvider);
 
             return fixture;
         }
