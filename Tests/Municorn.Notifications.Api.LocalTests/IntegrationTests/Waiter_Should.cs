@@ -22,7 +22,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         [Repeat(3)]
         public async Task Wait_Less_Than_N_Seconds(int n)
         {
-            Func<Task> action = () => this.waiter.Wait();
+            Func<Task> action = this.waiter.Wait;
 
             await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(n)).ConfigureAwait(false);
         }

@@ -17,27 +17,29 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterWaiter();
 
-        [TestInjected(10, "by")]
-        [TestInjected(11)]
+        [TestInjected(10, 1.1f, "by")]
+        [TestInjected(11, 1.2d)]
         [Repeat(3)]
-        public void Wait_Less_Than_N_Seconds<T>(
-            [Values] bool y,
-            [Inject] Waiter waiter2,
-            int n,
-            [Values("string", 777)] T t,
-            [Inject] Waiter waiter,
-            string z = "hello")
+        public void Check_Attribute<T1, T2>(
+            [Inject] ThreadSafeRandomNumberGenerator injectFirst,
+            [Values] bool automaticData,
+            int testCaseData,
+            [Inject] Waiter injectSecond,
+            [Values("string", 777)] T1 automaticInfer,
+            T2 testCaseInfer,
+            string testCaseOptional = "hello")
         {
-            waiter.Should().NotBeNull();
+            injectSecond.Should().NotBeNull();
         }
 
-        [TestInjected]
+        [TestInjected(10)]
+        [TestInjected(11)]
         [Repeat(3)]
-        public async Task Wait_Less_Than_10_Seconds([Inject] Waiter waiter)
+        public async Task Wait_Less_Than_N_Seconds([Inject] Waiter waiter, int n)
         {
             Func<Task> action = waiter.Wait;
 
-            await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
+            await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(n)).ConfigureAwait(false);
         }
 
         [TestInjected]
