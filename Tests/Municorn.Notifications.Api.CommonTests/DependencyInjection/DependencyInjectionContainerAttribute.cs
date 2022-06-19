@@ -69,7 +69,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             }
 
             var serviceCollection = new ServiceCollection()
-                .AddSingleton(new TestCaseServiceScopeMap())
+                .AddSingleton(new TestServiceProviderMap())
                 .AddSingleton<AsyncLocalTestCaseServiceResolver>()
                 .RegisterFixtures(test);
             configureServices.ConfigureServices(serviceCollection);
@@ -83,13 +83,13 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
         {
             var sp = this.GetServiceProvider(test);
             var serviceScope = sp.CreateAsyncScope();
-            sp.GetRequiredService<TestCaseServiceScopeMap>().AddScope(test, serviceScope);
+            sp.GetRequiredService<TestServiceProviderMap>().AddScope(test, serviceScope);
         }
 
         private void AfterTestCase(ITest test)
         {
             this.GetServiceProvider(test)
-                .GetRequiredService<TestCaseServiceScopeMap>()
+                .GetRequiredService<TestServiceProviderMap>()
                 .RemoveScope(test)
                 .DisposeSynchronously();
         }

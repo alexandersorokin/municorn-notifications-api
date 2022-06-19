@@ -19,7 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ConfigureServicesExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ServiceCollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AsyncLocalTestCaseServiceResolver.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\TestCaseServiceScopeMap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\TestServiceProviderMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\DependencyInjectionContainerAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\IConfigureServices.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\TestDependencyAttribute.cs" />

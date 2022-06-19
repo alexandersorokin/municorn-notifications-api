@@ -5,13 +5,13 @@ using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.Tests.DependencyInjection
 {
-    internal class TestCaseServiceScopeMap
+    internal class TestServiceProviderMap
     {
         private readonly ConcurrentDictionary<ITest, AsyncServiceScope> serviceScopes = new();
 
-        internal void AddScope(ITest test, AsyncServiceScope scope)
+        internal void AddScope(ITest test, AsyncServiceScope serviceScope)
         {
-            if (!this.serviceScopes.TryAdd(test, scope))
+            if (!this.serviceScopes.TryAdd(test, serviceScope))
             {
                 throw new InvalidOperationException($"Service scope is already added for test {test.FullName}");
             }
