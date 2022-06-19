@@ -15,12 +15,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)ApiTests\ObjectAssertionsExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ApiTests\SendNotification_Should.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ApiTests\ServiceCollectionClientFactoryExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\AsyncEnumerableExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AsyncEnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\TestMapExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\AsyncLocalTestCaseServiceResolver.TService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\ConfigureServicesExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\TestInjectedAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\ServiceCollectionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ServiceCollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\AsyncLocalTestCaseServiceResolver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\FixtureServiceProviderMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\DependencyInjectionContainerAttribute.cs" />
