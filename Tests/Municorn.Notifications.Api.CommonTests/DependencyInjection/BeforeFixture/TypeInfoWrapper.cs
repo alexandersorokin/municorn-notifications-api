@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.NotificationFeature.App;
+using Municorn.Notifications.Api.Tests.DependencyInjection.Scope;
+using NUnit.Framework;
 using NUnit.Framework.Interfaces;
+using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
 {
@@ -23,8 +28,18 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
         public TypeInfoWrapper(ITypeInfo implementation) => this.implementation = implementation;
 
         public T[] GetCustomAttributes<T>(bool inherit)
-            where T : class =>
-            this.implementation.GetCustomAttributes<T>(inherit);
+            where T : class
+        {
+            var customAttributes = this.implementation.GetCustomAttributes<T>(inherit);
+            if (typeof(T) == typeof(ITestAction))
+            {
+                customAttributes = customAttributes
+                    .Prepend((T)(object)new DependencyInjectionContainer2Attribute())
+                    .ToArray();
+            }
+
+            return customAttributes;
+        }
 
         public bool IsDefined<T>(bool inherit)
             where T : class =>
@@ -50,7 +65,8 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
 
         public object Construct(object?[]? args)
         {
-            var serviceCollection = new ServiceCollection();
+            var serviceCollection = new ServiceCollection()
+                .RegisterWaiter();
 
             foreach (var module in this.GetCustomAttributes<IModule>(true))
             {
@@ -78,6 +94,11 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
             where T : class
         {
             var result = this.implementation.GetMethodsWithAttribute<T>(inherit);
+
+            if (typeof(T) == typeof(OneTimeTearDownAttribute))
+            {
+                return result.ToArray();
+            }
 
             return result;
         }
@@ -273,6 +294,80 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
 
                 public override RuntimeMethodHandle MethodHandle => this.implementation.MethodHandle;
             }
+        }
+
+        private sealed class DependencyInjectionContainer2Attribute : NUnitAttribute, ITestAction
+        {
+            private ServiceProvider? serviceProvider;
+            private object? fixture;
+
+            public ActionTargets Targets => ActionTargets.Suite | ActionTargets.Test;
+
+            public void BeforeTest(ITest test)
+            {
+                if (test.IsSuite)
+                {
+                    this.BeforeTestSuite(test);
+                }
+                else
+                {
+                    this.BeforeTestCase(test);
+                }
+            }
+
+            public void AfterTest(ITest test)
+            {
+                if (test.IsSuite)
+                {
+                    this.AfterTestSuite(test);
+                }
+                else
+                {
+                    this.AfterTestCase(test);
+                }
+            }
+
+            private void BeforeTestSuite(ITest test)
+            {
+                var testFixture = test.Fixture;
+                if (testFixture is not { } notNullFixture)
+                {
+                    throw new InvalidOperationException($"Test {test.FullName} with fixture {testFixture}");
+                }
+
+                this.serviceProvider = ServiceProviders.GetValue(notNullFixture, _ => throw new InvalidOperationException("Fixture is not found"));
+                this.fixture = notNullFixture;
+            }
+
+            private void BeforeTestCase(ITest test)
+            {
+                var sp = this.GetServiceProvider(test);
+                var serviceScope = sp.CreateAsyncScope();
+                test.GetFixtureServiceProviderMap().AddScope(this.fixture!, serviceScope);
+            }
+
+            private void AfterTestCase(ITest test)
+            {
+                var map = test.GetFixtureServiceProviderMap();
+                map.GetScope(this.fixture!).DisposeSynchronously();
+                map.RemoveScope(this.fixture!);
+            }
+
+            private void AfterTestSuite(ITest test)
+            {
+                // workaround https://github.com/nunit/nunit/issues/2938
+                try
+                {
+                    this.GetServiceProvider(test).DisposeSynchronously();
+                }
+                catch (Exception ex)
+                {
+                    TestExecutionContext.CurrentContext.CurrentResult.RecordTearDownException(ex);
+                }
+            }
+
+            [MemberNotNull(nameof(serviceProvider))]
+            private ServiceProvider GetServiceProvider(ITest test) => this.serviceProvider ?? throw new InvalidOperationException($"Service provider is not initialized for {test.FullName}");
         }
     }
 }
