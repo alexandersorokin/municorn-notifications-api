@@ -17,9 +17,19 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterWaiter();
 
-        [TestInjected]
+        [TestCaseInjected(10)]
+        [TestCaseInjected(11)]
         [Repeat(3)]
-        public async Task Wait_Less_Than_10_Seconds(Waiter waiter)
+        public async Task Wait_Less_Than_N_Seconds([Inject] Waiter waiter2, int n, [Inject] Waiter waiter)
+        {
+            Func<Task> action = waiter.Wait;
+
+            await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(n)).ConfigureAwait(false);
+        }
+
+        [TestCaseInjected]
+        [Repeat(3)]
+        public async Task Wait_Less_Than_10_Seconds([Inject] Waiter waiter)
         {
             Func<Task> action = waiter.Wait;
 
@@ -28,13 +38,35 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
 
         [TestInjected]
         [Repeat(3)]
-        public async Task Wait_More_Than_500_Milliseconds(Waiter waiter)
+        public async Task Wait_More_Than_N_Milliseconds([Inject] Waiter waiter2, [Values(450, 400)] int milliseconds, [Inject] Waiter waiter)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            await waiter.Wait().ConfigureAwait(false);
+
+            stopwatch.Elapsed.Should().BeGreaterThan(TimeSpan.FromMilliseconds(milliseconds));
+        }
+
+        [TestInjected]
+        [Repeat(3)]
+        public async Task Wait_More_Than_500_Milliseconds([Inject] Waiter waiter)
         {
             var stopwatch = Stopwatch.StartNew();
 
             await waiter.Wait().ConfigureAwait(false);
 
             stopwatch.Elapsed.Should().BeGreaterThan(TimeSpan.FromMilliseconds(450));
+        }
+
+        [TestInjected]
+        [Repeat(3)]
+        public async Task Wait_More_Than_490_Milliseconds()
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            await this.ResolveService<Waiter>().Wait().ConfigureAwait(false);
+
+            stopwatch.Elapsed.Should().BeGreaterThan(TimeSpan.FromMilliseconds(440));
         }
     }
 }

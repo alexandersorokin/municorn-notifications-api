@@ -17,13 +17,14 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
 
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterWaiter();
 
-        [Test]
+        [TestCase(10)]
+        [TestCase(11)]
         [Repeat(3)]
-        public async Task Wait_Less_Than_10_Seconds()
+        public async Task Wait_Less_Than_N_Seconds(int n)
         {
             Func<Task> action = () => this.waiter.Wait();
 
-            await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
+            await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(n)).ConfigureAwait(false);
         }
 
         [Test]
