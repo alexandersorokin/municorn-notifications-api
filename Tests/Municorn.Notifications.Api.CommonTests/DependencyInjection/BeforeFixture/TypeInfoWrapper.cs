@@ -28,18 +28,8 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
         public TypeInfoWrapper(ITypeInfo implementation) => this.implementation = implementation;
 
         public T[] GetCustomAttributes<T>(bool inherit)
-            where T : class
-        {
-            var customAttributes = this.implementation.GetCustomAttributes<T>(inherit);
-            if (typeof(T) == typeof(ITestAction))
-            {
-                customAttributes = customAttributes
-                    .Prepend((T)(object)new DependencyInjectionContainer2Attribute())
-                    .ToArray();
-            }
-
-            return customAttributes;
-        }
+            where T : class =>
+            this.implementation.GetCustomAttributes<T>(inherit);
 
         public bool IsDefined<T>(bool inherit)
             where T : class =>
@@ -136,8 +126,19 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
             public override object[] GetCustomAttributes(bool inherit) =>
                 this.implementation.GetCustomAttributes(inherit);
 
-            public override object[] GetCustomAttributes(Type attributeType, bool inherit) =>
-                this.implementation.GetCustomAttributes(attributeType, inherit);
+            public override object[] GetCustomAttributes(Type attributeType, bool inherit)
+            {
+                var customAttributes = this.implementation.GetCustomAttributes(attributeType, inherit);
+                if (attributeType == typeof(ITestAction))
+                {
+                    return customAttributes
+                        .Cast<ITestAction>()
+                        .Prepend(new DependencyInjectionContainer2Attribute())
+                        .ToArray();
+                }
+
+                return customAttributes;
+            }
 
             public override bool IsDefined(Type attributeType, bool inherit) =>
                 this.implementation.IsDefined(attributeType, inherit);

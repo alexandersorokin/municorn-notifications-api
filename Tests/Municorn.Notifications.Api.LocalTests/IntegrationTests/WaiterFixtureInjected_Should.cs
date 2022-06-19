@@ -22,9 +22,9 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         [TestInjected(10)]
         [TestInjected(11)]
         [Repeat(3)]
-        public async Task Wait_Less_Than_N_Seconds([Inject] Waiter waiter, int n)
+        public async Task Wait_Less_Than_N_Seconds([Inject] Waiter w, int n)
         {
-            Func<Task> action = waiter.Wait;
+            Func<Task> action = w.Wait;
 
             await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(n)).ConfigureAwait(false);
         }
