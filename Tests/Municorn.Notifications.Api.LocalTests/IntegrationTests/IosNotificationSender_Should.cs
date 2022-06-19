@@ -14,6 +14,9 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     [TestFixture]
     internal class IosNotificationSender_Should : IConfigureServices
     {
+        [TestDependency]
+        private readonly AsyncLocalTestCaseServiceResolver serviceResolver = default!;
+
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
                 .RegisterWaiter()
@@ -25,7 +28,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         [Test]
         public async Task Deliver_Message()
         {
-            var result = await this.ResolveService<IosNotificationSender>()
+            var result = await this.CreateNotificationSender()
                 .Send(new("token", "alert"))
                 .ConfigureAwait(false);
 
@@ -35,7 +38,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         [Test]
         public async Task Not_Deliver_Fifth_Message()
         {
-            var sender = this.ResolveService<IosNotificationSender>();
+            var sender = this.CreateNotificationSender();
             IosNotificationData data = new("token", "alert");
 
             await sender.Send(data).ConfigureAwait(false);
@@ -50,11 +53,11 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         [Test]
         public async Task Save_Status_To_Repository()
         {
-            var result = await this.ResolveService<IosNotificationSender>()
+            var result = await this.CreateNotificationSender()
                 .Send(new("token", "alert"))
                 .ConfigureAwait(false);
 
-            var status = this.ResolveService<NotificationStatusRepository>().GetStatus(result.Id);
+            var status = this.serviceResolver.ResolveService<NotificationStatusRepository>().GetStatus(result.Id);
 
             status.HasSome.Should().BeTrue();
         }
@@ -71,7 +74,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
                 IsBackground = false,
             };
 
-            await this.ResolveService<IosNotificationSender>().Send(data).ConfigureAwait(false);
+            await this.CreateNotificationSender().Send(data).ConfigureAwait(false);
 
             var expectedMessages = new[]
             {
@@ -81,7 +84,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
                 bool.FalseString,
             };
             this
-                .ResolveService<LogMessageContainer>()
+                .GetLogMessageContainer()
                 .GetMessages()
                 .Should()
                 .Contain(logMessage => expectedMessages.All(logMessage.Contains));
@@ -90,12 +93,19 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         [Test]
         public async Task Write_Sender_Name_To_Log()
         {
-            await this.ResolveService<IosNotificationSender>()
+            await this.CreateNotificationSender()
                 .Send(new("token", "alert"))
                 .ConfigureAwait(false);
 
-            var sniffer = this.ResolveService<LogMessageContainer>();
-            sniffer.GetMessages().Should().Contain(logMessage => logMessage.Contains("IosSender"));
+            this
+                .GetLogMessageContainer()
+                .GetMessages()
+                .Should()
+                .Contain(logMessage => logMessage.Contains("IosSender"));
         }
+
+        private LogMessageContainer GetLogMessageContainer() => this.serviceResolver.ResolveService<LogMessageContainer>();
+
+        private IosNotificationSender CreateNotificationSender() => this.serviceResolver.ResolveService<IosNotificationSender>();
     }
 }

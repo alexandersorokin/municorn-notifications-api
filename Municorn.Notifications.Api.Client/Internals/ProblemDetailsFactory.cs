@@ -10,15 +10,13 @@ namespace Municorn.Notifications.Api.Internals
         private readonly string title;
         private readonly string detail;
 
-        internal ProblemDetails Create(ResponseCode responseCode)
-        {
-            return new()
+        internal ProblemDetails Create(ResponseCode responseCode) =>
+            new()
             {
                 Type = this.type,
                 Status = (int)responseCode,
                 Title = this.title,
                 Detail = this.detail,
             };
-        }
     }
 }

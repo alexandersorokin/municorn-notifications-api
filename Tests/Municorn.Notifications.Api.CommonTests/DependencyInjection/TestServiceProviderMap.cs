@@ -17,23 +17,16 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             }
         }
 
-        internal AsyncServiceScope GetScope(ITest test)
-        {
-            return this.serviceScopes.TryGetValue(test, out var serviceScope)
+        internal AsyncServiceScope GetScope(ITest test) =>
+            this.serviceScopes.TryGetValue(test, out var serviceScope)
                 ? serviceScope
                 : throw CreateNotFoundException(test);
-        }
 
-        internal AsyncServiceScope RemoveScope(ITest test)
-        {
-            return this.serviceScopes.TryRemove(test, out var serviceScope)
+        internal AsyncServiceScope RemoveScope(ITest test) =>
+            this.serviceScopes.TryRemove(test, out var serviceScope)
                 ? serviceScope
                 : throw CreateNotFoundException(test);
-        }
 
-        private static InvalidOperationException CreateNotFoundException(ITest test)
-        {
-            return new($"Service scope is not found for test {test.FullName}");
-        }
+        private static InvalidOperationException CreateNotFoundException(ITest test) => new($"Service scope is not found for test {test.FullName}");
     }
 }

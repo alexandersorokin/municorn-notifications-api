@@ -13,6 +13,15 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     [TestFixture]
     internal class AndroidNotificationSender_Should : IConfigureServices
     {
+        [TestDependency]
+        private readonly AsyncLocalTestCaseServiceResolver<AndroidNotificationSender> androidNotificationSender = default!;
+
+        [TestDependency]
+        private readonly AsyncLocalTestCaseServiceResolver<LogMessageContainer> logMessageContainer = default!;
+
+        [TestDependency]
+        private readonly AsyncLocalTestCaseServiceResolver<NotificationStatusRepository> notificationStatusRepository = default!;
+
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
                 .RegisterWaiter()
@@ -24,7 +33,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         [Test]
         public async Task Deliver_Message()
         {
-            var result = await this.ResolveService<AndroidNotificationSender>()
+            var result = await this.androidNotificationSender.Value
                 .Send(new("token", "message", "title"))
                 .ConfigureAwait(false);
 
@@ -34,7 +43,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         [Test]
         public async Task Not_Deliver_Fifth_Message()
         {
-            var sender = this.ResolveService<AndroidNotificationSender>();
+            var sender = this.androidNotificationSender.Value;
             AndroidNotificationData data = new("token", "message", "title");
 
             await sender.Send(data).ConfigureAwait(false);
@@ -49,11 +58,11 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         [Test]
         public async Task Save_Status_To_Repository()
         {
-            var result = await this.ResolveService<AndroidNotificationSender>()
+            var result = await this.androidNotificationSender.Value
                 .Send(new("token", "message", "title"))
                 .ConfigureAwait(false);
 
-            var status = this.ResolveService<NotificationStatusRepository>().GetStatus(result.Id);
+            var status = this.notificationStatusRepository.Value.GetStatus(result.Id);
 
             status.HasSome.Should().BeTrue();
         }
@@ -70,7 +79,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
                 Condition = condition,
             };
 
-            await this.ResolveService<AndroidNotificationSender>().Send(data).ConfigureAwait(false);
+            await this.androidNotificationSender.Value.Send(data).ConfigureAwait(false);
 
             var expectedMessages = new[]
             {
@@ -80,7 +89,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
                 condition,
             };
             this
-                .ResolveService<LogMessageContainer>()
+                .logMessageContainer.Value
                 .GetMessages()
                 .Should()
                 .Contain(logMessage => expectedMessages.All(logMessage.Contains));
@@ -89,12 +98,15 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         [Test]
         public async Task Write_Sender_Name_To_Log()
         {
-            await this.ResolveService<AndroidNotificationSender>()
+            await this.androidNotificationSender.Value
                 .Send(new("token", "message", "title"))
                 .ConfigureAwait(false);
 
-            var sniffer = this.ResolveService<LogMessageContainer>();
-            sniffer.GetMessages().Should().Contain(logMessage => logMessage.Contains("AndroidSender"));
+            this
+                .logMessageContainer.Value
+                .GetMessages()
+                .Should()
+                .Contain(logMessage => logMessage.Contains("AndroidSender"));
         }
     }
 }

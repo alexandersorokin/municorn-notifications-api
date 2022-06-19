@@ -35,10 +35,7 @@ namespace Municorn.Notifications.Api.Internals
 
         private readonly IContentSerializer contentSerializer;
 
-        public async Task<Result<ProblemDetails>> Deserialize(ClusterResult clusterResult)
-        {
-            return await this.GetClusterSuccessfulResponse(clusterResult).ConfigureAwait(false);
-        }
+        public async Task<Result<ProblemDetails>> Deserialize(ClusterResult clusterResult) => await this.GetClusterSuccessfulResponse(clusterResult).ConfigureAwait(false);
 
         public async Task<Result<ProblemDetails, TResponse>> Deserialize<TResponse>(ClusterResult clusterResult)
         {
@@ -62,9 +59,8 @@ namespace Municorn.Notifications.Api.Internals
             return result.MapFault(factory => factory.Create(responseCode));
         }
 
-        private static async Task<ProblemDetailsFactory> GetGatewayProblem(Response response)
-        {
-            return await response.ConvertBody(
+        private static async Task<ProblemDetailsFactory> GetGatewayProblem(Response response) =>
+            await response.ConvertBody(
                 async stream =>
                 {
                     using var reader = new StreamReader(stream);
@@ -75,11 +71,9 @@ namespace Municorn.Notifications.Api.Internals
                         $"Result sent by gateway. {body}");
                 },
                 NotBodyGatewayProblem).ConfigureAwait(false);
-        }
 
-        private static string GetClientErrorCode(ClusterResultStatus status)
-        {
-            return status switch
+        private static string GetClientErrorCode(ClusterResultStatus status) =>
+            status switch
             {
                 ClusterResultStatus.ReplicasExhausted => ClientErrorCodes.UnavailableError,
                 ClusterResultStatus.ReplicasNotFound => ClientErrorCodes.UnavailableError,
@@ -87,7 +81,6 @@ namespace Municorn.Notifications.Api.Internals
                 ClusterResultStatus.TimeExpired => ClientErrorCodes.TimeoutError,
                 _ => ClientErrorCodes.Error,
             };
-        }
 
         private async Task<Result<ProblemDetails, Response>> GetClusterSuccessfulResponse(ClusterResult clusterResult)
         {
@@ -133,16 +126,11 @@ namespace Municorn.Notifications.Api.Internals
                 .Create(responseCode);
         }
 
-        private async Task<Result<ProblemDetailsFactory, ProblemDetails>> GetServiceProblem(Response response)
-        {
-            return await this.ReadResponse<ProblemDetails>(response).ConfigureAwait(false);
-        }
+        private async Task<Result<ProblemDetailsFactory, ProblemDetails>> GetServiceProblem(Response response) => await this.ReadResponse<ProblemDetails>(response).ConfigureAwait(false);
 
-        private async Task<Result<ProblemDetailsFactory, TValue>> ReadResponse<TValue>(Response response)
-        {
-            return await response.ConvertBody(
+        private async Task<Result<ProblemDetailsFactory, TValue>> ReadResponse<TValue>(Response response) =>
+            await response.ConvertBody(
                 async stream => await this.contentSerializer.Deserialize<TValue>(stream).ConfigureAwait(false),
                 NoBodyServiceProblemFactory).ConfigureAwait(false);
-        }
     }
 }

@@ -71,6 +71,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             var serviceCollection = new ServiceCollection()
                 .AddSingleton(new TestServiceProviderMap())
                 .AddSingleton<AsyncLocalTestCaseServiceResolver>()
+                .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>))
                 .RegisterFixtures(test);
             configureServices.ConfigureServices(serviceCollection);
 
@@ -86,13 +87,11 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             sp.GetRequiredService<TestServiceProviderMap>().AddScope(test, serviceScope);
         }
 
-        private void AfterTestCase(ITest test)
-        {
+        private void AfterTestCase(ITest test) =>
             this.GetServiceProvider(test)
                 .GetRequiredService<TestServiceProviderMap>()
                 .RemoveScope(test)
                 .DisposeSynchronously();
-        }
 
         private void AfterTestSuite(ITest test)
         {
@@ -108,9 +107,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
         }
 
         [MemberNotNull(nameof(serviceProvider))]
-        private ServiceProvider GetServiceProvider(ITest test)
-        {
-            return this.serviceProvider ?? throw new InvalidOperationException($"Service provider is not initialized for {test.FullName}");
-        }
+        private ServiceProvider GetServiceProvider(ITest test) => this.serviceProvider ?? throw new InvalidOperationException($"Service provider is not initialized for {test.FullName}");
     }
 }

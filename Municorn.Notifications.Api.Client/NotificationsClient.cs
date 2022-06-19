@@ -22,16 +22,13 @@ namespace Municorn.Notifications.Api
         public NotificationsClient(NotificationsClientOptions options)
         {
             var (clientTopology, log) = options;
-            this.client = new(() =>
-            {
-                return new ClusterClient(
-                    log,
-                    configuration =>
-                    {
-                        clientTopology.Setup(configuration);
-                        configuration.SetupUniversalTransport();
-                    });
-            });
+            this.client = new(() => new ClusterClient(
+                log,
+                configuration =>
+                {
+                    clientTopology.Setup(configuration);
+                    configuration.SetupUniversalTransport();
+                }));
         }
 
         [MustUseReturnValue]

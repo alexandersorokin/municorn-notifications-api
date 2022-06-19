@@ -19,9 +19,6 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
             }
         }
 
-        internal void RegisterForDispose(IAsyncDisposable disposable)
-        {
-            this.disposables.Add(disposable);
-        }
+        internal void RegisterForDispose(IAsyncDisposable disposable) => this.disposables.Add(disposable);
     }
 }

@@ -9,11 +9,9 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
         private readonly TestServiceProviderMap testServiceProviderMap;
 
         internal TService ResolveService<TService>()
-            where TService : notnull
-        {
-            return this.testServiceProviderMap
+            where TService : notnull =>
+            this.testServiceProviderMap
                 .GetScope(TestExecutionContext.CurrentContext.CurrentTest)
                 .ServiceProvider.GetRequiredService<TService>();
-        }
     }
 }

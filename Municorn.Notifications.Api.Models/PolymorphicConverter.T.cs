@@ -21,10 +21,7 @@ namespace Municorn.Notifications.Api
         private static readonly IReadOnlyDictionary<Type, string> TypeToDiscriminatorMap = DiscriminatorToTypeMap.Keys.ToDictionary(
             discriminator => DiscriminatorToTypeMap[discriminator]);
 
-        public override bool CanConvert(Type typeToConvert)
-        {
-            return typeof(T) == typeToConvert;
-        }
+        public override bool CanConvert(Type typeToConvert) => typeof(T) == typeToConvert;
 
         public override void Write(
             Utf8JsonWriter writer,

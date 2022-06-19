@@ -38,15 +38,12 @@ namespace Municorn.Notifications.Api.Infrastructure.Swagger
                         options.SchemaFilter<SwaggerDataAnnotationSupportOnRecordConstructorSchemaFilter>();
 
                         options.UseOneOfForPolymorphism();
-                        options.SelectDiscriminatorNameUsing(baseType =>
-                        {
-                            return baseType.Assembly.DefinedTypes
-                                .Where(type => type.IsAssignableTo(baseType))
-                                .Select(assignableTypes => assignableTypes.GetCustomAttribute<DiscriminatorAttribute>())
-                                .Any(attribute => attribute != null)
-                                ? PolymorphicConverter.PropertyName
-                                : null;
-                        });
+                        options.SelectDiscriminatorNameUsing(baseType => baseType.Assembly.DefinedTypes
+                            .Where(type => type.IsAssignableTo(baseType))
+                            .Select(assignableTypes => assignableTypes.GetCustomAttribute<DiscriminatorAttribute>())
+                            .Any(attribute => attribute != null)
+                            ? PolymorphicConverter.PropertyName
+                            : null);
                         options.SelectDiscriminatorValueUsing(subType => subType.GetCustomAttribute<DiscriminatorAttribute>()?.Value);
                     })
 

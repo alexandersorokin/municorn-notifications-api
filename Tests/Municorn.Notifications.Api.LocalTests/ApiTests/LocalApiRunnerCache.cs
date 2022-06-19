@@ -8,11 +8,9 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
         private readonly GlobalCache globalCache;
         private readonly LocalApiRunner runner;
 
-        public async Task<LocalApi> Start()
-        {
-            return await this.globalCache
+        public async Task<LocalApi> Start() =>
+            await this.globalCache
                 .GetOrCreate(() => this.runner.Start())
                 .ConfigureAwait(false);
-        }
     }
 }

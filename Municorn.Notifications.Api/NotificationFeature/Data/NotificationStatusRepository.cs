@@ -15,11 +15,9 @@ namespace Municorn.Notifications.Api.NotificationFeature.Data
         }
 
         [MustUseReturnValue]
-        public Optional<NotificationStatus> GetStatus(Guid notificationId)
-        {
-            return this.statuses.TryGetValue(notificationId, out var status)
+        public Optional<NotificationStatus> GetStatus(Guid notificationId) =>
+            this.statuses.TryGetValue(notificationId, out var status)
                 ? status
                 : Optional.None();
-        }
     }
 }

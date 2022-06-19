@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ApiTests\SendNotification_Should.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ApiTests\ServiceCollectionClientFactoryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AsyncEnumerableExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AsyncLocalTestCaseServiceResolver.TService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ConfigureServicesExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ServiceCollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AsyncLocalTestCaseServiceResolver.cs" />

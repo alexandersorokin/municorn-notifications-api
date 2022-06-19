@@ -9,9 +9,6 @@ namespace Municorn.Notifications.Api.NotificationFeature.App
         private readonly TData notificationData;
         private readonly TSender notificationSender;
 
-        public async Task<SendResult> Send()
-        {
-            return await this.notificationSender.Send(this.notificationData).ConfigureAwait(false);
-        }
+        public async Task<SendResult> Send() => await this.notificationSender.Send(this.notificationData).ConfigureAwait(false);
     }
 }
