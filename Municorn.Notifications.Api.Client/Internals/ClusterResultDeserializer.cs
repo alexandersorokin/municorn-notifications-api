@@ -35,8 +35,6 @@ namespace Municorn.Notifications.Api.Internals
 
         private readonly IContentSerializer contentSerializer;
 
-        public async Task<Result<ProblemDetails>> Deserialize(ClusterResult clusterResult) => await this.GetClusterSuccessfulResponse(clusterResult).ConfigureAwait(false);
-
         public async Task<Result<ProblemDetails, TResponse>> Deserialize<TResponse>(ClusterResult clusterResult)
         {
             var maybeProblem = await this.GetClusterSuccessfulResponse(clusterResult).ConfigureAwait(false);
