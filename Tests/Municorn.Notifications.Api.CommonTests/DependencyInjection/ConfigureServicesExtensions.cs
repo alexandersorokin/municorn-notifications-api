@@ -5,9 +5,9 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
 {
     internal static class ConfigureServicesExtensions
     {
-        private static readonly ConditionalWeakTable<IConfigureServices, TestCaseServiceResolver> Storage = new();
+        private static readonly ConditionalWeakTable<IConfigureServices, AsyncLocalTestCaseServiceResolver> Storage = new();
 
-        internal static void SaveServiceResolver(this IConfigureServices configureServices, TestCaseServiceResolver serviceResolver)
+        internal static void SaveServiceResolver(this IConfigureServices configureServices, AsyncLocalTestCaseServiceResolver serviceResolver)
         {
             Storage.Add(configureServices, serviceResolver);
         }

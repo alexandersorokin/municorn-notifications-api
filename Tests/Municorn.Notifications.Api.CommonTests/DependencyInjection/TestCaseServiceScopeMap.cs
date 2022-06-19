@@ -17,24 +17,18 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             }
         }
 
-        internal TService ResolveService<TService>(ITest test)
-            where TService : notnull
+        internal AsyncServiceScope GetScope(ITest test)
         {
             return this.serviceScopes.TryGetValue(test, out var serviceScope)
-                ? serviceScope.ServiceProvider.GetRequiredService<TService>()
+                ? serviceScope
                 : throw CreateNotFoundException(test);
         }
 
-        internal void DisposeScope(ITest test)
+        internal AsyncServiceScope RemoveScope(ITest test)
         {
-            if (this.serviceScopes.TryRemove(test, out var value))
-            {
-                value.DisposeSynchronously();
-            }
-            else
-            {
-                throw CreateNotFoundException(test);
-            }
+            return this.serviceScopes.TryRemove(test, out var serviceScope)
+                ? serviceScope
+                : throw CreateNotFoundException(test);
         }
 
         private static InvalidOperationException CreateNotFoundException(ITest test)
