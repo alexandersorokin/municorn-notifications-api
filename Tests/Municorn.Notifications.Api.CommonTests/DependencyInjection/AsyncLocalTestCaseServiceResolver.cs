@@ -6,12 +6,14 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
     [PrimaryConstructor]
     internal partial class AsyncLocalTestCaseServiceResolver
     {
-        private readonly TestServiceProviderMap testServiceProviderMap;
+        private readonly IConfigureServices fixture;
 
         internal TService ResolveService<TService>()
             where TService : notnull =>
-            this.testServiceProviderMap
-                .GetScope(TestExecutionContext.CurrentContext.CurrentTest)
-                .ServiceProvider.GetRequiredService<TService>();
+            TestExecutionContext.CurrentContext.CurrentTest
+                .GetFixtureServiceProviderMap()
+                .GetScope(this.fixture)
+                .ServiceProvider
+                .GetRequiredService<TService>();
     }
 }

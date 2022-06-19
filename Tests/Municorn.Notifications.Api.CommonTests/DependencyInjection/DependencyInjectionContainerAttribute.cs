@@ -69,7 +69,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             }
 
             var serviceCollection = new ServiceCollection()
-                .AddSingleton(new TestServiceProviderMap())
+                .AddSingleton(configureServices)
                 .AddSingleton<AsyncLocalTestCaseServiceResolver>()
                 .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>))
                 .RegisterFixtures(test);
@@ -77,21 +77,22 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
 
             this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
             InitializeSingletonFields(configureServices, this.serviceProvider);
-            configureServices.SaveServiceResolver(this.serviceProvider.GetRequiredService<AsyncLocalTestCaseServiceResolver>());
         }
 
         private void BeforeTestCase(ITest test)
         {
             var sp = this.GetServiceProvider(test);
             var serviceScope = sp.CreateAsyncScope();
-            sp.GetRequiredService<TestServiceProviderMap>().AddScope(test, serviceScope);
+            test.GetFixtureServiceProviderMap().AddScope(sp.GetRequiredService<IConfigureServices>(), serviceScope);
         }
 
-        private void AfterTestCase(ITest test) =>
-            this.GetServiceProvider(test)
-                .GetRequiredService<TestServiceProviderMap>()
-                .RemoveScope(test)
-                .DisposeSynchronously();
+        private void AfterTestCase(ITest test)
+        {
+            var fixture = this.GetServiceProvider(test).GetRequiredService<IConfigureServices>();
+            var map = test.GetFixtureServiceProviderMap();
+            map.GetScope(fixture).DisposeSynchronously();
+            map.RemoveScope(fixture);
+        }
 
         private void AfterTestSuite(ITest test)
         {

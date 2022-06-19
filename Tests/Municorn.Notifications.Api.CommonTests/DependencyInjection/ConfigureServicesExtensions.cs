@@ -1,18 +1,9 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-
-namespace Municorn.Notifications.Api.Tests.DependencyInjection
+﻿namespace Municorn.Notifications.Api.Tests.DependencyInjection
 {
     internal static class ConfigureServicesExtensions
     {
-        private static readonly ConditionalWeakTable<IConfigureServices, AsyncLocalTestCaseServiceResolver> Storage = new();
-
-        internal static void SaveServiceResolver(this IConfigureServices configureServices, AsyncLocalTestCaseServiceResolver serviceResolver) => Storage.Add(configureServices, serviceResolver);
-
         internal static TService ResolveService<TService>(this IConfigureServices configureServices)
             where TService : notnull =>
-            Storage
-                .GetValue(configureServices, _ => throw new InvalidOperationException($"Fixture {configureServices} doesn't contain scope scope service resolver"))
-                .ResolveService<TService>();
+            new AsyncLocalTestCaseServiceResolver(configureServices).ResolveService<TService>();
     }
 }
