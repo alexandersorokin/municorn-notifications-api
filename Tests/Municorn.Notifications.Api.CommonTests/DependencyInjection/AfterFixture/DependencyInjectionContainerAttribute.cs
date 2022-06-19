@@ -3,11 +3,12 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.Tests.DependencyInjection.Scope;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection
+namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
 {
     [AttributeUsage(AttributeTargets.Interface)]
     internal sealed class DependencyInjectionContainerAttribute : NUnitAttribute, ITestAction

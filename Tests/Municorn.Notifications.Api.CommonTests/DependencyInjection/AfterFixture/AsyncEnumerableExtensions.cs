@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection
+namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
 {
     internal static class AsyncEnumerableExtensions
     {

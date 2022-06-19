@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.Tests.DependencyInjection;
+using Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture;
 using Municorn.Notifications.Api.Tests.Logging;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;

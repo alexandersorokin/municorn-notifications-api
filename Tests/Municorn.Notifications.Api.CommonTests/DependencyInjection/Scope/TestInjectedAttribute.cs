@@ -7,7 +7,7 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection
+namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
 {
     [AttributeUsage(AttributeTargets.Method)]
     [MeansImplicitUse(ImplicitUseKindFlags.Access)]
@@ -47,11 +47,11 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             public IMethodInfo MakeGenericMethod(params Type[] typeArguments) => this.implementation.MakeGenericMethod(typeArguments);
 
             public object? Invoke(object? fixture, params object?[]? args) =>
-                fixture is IConfigureServices configureServices
-                    ? this.implementation.Invoke(configureServices, this.ResolveArgs(configureServices))
-                    : throw new InvalidOperationException($"{nameof(TestInjectedAttribute)} can be only applied to {nameof(IConfigureServices)} fixture");
+                fixture is { } methodTarget
+                    ? this.implementation.Invoke(methodTarget, this.ResolveArgs(methodTarget))
+                    : throw new InvalidOperationException("Method is not bound to fixture instance");
 
-            private object?[] ResolveArgs(IConfigureServices fixture)
+            private object?[] ResolveArgs(object fixture)
             {
                 var serviceProvider = this.Test.GetFixtureServiceProviderMap().GetScope(fixture).ServiceProvider;
                 return this.implementation.GetParameters()
