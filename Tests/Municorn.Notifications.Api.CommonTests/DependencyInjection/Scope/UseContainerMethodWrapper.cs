@@ -50,9 +50,13 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
                 {
                     yield return serviceProvider.GetRequiredService(parameter.ParameterType);
                 }
-                else
+                else if (usedIndex < args.Count)
                 {
                     yield return args[usedIndex++];
+                }
+                else if (parameter.IsOptional)
+                {
+                    yield return Type.Missing;
                 }
             }
         }

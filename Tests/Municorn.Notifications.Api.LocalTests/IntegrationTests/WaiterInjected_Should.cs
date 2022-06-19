@@ -17,17 +17,21 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterWaiter();
 
-        [TestCaseInjected(10)]
-        [TestCaseInjected(11)]
+        [TestInjected(10, "by")]
+        [TestInjected(11)]
         [Repeat(3)]
-        public async Task Wait_Less_Than_N_Seconds([Inject] Waiter waiter, int n)
+        public void Wait_Less_Than_N_Seconds<T>(
+            [Values] bool y,
+            [Inject] Waiter waiter2,
+            int n,
+            [Values("string", 777)] T t,
+            [Inject] Waiter waiter,
+            string z = "hello")
         {
-            Func<Task> action = waiter.Wait;
-
-            await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(n)).ConfigureAwait(false);
+            waiter.Should().NotBeNull();
         }
 
-        [TestCaseInjected]
+        [TestInjected]
         [Repeat(3)]
         public async Task Wait_Less_Than_10_Seconds([Inject] Waiter waiter)
         {
@@ -36,46 +40,15 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
             await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
         }
 
-        [TestCaseInjected]
-        [Repeat(3)]
-        public async Task Wait_Less_Than_11_Seconds()
-        {
-            Func<Task> action = this.ResolveService<Waiter>().Wait;
-
-            await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(11)).ConfigureAwait(false);
-        }
-
         [TestInjected]
         [Repeat(3)]
-        public async Task Wait_More_Than_N_Milliseconds([Inject] Waiter waiter, [Values(450, 400)] int milliseconds)
-        {
-            var stopwatch = Stopwatch.StartNew();
-
-            await waiter.Wait().ConfigureAwait(false);
-
-            stopwatch.Elapsed.Should().BeGreaterThan(TimeSpan.FromMilliseconds(milliseconds));
-        }
-
-        [TestInjected]
-        [Repeat(3)]
-        public async Task Wait_More_Than_500_Milliseconds([Inject] Waiter waiter)
-        {
-            var stopwatch = Stopwatch.StartNew();
-
-            await waiter.Wait().ConfigureAwait(false);
-
-            stopwatch.Elapsed.Should().BeGreaterThan(TimeSpan.FromMilliseconds(450));
-        }
-
-        [TestInjected]
-        [Repeat(3)]
-        public async Task Wait_More_Than_490_Milliseconds()
+        public async Task Wait_More_Than_500_Milliseconds()
         {
             var stopwatch = Stopwatch.StartNew();
 
             await this.ResolveService<Waiter>().Wait().ConfigureAwait(false);
 
-            stopwatch.Elapsed.Should().BeGreaterThan(TimeSpan.FromMilliseconds(440));
+            stopwatch.Elapsed.Should().BeGreaterThan(TimeSpan.FromMilliseconds(450));
         }
     }
 }

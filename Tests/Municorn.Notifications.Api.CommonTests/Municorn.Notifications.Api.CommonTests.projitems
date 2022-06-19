@@ -21,7 +21,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixture\TypeInfoWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\InjectAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\HideInjectedMethodWrapper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\TestCaseInjectedAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\TestMapExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\AsyncLocalTestCaseServiceResolver.TService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\ConfigureServicesExtensions.cs" />
