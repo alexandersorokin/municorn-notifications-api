@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Municorn.Notifications.Api.Tests.Logging;
 
-namespace Municorn.Notifications.Api.Tests.ApiTests
+namespace Municorn.Notifications.Api.Tests
 {
     [PrimaryConstructor]
     internal partial class AdHocTextWriterProvider : ITextWriterProvider

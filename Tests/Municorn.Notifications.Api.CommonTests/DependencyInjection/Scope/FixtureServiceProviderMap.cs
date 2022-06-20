@@ -10,9 +10,21 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
 
         internal void AddScope(object fixture, AsyncServiceScope serviceScope) => this.serviceScopes.Add(fixture, new(serviceScope));
 
+        internal bool TryGetScope(object fixture, out AsyncServiceScope serviceScope)
+        {
+            if (this.serviceScopes.TryGetValue(fixture, out var converter))
+            {
+                serviceScope = converter.Scope;
+                return true;
+            }
+
+            serviceScope = default;
+            return false;
+        }
+
         internal AsyncServiceScope GetScope(object fixture) =>
-            this.serviceScopes.TryGetValue(fixture, out var serviceScope)
-                ? serviceScope.Scope
+            this.TryGetScope(fixture, out var serviceScope)
+                ? serviceScope
                 : throw CreateNotFoundException(fixture);
 
         internal void RemoveScope(object fixture)

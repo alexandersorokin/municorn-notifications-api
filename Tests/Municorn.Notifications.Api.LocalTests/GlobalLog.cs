@@ -4,7 +4,7 @@ using Municorn.Notifications.Api.Tests.Logging;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 
-namespace Municorn.Notifications.Api.Tests.ApiTests
+namespace Municorn.Notifications.Api.Tests
 {
     [SetUpFixture]
     internal class GlobalLog : IConfigureServices
@@ -12,7 +12,7 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddSingleton(TestContext.Out)
-                .AddSingleton<ITextWriterProvider, AdHocTextWriterProvider>()
+                .AddSingleton<ITextWriterProvider, Tests.AdHocTextWriterProvider>()
                 .AddSingleton<ILog, TextWriterLog>();
 
         [field: TestDependency]

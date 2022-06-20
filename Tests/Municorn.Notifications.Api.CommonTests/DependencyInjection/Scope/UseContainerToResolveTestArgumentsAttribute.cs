@@ -64,18 +64,16 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
 
             public object? Invoke(object? fixture, params object?[]? args)
             {
-                if (fixture is { } methodTarget)
+                if (fixture is not null && this.fixtureServiceProviderMap.TryGetScope(fixture, out var serviceScope))
                 {
-                    var arguments = this.ResolveArgs(methodTarget, args ?? Array.Empty<object?>()).ToArray();
-                    return this.implementation.Invoke(methodTarget, arguments);
+                    args = this.ResolveArgs(serviceScope.ServiceProvider, args ?? Array.Empty<object?>()).ToArray();
                 }
 
-                throw new InvalidOperationException("Method is not bound to fixture instance");
+                return this.implementation.Invoke(fixture, args);
             }
 
-            private IEnumerable<object?> ResolveArgs(object fixture, IReadOnlyList<object?> args)
+            private IEnumerable<object?> ResolveArgs(IServiceProvider serviceProvider, IReadOnlyList<object?> args)
             {
-                var serviceProvider = this.fixtureServiceProviderMap.GetScope(fixture).ServiceProvider;
                 var parameters = this.implementation.GetParameters();
                 var usedIndex = 0;
                 foreach (var parameter in parameters)
