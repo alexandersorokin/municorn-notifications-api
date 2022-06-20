@@ -7,9 +7,11 @@ using NUnit.Framework.Internal;
 namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
 {
     [AttributeUsage(AttributeTargets.Interface)]
-    internal sealed class UseContainerAttribute : NUnitAttribute, ITestAction
+    internal sealed class UseContainerToResolveTestArgumentsAttribute : NUnitAttribute, ITestAction
     {
         private readonly ConditionalWeakTable<ITest, IMethodInfo> methodInfos = new();
+
+        public ActionTargets Targets => ActionTargets.Test;
 
         public void BeforeTest(ITest test)
         {
@@ -30,7 +32,5 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
                 throw new InvalidOperationException($"Failed to clear saved MethodInfo for {test.FullName}");
             }
         }
-
-        public ActionTargets Targets => ActionTargets.Test;
     }
 }

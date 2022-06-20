@@ -19,7 +19,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixture\TestFixtureInjectedAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixture\IModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixture\TypeInfoWrapper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\UseContainerAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\IUseContainerToResolveTestArguments.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\UseContainerToResolveTestArgumentsAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\InjectAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\InjectedService.TService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\TestMapExtensions.cs" />

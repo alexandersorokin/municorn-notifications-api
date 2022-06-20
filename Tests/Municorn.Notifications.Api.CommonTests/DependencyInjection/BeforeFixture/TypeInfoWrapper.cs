@@ -136,7 +136,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
                     return customAttributes
                         .Cast<ITestAction>()
                         .Prepend(new DependencyInjectionContainer2Attribute())
-                        .Append(new UseContainerAttribute())
+                        .Append(new UseContainerToResolveTestArgumentsAttribute())
                         .ToArray();
                 }
 
