@@ -310,11 +310,10 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
                 sp.GetRequiredService<TestActionMethodManager>().BeforeTestCase(sp, test);
             }
 
-            private void AfterTestCase(ITest test)
-            {
-                var sp = this.GetServiceProvider(test);
-                sp.GetRequiredService<TestActionMethodManager>().AfterTestCase(sp, test);
-            }
+            private void AfterTestCase(ITest test) =>
+                this.GetServiceProvider(test)
+                    .GetRequiredService<TestActionMethodManager>()
+                    .AfterTestCase(test);
 
             private void AfterTestSuite(ITest test)
             {

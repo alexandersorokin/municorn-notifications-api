@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixtureConstructor\TestFixtureInjectableAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixtureConstructor\IModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixtureConstructor\TypeInfoWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\IFixtureSetUp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\IInjectedService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\UseContainerMethodInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\InjectAttribute.cs" />

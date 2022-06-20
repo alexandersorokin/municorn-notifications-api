@@ -14,9 +14,9 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
 
         private readonly IFixtureProvider fixtureProvider;
 
-        internal void BeforeTestCase(ServiceProvider serviceProvider, ITest test)
+        internal void BeforeTestCase(ServiceProvider fixtureServiceProvider, ITest test)
         {
-            var serviceScope = serviceProvider.CreateAsyncScope();
+            var serviceScope = fixtureServiceProvider.CreateAsyncScope();
 
             var testMethod = (TestMethod)test;
             var originalMethodInfo = testMethod.Method;
@@ -26,11 +26,17 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
                 throw new InvalidOperationException($"Failed to save original MethodInfo for {test.FullName}");
             }
 
-            map.AddScope(this.fixtureProvider.Fixture, serviceScope.ServiceProvider);
-            testMethod.Method = new UseContainerMethodInfo(originalMethodInfo, serviceScope.ServiceProvider, this.fixtureProvider.Fixture);
+            var scopeServiceProvider = serviceScope.ServiceProvider;
+            testMethod.Method = new UseContainerMethodInfo(originalMethodInfo, scopeServiceProvider, this.fixtureProvider.Fixture);
+            map.AddScope(this.fixtureProvider.Fixture, scopeServiceProvider);
+
+            foreach (var fixtureSetUp in scopeServiceProvider.GetServices<IFixtureSetUp>())
+            {
+                fixtureSetUp.SetUp();
+            }
         }
 
-        internal void AfterTestCase(ServiceProvider serviceProvider, ITest test)
+        internal void AfterTestCase(ITest test)
         {
             if (!this.scopes.TryRemove(test, out var testData))
             {
