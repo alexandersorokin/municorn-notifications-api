@@ -14,7 +14,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .RegisterWaiter()
             .AddSingleton<ITextWriterProvider, NUnitTextWriterProvider>()
-            .AddSingleton<ILog, TextWriterLog>()
+            .AddScoped<ILog, TextWriterLog>()
             .AddScoped<IFixtureSetUp, TestTimeLogger>();
     }
 }

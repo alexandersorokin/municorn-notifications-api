@@ -16,6 +16,30 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
 
         public Waiter_FixtureInjectable_Static_Should(Waiter waiter) => this.waiter = waiter;
 
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            false.Should().BeTrue();
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            false.Should().BeTrue();
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            true.Should().BeTrue();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            true.Should().BeTrue();
+        }
+
         [TestCase(10)]
         [TestCase(11)]
         [Repeat(3)]
