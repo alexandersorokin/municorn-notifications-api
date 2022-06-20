@@ -17,6 +17,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
         private static readonly ParameterDataSourceProvider DataProvider = new();
         private static readonly CombinatorialStrategy CombinatorialStrategy = new();
         private static readonly NUnitTestCaseBuilder TestCaseBuilder = new();
+
         private readonly object?[] arguments;
 
         public TestCaseCombiningAttribute(params object?[] arguments)

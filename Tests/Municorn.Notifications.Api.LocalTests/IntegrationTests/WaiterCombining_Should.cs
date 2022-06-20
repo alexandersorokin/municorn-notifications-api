@@ -46,6 +46,15 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
 
         [TestCaseCombining]
         [Repeat(3)]
+        public async Task Wait_Less_Than_10_Seconds([Inject] Waiter waiter)
+        {
+            Func<Task> action = waiter.Wait;
+
+            await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
+        }
+
+        [TestCaseCombining]
+        [Repeat(3)]
         public async Task Wait_More_Than_500_Milliseconds()
         {
             var stopwatch = Stopwatch.StartNew();
