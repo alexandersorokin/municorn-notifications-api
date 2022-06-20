@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixtureConstructor\TestFixtureInjectableAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixtureConstructor\IModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixtureConstructor\TypeInfoWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixtureConstructor\IFixtureOneTimeSetUp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\IFixtureSetUp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\IInjectedService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\UseContainerMethodInfo.cs" />
@@ -44,7 +45,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)NUnit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\TextWriterLog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CombinatorialTestCaseAttribute_WithServices_Should.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TimeLogger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestTimeLogger.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixtureConstructor\" />

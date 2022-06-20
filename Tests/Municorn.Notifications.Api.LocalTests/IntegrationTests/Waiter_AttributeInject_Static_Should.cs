@@ -5,7 +5,9 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.NotificationFeature.App;
 using Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConstructor;
+using Municorn.Notifications.Api.Tests.Logging;
 using NUnit.Framework;
+using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
@@ -15,7 +17,11 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         [TestDependency]
         private readonly Waiter waiter = default!;
 
-        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterWaiter();
+        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
+            .RegisterWaiter()
+            .AddSingleton<ITextWriterProvider, NUnitTextWriterProvider>()
+            .AddSingleton<ILog, TextWriterLog>()
+            .AddSingleton<IFixtureOneTimeSetUp, FixtureTimeLogger>();
 
         [TestCase(10)]
         [TestCase(11)]

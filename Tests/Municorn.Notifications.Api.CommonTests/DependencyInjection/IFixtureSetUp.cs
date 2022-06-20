@@ -2,6 +2,6 @@
 {
     internal interface IFixtureSetUp
     {
-        void SetUp();
+        void Run();
     }
 }

@@ -16,7 +16,7 @@ namespace Municorn.Notifications.Api.Tests
                 .AddSingleton(TestContext.Out)
                 .AddSingleton<ITextWriterProvider, AdHocTextWriterProvider>()
                 .AddSingleton<ILog, TextWriterLog>()
-                .AddScoped<IFixtureSetUp, TimeLogger>();
+                .AddScoped<IFixtureSetUp, TestTimeLogger>();
 
         [field: TestDependency]
         internal ILog BoundLog { get; } = default!;

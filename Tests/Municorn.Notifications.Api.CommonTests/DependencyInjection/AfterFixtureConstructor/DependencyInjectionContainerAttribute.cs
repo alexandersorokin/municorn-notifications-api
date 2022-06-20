@@ -81,6 +81,11 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConst
 
             this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
             InitializeSingletonFields(configureServices, this.serviceProvider);
+
+            foreach (var fixtureOneTimeSetUp in this.serviceProvider.GetServices<IFixtureOneTimeSetUp>())
+            {
+                fixtureOneTimeSetUp.Run();
+            }
         }
 
         private void BeforeTestCase(ITest test)

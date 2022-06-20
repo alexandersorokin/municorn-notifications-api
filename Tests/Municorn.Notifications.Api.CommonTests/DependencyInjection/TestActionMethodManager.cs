@@ -33,7 +33,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
 
             foreach (var fixtureSetUp in scopeServiceProvider.GetServices<IFixtureSetUp>())
             {
-                fixtureSetUp.SetUp();
+                fixtureSetUp.Run();
             }
         }
 
