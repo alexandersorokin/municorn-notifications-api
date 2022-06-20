@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
+namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConstructor
 {
     [DependencyInjectionContainer]
     internal interface IConfigureServices

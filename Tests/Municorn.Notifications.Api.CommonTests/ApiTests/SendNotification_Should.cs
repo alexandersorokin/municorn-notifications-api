@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Kontur.Results;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture;
+using Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConstructor;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.Tests.ApiTests

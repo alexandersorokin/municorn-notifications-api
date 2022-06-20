@@ -11,7 +11,7 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
+namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConstructor
 {
     [AttributeUsage(AttributeTargets.Interface)]
     internal sealed class DependencyInjectionContainerAttribute : NUnitAttribute, ITestAction

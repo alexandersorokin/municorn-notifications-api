@@ -14,7 +14,7 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
+namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [PrimaryConstructor]
     internal partial class TypeInfoWrapper : ITypeInfo
