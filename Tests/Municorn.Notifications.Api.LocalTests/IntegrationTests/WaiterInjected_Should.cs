@@ -17,8 +17,8 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterWaiter();
 
-        [TestInjected(10, 1.1f, "by")]
-        [TestInjected(11, 1.2d)]
+        [TestInjected(10, 1.1f, 100, "by")]
+        [TestInjected(11, 1.2d, null)]
         [Repeat(3)]
         public void Check_Attribute<T1, T2>(
             [Inject] ThreadSafeRandomNumberGenerator injectFirst,
@@ -27,6 +27,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
             [Inject] Waiter injectSecond,
             [Values("string", 777)] T1 automaticInfer,
             T2 testCaseInfer,
+            int? testCaseDataConversion,
             string testCaseOptional = "hello")
         {
             injectSecond.Should().NotBeNull();
