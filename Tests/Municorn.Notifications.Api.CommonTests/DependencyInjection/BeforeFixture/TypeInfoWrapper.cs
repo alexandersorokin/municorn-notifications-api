@@ -46,7 +46,10 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
 
         public bool HasMethodWithAttribute(Type attrType) => this.implementation.HasMethodWithAttribute(attrType);
 
-        public IMethodInfo[] GetMethods(BindingFlags flags) => this.implementation.GetMethods(flags);
+        public IMethodInfo[] GetMethods(BindingFlags flags) => this.implementation
+            .GetMethods(flags)
+            .Select(method => new ReplaceTestBuilderMethodWrapper(method))
+            .ToArray<IMethodInfo>();
 
         public ConstructorInfo? GetConstructor(Type[] argTypes) => this.implementation.GetConstructor(argTypes);
 
@@ -368,6 +371,64 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
 
             [MemberNotNull(nameof(serviceProvider))]
             private ServiceProvider GetServiceProvider(ITest test) => this.serviceProvider ?? throw new InvalidOperationException($"Service provider is not initialized for {test.FullName}");
+        }
+
+        private class ReplaceTestBuilderMethodWrapper : IMethodInfo
+        {
+            private readonly IMethodInfo implementation;
+
+            public ReplaceTestBuilderMethodWrapper(IMethodInfo implementation)
+            {
+                this.implementation = implementation;
+            }
+
+            public T[] GetCustomAttributes<T>(bool inherit)
+                where T : class
+            {
+                var result = this.implementation.GetCustomAttributes<T>(inherit);
+                if (typeof(T) == typeof(ITestBuilder))
+                {
+                    return result
+                        .Select(attribute => attribute is TestCaseAttribute testCaseAttribute
+                            ? (T)(object)new InjectableTestAttribute(testCaseAttribute.Arguments)
+                            : attribute)
+                        .ToArray();
+                }
+
+                return result;
+            }
+
+            public bool IsDefined<T>(bool inherit)
+                where T : class =>
+                this.implementation.IsDefined<T>(inherit);
+
+            public IParameterInfo[] GetParameters() => this.implementation.GetParameters();
+
+            public Type[] GetGenericArguments() => this.implementation.GetGenericArguments();
+
+            public IMethodInfo MakeGenericMethod(params Type[] typeArguments) => this.implementation.MakeGenericMethod(typeArguments);
+
+            public object? Invoke(object? fixture, params object?[]? args) => this.implementation.Invoke(fixture, args);
+
+            public ITypeInfo TypeInfo => this.implementation.TypeInfo;
+
+            public MethodInfo MethodInfo => this.implementation.MethodInfo;
+
+            public string Name => this.implementation.Name;
+
+            public bool IsAbstract => this.implementation.IsAbstract;
+
+            public bool IsPublic => this.implementation.IsPublic;
+
+            public bool IsStatic => this.implementation.IsStatic;
+
+            public bool ContainsGenericParameters => this.implementation.ContainsGenericParameters;
+
+            public bool IsGenericMethod => this.implementation.IsGenericMethod;
+
+            public bool IsGenericMethodDefinition => this.implementation.IsGenericMethodDefinition;
+
+            public ITypeInfo ReturnType => this.implementation.ReturnType;
         }
     }
 }
