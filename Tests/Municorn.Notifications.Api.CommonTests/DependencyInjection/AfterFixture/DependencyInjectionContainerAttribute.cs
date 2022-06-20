@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.Tests.DependencyInjection.Scope;
 using NUnit.Framework;
@@ -20,7 +20,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
             ValidateScopes = true,
         };
 
-        private readonly ConditionalWeakTable<ITest, IMethodInfo> methodInfos = new();
+        private readonly ConcurrentDictionary<ITest, IMethodInfo> methodInfos = new();
         private ServiceProvider? serviceProvider;
 
         public ActionTargets Targets => ActionTargets.Suite | ActionTargets.Test;
@@ -86,13 +86,16 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
         {
             var sp = this.GetServiceProvider(test);
             var serviceScope = sp.CreateAsyncScope();
-            var serviceProviderMap = test.GetFixtureServiceProviderMap();
             var fixture = sp.GetRequiredService<IConfigureServices>();
-            serviceProviderMap.AddScope(fixture, serviceScope);
+            test.GetFixtureServiceProviderMap().AddScope(fixture, serviceScope);
 
             var testMethod = (TestMethod)test;
             var originalMethodInfo = testMethod.Method;
-            this.methodInfos.Add(test, originalMethodInfo);
+            if (!this.methodInfos.TryAdd(test, originalMethodInfo))
+            {
+                throw new InvalidOperationException($"Failed to save original MethodInfo for {test.FullName}");
+            }
+
             testMethod.Method = new UseContainerMethodInfo(originalMethodInfo, serviceScope.ServiceProvider, fixture);
         }
 
@@ -104,13 +107,9 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
             map.RemoveScope(fixture);
 
             var testMethod = (TestMethod)test;
-            testMethod.Method = this.methodInfos.GetValue(
-                test,
-                _ => throw new InvalidOperationException($"Failed to restore MethodInfo for {test.FullName}"));
-            if (!this.methodInfos.Remove(test))
-            {
-                throw new InvalidOperationException($"Failed to clear saved MethodInfo for {test.FullName}");
-            }
+            testMethod.Method = this.methodInfos.TryRemove(test, out var originalMethod)
+                ? originalMethod
+                : throw new InvalidOperationException($"Failed to restore MethodInfo for {test.FullName}");
         }
 
         private void AfterTestSuite(ITest test)
