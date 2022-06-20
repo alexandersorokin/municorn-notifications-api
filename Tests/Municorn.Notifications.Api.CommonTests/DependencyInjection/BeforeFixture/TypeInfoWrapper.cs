@@ -59,7 +59,13 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
 
         public object Construct(object?[]? args)
         {
+            FixtureProvider fixtureProvider = new();
+
             var serviceCollection = new ServiceCollection()
+                .AddSingleton<IFixtureProvider>(fixtureProvider)
+                .AddSingleton<AsyncLocalTestCaseServiceResolver>()
+                .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>))
+                .RegisterFixtures(TestExecutionContext.CurrentContext.CurrentTest)
                 .RegisterWaiter();
 
             foreach (var module in this.GetCustomAttributes<IModule>(true))
@@ -79,6 +85,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
 
             var fixture = this.implementation.Construct(ctorArgs);
 
+            fixtureProvider.Fixture = fixture;
             ServiceProviders.Add(fixture, serviceProvider);
 
             return fixture;
@@ -456,6 +463,17 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
             public bool IsGenericMethodDefinition => this.implementation.IsGenericMethodDefinition;
 
             public ITypeInfo ReturnType => this.implementation.ReturnType;
+        }
+
+        private class FixtureProvider : IFixtureProvider
+        {
+            private object? fixture;
+
+            public object Fixture
+            {
+                get => this.fixture ?? throw new InvalidOperationException("Fixture is not yet set");
+                set => this.fixture = value;
+            }
         }
     }
 }

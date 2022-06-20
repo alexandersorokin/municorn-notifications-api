@@ -22,20 +22,23 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\UseContainerMethodInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\InjectAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\InjectedService.TService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\IFixtureProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\TestMapExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\AsyncLocalTestCaseServiceResolver.TService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\ConfigureServicesExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\AsyncLocalTestCaseServiceResolver.TService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\FixtureExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CombinatorialTestCaseAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ServiceCollectionExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\AsyncLocalTestCaseServiceResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\AsyncLocalTestCaseServiceResolver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\FixtureServiceProviderMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\DependencyInjectionContainerAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\IConfigureServices.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\TestDependencyAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalLog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\NUnitTextWriterProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\ITextWriterProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NUnit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\TextWriterLog.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CombinatorialTestCaseAttribute_Should.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\" />

@@ -2,20 +2,18 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.NotificationFeature.App;
-using Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture;
+using Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
-    [TestFixture]
-    internal class WaiterStatic_Should : IConfigureServices
+    [TestFixtureInjected]
+    internal class Waiter_FixtureInjectable_Static_Should
     {
-        [TestDependency]
-        private readonly Waiter waiter = default!;
+        private readonly Waiter waiter;
 
-        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterWaiter();
+        public Waiter_FixtureInjectable_Static_Should(Waiter waiter) => this.waiter = waiter;
 
         [TestCase(10)]
         [TestCase(11)]

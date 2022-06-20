@@ -1,4 +1,4 @@
-﻿namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
+﻿namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeTestMap
 {
     [PrimaryConstructor]
     internal partial class AsyncLocalTestCaseServiceResolver<TService>

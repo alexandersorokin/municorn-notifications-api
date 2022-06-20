@@ -1,19 +1,18 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeTestMap;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
+namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeTestMap
 {
     [PrimaryConstructor]
     internal partial class AsyncLocalTestCaseServiceResolver
     {
-        private readonly IConfigureServices fixture;
+        private readonly IFixtureProvider fixtureProvider;
 
         internal TService ResolveService<TService>()
             where TService : notnull =>
             TestExecutionContext.CurrentContext.CurrentTest
                 .GetFixtureServiceProviderMap()
-                .GetScope(this.fixture)
+                .GetScope(this.fixtureProvider.Fixture)
                 .GetRequiredService<TService>();
     }
 }

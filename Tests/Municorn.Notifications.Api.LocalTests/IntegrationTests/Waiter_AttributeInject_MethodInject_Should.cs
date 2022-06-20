@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
-    internal class WaiterInject_Should : IConfigureServices
+    internal class Waiter_AttributeInject_MethodInject_Should : IConfigureServices
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterWaiter();
 

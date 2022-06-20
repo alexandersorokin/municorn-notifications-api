@@ -74,6 +74,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
 
             var serviceCollection = new ServiceCollection()
                 .AddSingleton(configureServices)
+                .AddSingleton<IFixtureProvider, FixtureProvider>()
                 .AddSingleton<AsyncLocalTestCaseServiceResolver>()
                 .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>))
                 .RegisterFixtures(test);
@@ -131,5 +132,12 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
         private ServiceProvider GetServiceProvider(ITest test) => this.serviceProvider ?? throw new InvalidOperationException($"Service provider is not initialized for {test.FullName}");
 
         private record TestData(AsyncServiceScope Scope, IMethodInfo OriginalMethodInfo);
+
+        private class FixtureProvider : IFixtureProvider
+        {
+            public FixtureProvider(IConfigureServices fixture) => this.Fixture = fixture;
+
+            public object Fixture { get; }
+        }
     }
 }
