@@ -362,7 +362,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
                 var ownFixture = this.GetFixture(test);
                 testMethod.Method = new UseContainerMethodInfo(originalMethodInfo, serviceScope.ServiceProvider, ownFixture);
 
-                test.GetFixtureServiceProviderMap().AddScope(ownFixture, serviceScope);
+                test.GetFixtureServiceProviderMap().AddScope(ownFixture, serviceScope.ServiceProvider);
             }
 
             private void AfterTestCase(ITest test)

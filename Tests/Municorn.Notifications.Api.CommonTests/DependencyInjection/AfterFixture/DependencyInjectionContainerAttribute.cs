@@ -98,7 +98,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
             var fixture = sp.GetRequiredService<IConfigureServices>();
             testMethod.Method = new UseContainerMethodInfo(originalMethodInfo, serviceScope.ServiceProvider, fixture);
 
-            test.GetFixtureServiceProviderMap().AddScope(fixture, serviceScope);
+            test.GetFixtureServiceProviderMap().AddScope(fixture, serviceScope.ServiceProvider);
         }
 
         private void AfterTestCase(ITest test)

@@ -14,7 +14,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
             TestExecutionContext.CurrentContext.CurrentTest
                 .GetFixtureServiceProviderMap()
                 .GetScope(this.fixture)
-                .ServiceProvider
                 .GetRequiredService<TService>();
     }
 }
