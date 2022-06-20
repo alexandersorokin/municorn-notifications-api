@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.NotificationFeature.App;
+using Municorn.Notifications.Api.Tests.DependencyInjection;
 using Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture;
 using Municorn.Notifications.Api.Tests.DependencyInjection.Scope;
 using NUnit.Framework;
@@ -17,8 +18,8 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterWaiter();
 
-        [TestCaseCombining(10, 1.1f, 100)]
-        [TestCaseCombining(11, 1.2d, null)]
+        [CombinatorialTestCase(10, 1.1f, 100)]
+        [CombinatorialTestCase(11, 1.2d, null)]
         [Repeat(3)]
         public void Check_Attribute<T1, T2>(
             [Inject(typeof(ThreadSafeRandomNumberGenerator))] object injectFirst,
@@ -34,8 +35,8 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
             injectSecond.Should().NotBeNull();
         }
 
-        [TestCaseCombining(10, "by")]
-        [TestCaseCombining(11)]
+        [CombinatorialTestCase(10, "by")]
+        [CombinatorialTestCase(11)]
         [Repeat(3)]
         public async Task Wait_Less_Than_N_Seconds([Inject] Waiter waiter, int n, string x = "c")
         {
@@ -44,7 +45,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
             await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(n)).ConfigureAwait(false);
         }
 
-        [TestCaseCombining]
+        [CombinatorialTestCase]
         [Repeat(3)]
         public async Task Wait_Less_Than_10_Seconds([Inject] Waiter waiter)
         {
@@ -53,7 +54,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
             await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
         }
 
-        [TestCaseCombining]
+        [CombinatorialTestCase]
         [Repeat(3)]
         public async Task Wait_More_Than_500_Milliseconds()
         {

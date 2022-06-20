@@ -393,7 +393,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
                 {
                     return result
                         .Select(attribute => attribute is TestCaseAttribute testCaseAttribute
-                            ? (T)(object)new TestCaseCombiningAttribute(testCaseAttribute.Arguments)
+                            ? (T)(object)new CombinatorialTestCaseAttribute(testCaseAttribute.Arguments)
                             : attribute)
                         .ToArray();
                 }

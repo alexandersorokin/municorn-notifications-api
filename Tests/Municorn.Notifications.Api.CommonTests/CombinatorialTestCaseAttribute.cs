@@ -8,11 +8,11 @@ using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 using NUnit.Framework.Internal.Builders;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
+namespace Municorn.Notifications.Api.Tests.DependencyInjection
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     [MeansImplicitUse(ImplicitUseKindFlags.Access)]
-    internal sealed class TestCaseCombiningAttribute : CombiningStrategyAttribute, ITestBuilder
+    internal sealed class CombinatorialTestCaseAttribute : CombiningStrategyAttribute, ITestBuilder
     {
         private static readonly ParameterDataSourceProvider DataProvider = new();
         private static readonly CombinatorialStrategy CombinatorialStrategy = new();
@@ -20,7 +20,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
 
         private readonly object?[] arguments;
 
-        public TestCaseCombiningAttribute(params object?[] arguments)
+        public CombinatorialTestCaseAttribute(params object?[] arguments)
             : base(CombinatorialStrategy, new DefaultValueParameterDataSourceProvider())
         {
             this.arguments = arguments;
