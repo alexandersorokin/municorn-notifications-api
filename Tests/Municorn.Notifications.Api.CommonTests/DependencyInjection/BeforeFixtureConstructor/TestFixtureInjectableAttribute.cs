@@ -7,7 +7,7 @@ using NUnit.Framework.Internal;
 namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [AttributeUsage(AttributeTargets.Class)]
-    internal sealed class TestFixtureInjectedAttribute : NUnitAttribute, IFixtureBuilder2
+    internal sealed class TestFixtureInjectableAttribute : NUnitAttribute, IFixtureBuilder2
     {
         private readonly TestFixtureAttribute implementation = new();
 
