@@ -11,16 +11,16 @@ namespace Municorn.Notifications.Api.Tests
     internal class CombinatorialTestCaseAttribute_WithServices_Should : IConfigureServices
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
-            serviceCollection.AddSingleton<ITextWriterProvider, NUnitTextWriterProvider>();
+            serviceCollection.AddSingleton<NUnitTextWriterProvider>();
 
         [CombinatorialTestCase(10, 1.1f, 100, "let")]
         [CombinatorialTestCase(11, 1.2d, null)]
         [Repeat(3)]
         public void Deduce_Generic_With_Optional<T1, T2>(
-            [Inject(typeof(ITextWriterProvider))] object injectFirst,
+            [Inject(typeof(NUnitTextWriterProvider))] object injectFirst,
             [Values] bool automaticData,
             int testCaseData,
-            [Inject] ITextWriterProvider injectSecond,
+            [Inject] NUnitTextWriterProvider injectSecond,
             [Values("string", 777)] T1 automaticInfer,
             T2 testCaseInfer,
             int? testCaseDataConversion,
@@ -34,7 +34,7 @@ namespace Municorn.Notifications.Api.Tests
         [CombinatorialTestCase(10, "by")]
         [CombinatorialTestCase(11)]
         [Repeat(3)]
-        public void Process_Optional_Without_Generic([Inject] ITextWriterProvider injected, int n, string x = "c")
+        public void Process_Optional_Without_Generic([Inject] NUnitTextWriterProvider injected, int n, string x = "c")
         {
             injected.Should().NotBeNull();
         }
@@ -56,7 +56,7 @@ namespace Municorn.Notifications.Api.Tests
         [CombinatorialTestCase(10)]
         [CombinatorialTestCase(11)]
         [Repeat(3)]
-        public void Inject_From_Container_And_Case([Inject] ITextWriterProvider injected, int value)
+        public void Inject_From_Container_And_Case([Inject] NUnitTextWriterProvider injected, int value)
         {
             injected.Should().NotBeNull();
             value.Should().BePositive();
