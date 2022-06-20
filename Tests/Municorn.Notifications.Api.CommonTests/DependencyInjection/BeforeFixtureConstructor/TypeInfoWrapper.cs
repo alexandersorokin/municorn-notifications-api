@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.NotificationFeature.App;
 using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeTestMap.AsyncLocal;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -64,8 +63,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
                 .AddSingleton<TestActionMethodManager>()
                 .AddSingleton<AsyncLocalTestCaseServiceResolver>()
                 .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>))
-                .RegisterFixtures(TestExecutionContext.CurrentContext.CurrentTest)
-                .RegisterWaiter();
+                .RegisterFixtures(TestExecutionContext.CurrentContext.CurrentTest);
 
             foreach (var module in this.GetCustomAttributes<IModule>(true))
             {

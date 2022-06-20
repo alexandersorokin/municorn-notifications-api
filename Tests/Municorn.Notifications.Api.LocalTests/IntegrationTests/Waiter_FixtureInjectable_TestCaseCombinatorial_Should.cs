@@ -10,6 +10,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixtureInjected]
+    [WaiterModule]
     internal class Waiter_FixtureInjectable_TestCaseCombinatorial_Should
     {
         private readonly Waiter waiter;
