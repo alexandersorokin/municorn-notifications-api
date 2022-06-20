@@ -12,7 +12,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject
     {
         private readonly IMethodInfo implementation;
         private readonly IServiceProvider serviceProvider;
-        private readonly object ownerFixture;
+        private readonly object containerFixture;
 
         public T[] GetCustomAttributes<T>(bool inherit)
             where T : class =>
@@ -30,20 +30,16 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject
 
         public object? Invoke(object? fixture, params object?[]? args)
         {
-            var resolvedArguments = this.ownerFixture == fixture
-                ? this.ResolveArgs(args ?? Enumerable.Empty<object?>()).ToArray()
-                : args;
+            var resolvedArguments = this.ResolveArgs(fixture, args ?? Enumerable.Empty<object?>()).ToArray();
             return this.implementation.Invoke(fixture, resolvedArguments);
         }
 
-        private IEnumerable<object?> ResolveArgs(IEnumerable<object?> args)
+        private IEnumerable<object?> ResolveArgs(object? methodFixture, IEnumerable<object?> args)
         {
             return
                 from arg in args
-                let type = arg?.GetType()
-                select type is not null && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(InjectedService<>)
-                    ? this.serviceProvider.GetRequiredService(type.GetGenericArguments().Single())
-                    : arg;
+                let serviceType = (arg as IInjectedService)?.GetServiceType(methodFixture, this.containerFixture)
+                select serviceType is null ? arg : this.serviceProvider.GetRequiredService(serviceType);
         }
 
         public ITypeInfo TypeInfo => this.implementation.TypeInfo;
