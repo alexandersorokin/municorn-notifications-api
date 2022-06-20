@@ -41,7 +41,8 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
                 .AddSingleton<TestActionMethodManager>()
                 .AddSingleton<AsyncLocalTestCaseServiceResolver>()
                 .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>))
-                .RegisterFixtures(TestExecutionContext.CurrentContext.CurrentTest);
+                .RegisterFixtures(TestExecutionContext.CurrentContext.CurrentTest)
+                .AddScoped<TestAccessor>();
 
             foreach (var module in this.GetCustomAttributes<IModule>(true))
             {

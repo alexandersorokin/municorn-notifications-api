@@ -27,6 +27,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             }
 
             var scopeServiceProvider = serviceScope.ServiceProvider;
+            scopeServiceProvider.GetRequiredService<TestAccessor>().Test = test;
             testMethod.Method = new UseContainerMethodInfo(originalMethodInfo, scopeServiceProvider, this.fixtureProvider.Fixture);
             map.AddScope(this.fixtureProvider.Fixture, scopeServiceProvider);
 

@@ -75,7 +75,8 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConst
                 .AddSingleton<TestActionMethodManager>()
                 .AddSingleton<AsyncLocalTestCaseServiceResolver>()
                 .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>))
-                .RegisterFixtures(test);
+                .RegisterFixtures(test)
+                .AddScoped<TestAccessor>();
             configureServices.ConfigureServices(serviceCollection);
 
             this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
