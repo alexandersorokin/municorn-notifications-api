@@ -31,31 +31,19 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject
         public object? Invoke(object? fixture, params object?[]? args)
         {
             var resolvedArguments = this.ownerFixture == fixture
-                ? this.ResolveArgs(args ?? Array.Empty<object?>()).ToArray()
+                ? this.ResolveArgs(args ?? Enumerable.Empty<object?>()).ToArray()
                 : args;
             return this.implementation.Invoke(fixture, resolvedArguments);
         }
 
-        private IEnumerable<object?> ResolveArgs(IReadOnlyList<object?> args)
+        private IEnumerable<object?> ResolveArgs(IEnumerable<object?> args)
         {
-            var parameters = this.implementation.GetParameters();
-            var usedIndex = 0;
-            foreach (var parameter in parameters)
-            {
-                if (usedIndex < args.Count)
-                {
-                    var resolveArgs = args[usedIndex++];
-                    var type = resolveArgs?.GetType();
-                    if (type is not null && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(InjectedService<>))
-                    {
-                        yield return this.serviceProvider.GetRequiredService(type.GetGenericArguments().Single());
-                    }
-                    else
-                    {
-                        yield return resolveArgs;
-                    }
-                }
-            }
+            return
+                from arg in args
+                let type = arg?.GetType()
+                select type is not null && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(InjectedService<>)
+                    ? this.serviceProvider.GetRequiredService(type.GetGenericArguments().Single())
+                    : arg;
         }
 
         public ITypeInfo TypeInfo => this.implementation.TypeInfo;
