@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -31,6 +32,8 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
             .GetMethods(flags)
             .Select(method => new ReplaceTestBuilderMethodWrapper(method))
             .ToArray<IMethodInfo>();
+
+        Type ITypeInfo.Type => new TypeWrapper(this.Type);
 
         object ITypeInfo.Construct(object?[]? args)
         {
@@ -72,24 +75,131 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
         {
             var result = this.GetMethodsWithAttribute<T>(inherit);
 
-            if (typeof(T) == typeof(OneTimeTearDownAttribute))
+            HashSet<Type> attributesToPatch = new()
             {
-                return result.ToArray();
+                typeof(OneTimeSetUpAttribute),
+                typeof(OneTimeTearDownAttribute),
+                typeof(SetUpAttribute),
+                typeof(TearDownAttribute),
+            };
+
+            if (attributesToPatch.Contains(typeof(T)))
+            {
+                return result.Select(method => new FixtureActionMethodInfo(method)).ToArray<IMethodInfo>();
             }
 
             return result;
         }
 
-        Type ITypeInfo.Type => new TypeWrapper(this.Type);
+        private class FixtureActionMethodInfo : MethodWrapper, IMethodInfo
+        {
+            public FixtureActionMethodInfo(IMethodInfo methodInfo)
+                : base(methodInfo.TypeInfo.Type, methodInfo.MethodInfo)
+            {
+            }
 
-        internal class TypeWrapper : Type
+            IParameterInfo[] IMethodInfo.GetParameters() => Array.Empty<IParameterInfo>();
+
+            object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
+            {
+                return this.Invoke(fixture, args);
+            }
+        }
+
+        private class FixtureProvider : IFixtureProvider
+        {
+            private object? fixture;
+
+            public object Fixture
+            {
+                get => this.fixture ?? throw new InvalidOperationException("Fixture is not yet set");
+                set => this.fixture = value;
+            }
+        }
+
+        private sealed class DependencyInjectionContainer2Attribute : NUnitAttribute, ITestAction
+        {
+            private ServiceProvider? serviceProvider;
+
+            public ActionTargets Targets => ActionTargets.Suite | ActionTargets.Test;
+
+            public void BeforeTest(ITest test)
+            {
+                if (test.IsSuite)
+                {
+                    this.BeforeTestSuite(test);
+                }
+                else
+                {
+                    this.BeforeTestCase(test);
+                }
+            }
+
+            public void AfterTest(ITest test)
+            {
+                if (test.IsSuite)
+                {
+                    this.AfterTestSuite(test);
+                }
+                else
+                {
+                    this.AfterTestCase(test);
+                }
+            }
+
+            private void BeforeTestSuite(ITest test)
+            {
+                var testFixture = test.Fixture;
+                if (testFixture is not { } notNullFixture)
+                {
+                    throw new InvalidOperationException($"Test {test.FullName} with fixture {testFixture}");
+                }
+
+                this.serviceProvider = ServiceProviders.GetValue(
+                    notNullFixture,
+                    _ => throw new InvalidOperationException("Fixture is not found"));
+            }
+
+            private void BeforeTestCase(ITest test)
+            {
+                var sp = this.GetServiceProvider(test);
+                sp.GetRequiredService<TestActionMethodManager>().BeforeTestCase(sp, test);
+            }
+
+            private void AfterTestCase(ITest test) =>
+                this.GetServiceProvider(test)
+                    .GetRequiredService<TestActionMethodManager>()
+                    .AfterTestCase(test);
+
+            private void AfterTestSuite(ITest test)
+            {
+                // workaround https://github.com/nunit/nunit/issues/2938
+                try
+                {
+                    this.GetServiceProvider(test).DisposeSynchronously();
+                }
+                catch (Exception ex)
+                {
+                    TestExecutionContext.CurrentContext.CurrentResult.RecordTearDownException(ex);
+                }
+            }
+
+            [MemberNotNull(nameof(serviceProvider))]
+            private ServiceProvider GetServiceProvider(ITest test) => this.serviceProvider ??
+                                                                      throw new InvalidOperationException(
+                                                                          $"Service provider is not initialized for {test.FullName}");
+        }
+
+        private class TypeWrapper : Type
         {
             private readonly Type implementation;
 
             public TypeWrapper(Type implementation) => this.implementation = implementation;
 
-            public override object[] GetCustomAttributes(bool inherit) =>
-                this.implementation.GetCustomAttributes(inherit);
+            public override ConstructorInfo[] GetConstructors(BindingFlags bindingAttr) =>
+                this.implementation.GetConstructors(bindingAttr)
+                    .Select(constructorInfo => new ConstructorInfoParameterLess(constructorInfo))
+                    .ToArray<ConstructorInfo>();
 
             public override object[] GetCustomAttributes(Type attributeType, bool inherit)
             {
@@ -105,6 +215,9 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
                 return customAttributes;
             }
 
+            public override object[] GetCustomAttributes(bool inherit) =>
+                this.implementation.GetCustomAttributes(inherit);
+
             public override bool IsDefined(Type attributeType, bool inherit) =>
                 this.implementation.IsDefined(attributeType, inherit);
 
@@ -113,11 +226,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
             public override string? Namespace => this.implementation.Namespace;
 
             public override string Name => this.implementation.Name;
-
-            public override ConstructorInfo[] GetConstructors(BindingFlags bindingAttr) =>
-                this.implementation.GetConstructors(bindingAttr)
-                    .Select(constructorInfo => new ConstructorInfoWrapper(constructorInfo))
-                    .ToArray<ConstructorInfo>();
 
             public override Type? GetElementType() => this.implementation.GetElementType();
 
@@ -216,11 +324,14 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
 
             protected override bool HasElementTypeImpl() => this.implementation.HasElementType;
 
-            private class ConstructorInfoWrapper : ConstructorInfo
+            private class ConstructorInfoParameterLess : ConstructorInfo
             {
                 private readonly ConstructorInfo implementation;
 
-                public ConstructorInfoWrapper(ConstructorInfo implementation) => this.implementation = implementation;
+                public ConstructorInfoParameterLess(ConstructorInfo implementation) =>
+                    this.implementation = implementation;
+
+                public override ParameterInfo[] GetParameters() => Array.Empty<ParameterInfo>();
 
                 public override object[] GetCustomAttributes(bool inherit) =>
                     this.implementation.GetCustomAttributes(inherit);
@@ -240,8 +351,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
                 public override MethodImplAttributes GetMethodImplementationFlags() =>
                     this.implementation.GetMethodImplementationFlags();
 
-                public override ParameterInfo[] GetParameters() => Array.Empty<ParameterInfo>();
-
                 public override object? Invoke(
                     object? obj,
                     BindingFlags invokeAttr,
@@ -260,77 +369,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
 
                 public override RuntimeMethodHandle MethodHandle => this.implementation.MethodHandle;
             }
-        }
-
-        private sealed class DependencyInjectionContainer2Attribute : NUnitAttribute, ITestAction
-        {
-            private ServiceProvider? serviceProvider;
-
-            public ActionTargets Targets => ActionTargets.Suite | ActionTargets.Test;
-
-            public void BeforeTest(ITest test)
-            {
-                if (test.IsSuite)
-                {
-                    this.BeforeTestSuite(test);
-                }
-                else
-                {
-                    this.BeforeTestCase(test);
-                }
-            }
-
-            public void AfterTest(ITest test)
-            {
-                if (test.IsSuite)
-                {
-                    this.AfterTestSuite(test);
-                }
-                else
-                {
-                    this.AfterTestCase(test);
-                }
-            }
-
-            private void BeforeTestSuite(ITest test)
-            {
-                var testFixture = test.Fixture;
-                if (testFixture is not { } notNullFixture)
-                {
-                    throw new InvalidOperationException($"Test {test.FullName} with fixture {testFixture}");
-                }
-
-                this.serviceProvider = ServiceProviders.GetValue(
-                    notNullFixture,
-                    _ => throw new InvalidOperationException("Fixture is not found"));
-            }
-
-            private void BeforeTestCase(ITest test)
-            {
-                var sp = this.GetServiceProvider(test);
-                sp.GetRequiredService<TestActionMethodManager>().BeforeTestCase(sp, test);
-            }
-
-            private void AfterTestCase(ITest test) =>
-                this.GetServiceProvider(test)
-                    .GetRequiredService<TestActionMethodManager>()
-                    .AfterTestCase(test);
-
-            private void AfterTestSuite(ITest test)
-            {
-                // workaround https://github.com/nunit/nunit/issues/2938
-                try
-                {
-                    this.GetServiceProvider(test).DisposeSynchronously();
-                }
-                catch (Exception ex)
-                {
-                    TestExecutionContext.CurrentContext.CurrentResult.RecordTearDownException(ex);
-                }
-            }
-
-            [MemberNotNull(nameof(serviceProvider))]
-            private ServiceProvider GetServiceProvider(ITest test) => this.serviceProvider ?? throw new InvalidOperationException($"Service provider is not initialized for {test.FullName}");
         }
 
         private class ReplaceTestBuilderMethodWrapper : MethodWrapper, IReflectionInfo
@@ -354,17 +392,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
                 }
 
                 return result;
-            }
-        }
-
-        private class FixtureProvider : IFixtureProvider
-        {
-            private object? fixture;
-
-            public object Fixture
-            {
-                get => this.fixture ?? throw new InvalidOperationException("Fixture is not yet set");
-                set => this.fixture = value;
             }
         }
     }
