@@ -5,7 +5,7 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
+namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject
 {
     [PrimaryConstructor]
     internal partial class UseContainerMethodInfo : IMethodInfo

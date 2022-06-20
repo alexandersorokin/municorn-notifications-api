@@ -1,4 +1,4 @@
-﻿namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
+﻿namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject
 {
     internal class InjectedService<TService>
     {

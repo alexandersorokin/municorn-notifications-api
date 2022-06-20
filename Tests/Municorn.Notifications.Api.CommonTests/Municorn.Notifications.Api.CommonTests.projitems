@@ -19,16 +19,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixture\TestFixtureInjectedAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixture\IModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixture\TypeInfoWrapper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\UseContainerMethodInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\InjectAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\InjectedService.TService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\TestMapExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\UseContainerMethodInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\InjectAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\InjectedService.TService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\TestMapExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\AsyncLocalTestCaseServiceResolver.TService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\ConfigureServicesExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CombinatorialTestCaseAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ServiceCollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\AsyncLocalTestCaseServiceResolver.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\FixtureServiceProviderMap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\FixtureServiceProviderMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\DependencyInjectionContainerAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\IConfigureServices.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\TestDependencyAttribute.cs" />
@@ -39,5 +39,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\" />
+    <Folder Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\" />
   </ItemGroup>
 </Project>

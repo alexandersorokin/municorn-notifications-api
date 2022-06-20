@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.Tests.DependencyInjection.Scope;
+using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeTestMap;
 using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture

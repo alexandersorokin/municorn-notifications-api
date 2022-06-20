@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
+namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeTestMap
 {
     internal class FixtureServiceProviderMap
     {

@@ -3,7 +3,7 @@ using System.Collections;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
+namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject
 {
     [AttributeUsage(AttributeTargets.Parameter)]
     internal sealed class InjectAttribute : NUnitAttribute, IParameterDataSource
