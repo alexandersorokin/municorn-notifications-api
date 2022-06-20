@@ -52,13 +52,18 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
             var usedIndex = 0;
             foreach (var parameter in parameters)
             {
-                if (parameter.GetCustomAttributes<InjectAttribute>(false).Any())
+                if (usedIndex < args.Count)
                 {
-                    yield return serviceProvider.GetRequiredService(parameter.ParameterType);
-                }
-                else if (usedIndex < args.Count)
-                {
-                    yield return args[usedIndex++];
+                    var resolveArgs = args[usedIndex++];
+                    var type = resolveArgs?.GetType();
+                    if (type is not null && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(InjectedService<>))
+                    {
+                        yield return serviceProvider.GetRequiredService(type.GetGenericArguments().Single());
+                    }
+                    else
+                    {
+                        yield return resolveArgs;
+                    }
                 }
                 else if (parameter.IsOptional)
                 {

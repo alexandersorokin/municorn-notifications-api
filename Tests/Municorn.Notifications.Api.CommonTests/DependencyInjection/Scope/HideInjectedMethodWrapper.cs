@@ -23,7 +23,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
 
         public IParameterInfo[] GetParameters() => this.implementation
             .GetParameters()
-            .Where(parameter => !parameter.GetCustomAttributes<InjectAttribute>(false).Any())
             .TakeWhile((parameter, index) => !parameter.IsOptional || index < this.optionalArgumentLimit)
             .ToArray();
 
@@ -86,7 +85,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
 
             public override ParameterInfo[] GetParameters() => this.implementation
                 .GetParameters()
-                .Where(parameter => !parameter.GetCustomAttributes<InjectAttribute>(false).Any())
                 .TakeWhile((parameter, index) => !parameter.IsOptional || index < this.optionalArgumentLimit)
                 .ToArray();
 

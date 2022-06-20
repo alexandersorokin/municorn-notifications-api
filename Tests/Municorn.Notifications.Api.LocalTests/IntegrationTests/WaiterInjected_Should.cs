@@ -21,7 +21,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         [TestInjected(11, 1.2d, null)]
         [Repeat(3)]
         public void Check_Attribute<T1, T2>(
-            [Inject] ThreadSafeRandomNumberGenerator injectFirst,
+            [Inject(typeof(ThreadSafeRandomNumberGenerator))] object injectFirst,
             [Values] bool automaticData,
             int testCaseData,
             [Inject] Waiter injectSecond,
