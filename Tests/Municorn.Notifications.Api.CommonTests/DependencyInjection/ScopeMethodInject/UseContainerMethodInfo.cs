@@ -55,10 +55,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject
                         yield return resolveArgs;
                     }
                 }
-                else if (parameter.IsOptional)
-                {
-                    yield return Type.Missing;
-                }
             }
         }
 

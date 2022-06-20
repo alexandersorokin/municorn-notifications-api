@@ -33,8 +33,7 @@ namespace Municorn.Notifications.Api.Tests
                 var sources = this.GetSources(method.GetParameters()).ToArray<IEnumerable>();
                 return CombinatorialStrategy
                     .GetTestCases(sources)
-                    .Select(
-                        testCaseData => TestCaseBuilder.BuildTestMethod(method, suite, (TestCaseParameters)testCaseData))
+                    .Select(testCaseData => TestCaseBuilder.BuildTestMethod(method, suite, CreateParameters(testCaseData)))
                     .ToArray();
             }
             catch (Exception ex)
@@ -48,18 +47,29 @@ namespace Municorn.Notifications.Api.Tests
             }
         }
 
+        private static TestCaseParameters CreateParameters(ITestCaseData testCaseData)
+        {
+            return new OriginalChangeableTestCaseParameters(
+                testCaseData.Arguments,
+                testCaseData.Arguments.TakeWhile(arg => arg != Type.Missing).ToArray());
+        }
+
         private IEnumerable<object?[]> GetSources(IEnumerable<IParameterInfo> parameters)
         {
             var usedIndex = 0;
-            foreach (var parameterInfo in parameters)
+            foreach (var parameter in parameters)
             {
-                if (parameterInfo.GetCustomAttributes<IParameterDataSource>(false).Any())
+                if (parameter.GetCustomAttributes<IParameterDataSource>(false).Any())
                 {
-                    yield return DataProvider.GetDataFor(parameterInfo).Cast<object>().ToArray();
+                    yield return DataProvider.GetDataFor(parameter).Cast<object>().ToArray();
                 }
                 else if (usedIndex < this.arguments.Length)
                 {
                     yield return new[] { this.arguments[usedIndex++] };
+                }
+                else if (parameter.IsOptional)
+                {
+                    yield return new[] { Type.Missing };
                 }
             }
 
@@ -74,6 +84,15 @@ namespace Municorn.Notifications.Api.Tests
             public bool HasDataFor(IParameterInfo parameter) => true;
 
             public IEnumerable GetDataFor(IParameterInfo parameter) => Enumerable.Empty<object>();
+        }
+
+        private class OriginalChangeableTestCaseParameters : TestCaseParameters
+        {
+            public OriginalChangeableTestCaseParameters(object?[] args, object?[] originalArgs)
+                : base(args)
+            {
+                this.OriginalArguments = originalArgs;
+            }
         }
     }
 }
