@@ -10,7 +10,11 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
     {
         private readonly Type? type;
 
-        public InjectAttribute(Type? type = null) => this.type = type;
+        public InjectAttribute(Type type) => this.type = type;
+
+        public InjectAttribute()
+        {
+        }
 
         public IEnumerable GetData(IParameterInfo parameter)
         {

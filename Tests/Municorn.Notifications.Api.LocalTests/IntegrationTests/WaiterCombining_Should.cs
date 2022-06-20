@@ -28,7 +28,8 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
             [Values("string", 777)] T1 automaticInfer,
             T2 testCaseInfer,
             int? testCaseDataConversion,
-            [Values(true, null)] bool? valuesConversion)
+            [Values(true, null)] bool? valuesConversion,
+            [Inject] GlobalLog log)
         {
             injectSecond.Should().NotBeNull();
         }
