@@ -11,8 +11,10 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
     {
         private readonly TestFixtureAttribute implementation = new();
 
-        public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo) => this.implementation.BuildFrom(new TypeInfoWrapper(typeInfo));
+        public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo) => this.implementation.BuildFrom(CreateWrapper(typeInfo));
 
-        public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo, IPreFilter filter) => this.implementation.BuildFrom(new TypeInfoWrapper(typeInfo), filter);
+        public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo, IPreFilter filter) => this.implementation.BuildFrom(CreateWrapper(typeInfo), filter);
+
+        private static TypeInfoWrapper CreateWrapper(ITypeInfo typeInfo) => new(typeInfo.Type);
     }
 }

@@ -12,8 +12,7 @@ using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureConstructor
 {
-    [PrimaryConstructor]
-    internal partial class TypeInfoWrapper : ITypeInfo
+    internal class TypeInfoWrapper : TypeWrapper, ITypeInfo
     {
         private static readonly ConditionalWeakTable<object, ServiceProvider> ServiceProviders = new();
 
@@ -23,38 +22,17 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
             ValidateScopes = true,
         };
 
-        private readonly ITypeInfo implementation;
+        public TypeInfoWrapper(Type type)
+            : base(type)
+        {
+        }
 
-        public T[] GetCustomAttributes<T>(bool inherit)
-            where T : class =>
-            this.implementation.GetCustomAttributes<T>(inherit);
-
-        public bool IsDefined<T>(bool inherit)
-            where T : class =>
-            this.implementation.IsDefined<T>(inherit);
-
-        public bool IsType(Type type) => this.implementation.IsType(type);
-
-        public string GetDisplayName() => this.implementation.GetDisplayName();
-
-        public string GetDisplayName(object?[]? args) => this.implementation.GetDisplayName(args);
-
-        public Type GetGenericTypeDefinition() => this.implementation.GetGenericTypeDefinition();
-
-        public ITypeInfo MakeGenericType(Type[] typeArgs) => this.implementation.MakeGenericType(typeArgs);
-
-        public bool HasMethodWithAttribute(Type attrType) => this.implementation.HasMethodWithAttribute(attrType);
-
-        public IMethodInfo[] GetMethods(BindingFlags flags) => this.implementation
+        IMethodInfo[] ITypeInfo.GetMethods(BindingFlags flags) => this
             .GetMethods(flags)
             .Select(method => new ReplaceTestBuilderMethodWrapper(method))
             .ToArray<IMethodInfo>();
 
-        public ConstructorInfo? GetConstructor(Type[] argTypes) => this.implementation.GetConstructor(argTypes);
-
-        public bool HasConstructor(Type[] argTypes) => this.implementation.HasConstructor(argTypes);
-
-        public object Construct(object?[]? args)
+        object ITypeInfo.Construct(object?[]? args)
         {
             FixtureProvider fixtureProvider = new();
 
@@ -72,7 +50,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
 
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);
 
-            var ctorArgs = this.implementation.Type
+            var ctorArgs = this.Type
                 .GetConstructors()
                 .First()
                 .GetParameters()
@@ -80,7 +58,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
                 .Select(type => serviceProvider.GetRequiredService(type))
                 .ToArray();
 
-            var fixture = this.implementation.Construct(ctorArgs);
+            var fixture = this.Construct(ctorArgs);
 
             fixtureProvider.Fixture = fixture;
             ServiceProviders.Add(fixture, serviceProvider);
@@ -88,10 +66,10 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
             return fixture;
         }
 
-        public IMethodInfo[] GetMethodsWithAttribute<T>(bool inherit)
+        IMethodInfo[] ITypeInfo.GetMethodsWithAttribute<T>(bool inherit)
             where T : class
         {
-            var result = this.implementation.GetMethodsWithAttribute<T>(inherit);
+            var result = this.GetMethodsWithAttribute<T>(inherit);
 
             if (typeof(T) == typeof(OneTimeTearDownAttribute))
             {
@@ -101,29 +79,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
             return result;
         }
 
-        public Type Type => new TypeWrapper(this.implementation.Type);
-
-        public ITypeInfo? BaseType => this.implementation.BaseType;
-
-        public string Name => this.implementation.Name;
-
-        public string FullName => this.implementation.FullName;
-
-        public Assembly Assembly => this.implementation.Assembly;
-
-        public string Namespace => this.implementation.Namespace;
-
-        public bool IsAbstract => this.implementation.IsAbstract;
-
-        public bool IsGenericType => this.implementation.IsGenericType;
-
-        public bool ContainsGenericParameters => this.implementation.ContainsGenericParameters;
-
-        public bool IsGenericTypeDefinition => this.implementation.IsGenericTypeDefinition;
-
-        public bool IsSealed => this.implementation.IsSealed;
-
-        public bool IsStaticClass => this.implementation.IsStaticClass;
+        Type ITypeInfo.Type => new TypeWrapper(this.Type);
 
         internal class TypeWrapper : Type
         {
