@@ -5,7 +5,7 @@ using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject;
 using Municorn.Notifications.Api.Tests.Logging;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.Tests.IntegrationTests
+namespace Municorn.Notifications.Api.Tests
 {
     [TestFixture]
     internal class CombinatorialTestCaseAttribute_Should : IConfigureServices
