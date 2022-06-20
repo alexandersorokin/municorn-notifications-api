@@ -113,7 +113,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConst
 
             ((TestMethod)test).Method = testData.OriginalMethodInfo;
             testData.Scope.DisposeSynchronously();
-
             testData.Map.RemoveScope(this.GetServiceProvider(test).GetRequiredService<IConfigureServices>());
         }
 

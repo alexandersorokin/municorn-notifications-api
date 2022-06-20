@@ -313,7 +313,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
         {
             private readonly ConcurrentDictionary<ITest, TestData> scopes = new();
             private ServiceProvider? serviceProvider;
-            private object? fixture;
 
             public ActionTargets Targets => ActionTargets.Suite | ActionTargets.Test;
 
@@ -352,7 +351,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
                 this.serviceProvider = ServiceProviders.GetValue(
                     notNullFixture,
                     _ => throw new InvalidOperationException("Fixture is not found"));
-                this.fixture = notNullFixture;
             }
 
             private void BeforeTestCase(ITest test)
@@ -368,7 +366,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
                     throw new InvalidOperationException($"Failed to save original MethodInfo for {test.FullName}");
                 }
 
-                var ownFixture = this.GetFixture(test);
+                var ownFixture = sp.GetRequiredService<IFixtureProvider>().Fixture;
                 testMethod.Method = new UseContainerMethodInfo(originalMethodInfo, serviceScope.ServiceProvider, ownFixture);
 
                 map.AddScope(ownFixture, serviceScope.ServiceProvider);
@@ -383,8 +381,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
 
                 ((TestMethod)test).Method = testData.OriginalMethodInfo;
                 testData.Scope.DisposeSynchronously();
-
-                testData.Map.RemoveScope(this.GetFixture(test));
+                testData.Map.RemoveScope(this.GetServiceProvider(test).GetRequiredService<IFixtureProvider>().Fixture);
             }
 
             private void AfterTestSuite(ITest test)
@@ -402,9 +399,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
 
             [MemberNotNull(nameof(serviceProvider))]
             private ServiceProvider GetServiceProvider(ITest test) => this.serviceProvider ?? throw new InvalidOperationException($"Service provider is not initialized for {test.FullName}");
-
-            [MemberNotNull(nameof(fixture))]
-            private object GetFixture(ITest test) => this.fixture ?? throw new InvalidOperationException($"Service provider is not initialized for {test.FullName}");
 
             private record TestData(AsyncServiceScope Scope, IMethodInfo OriginalMethodInfo, FixtureServiceProviderMap Map);
         }
