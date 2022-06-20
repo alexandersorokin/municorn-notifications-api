@@ -25,13 +25,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\InjectAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\InjectedService.TService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\IFixtureProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\TestMapExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\AsyncLocal\AsyncLocalTestCaseServiceResolver.TService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\AsyncLocal\FixtureExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\TestMapExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeAsyncLocal\AsyncLocalTestCaseServiceResolver.TService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeAsyncLocal\FixtureExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CombinatorialTestCaseAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ServiceCollectionExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\AsyncLocal\AsyncLocalTestCaseServiceResolver.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\FixtureServiceProviderMap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeAsyncLocal\AsyncLocalTestCaseServiceResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\FixtureServiceProviderMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixtureConstructor\DependencyInjectionContainerAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixtureConstructor\IConfigureServices.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixtureConstructor\TestDependencyAttribute.cs" />
@@ -45,6 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixtureConstructor\" />
-    <Folder Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\AsyncLocal\" />
+    <Folder Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeAsyncLocal\" />
   </ItemGroup>
 </Project>

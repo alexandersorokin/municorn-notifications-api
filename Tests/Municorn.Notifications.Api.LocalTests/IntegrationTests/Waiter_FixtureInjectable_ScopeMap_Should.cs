@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Municorn.Notifications.Api.NotificationFeature.App;
 using Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureConstructor;
-using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeTestMap.AsyncLocal;
+using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeAsyncLocal;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.Tests.IntegrationTests

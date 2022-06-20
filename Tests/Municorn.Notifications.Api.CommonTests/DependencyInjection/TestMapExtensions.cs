@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeTestMap
+namespace Municorn.Notifications.Api.Tests.DependencyInjection
 {
     internal static class TestMapExtensions
     {

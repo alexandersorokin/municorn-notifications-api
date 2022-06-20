@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject;
-using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeTestMap;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 
