@@ -10,23 +10,13 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixtureInjected]
-    internal class WaiterFixtureInjected_Should
+    internal class WaiterFixtureInjectable_Should
     {
         private readonly Waiter waiter;
 
-        public WaiterFixtureInjected_Should(Waiter waiter)
+        public WaiterFixtureInjectable_Should(Waiter waiter)
         {
             this.waiter = waiter;
-        }
-
-        [InjectableTest(10)]
-        [InjectableTest(11)]
-        [Repeat(3)]
-        public async Task Wait_Less_Than_N_Seconds([Inject] Waiter w, int n)
-        {
-            Func<Task> action = w.Wait;
-
-            await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(n)).ConfigureAwait(false);
         }
 
         [TestCase(10)]

@@ -136,7 +136,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
                     return customAttributes
                         .Cast<ITestAction>()
                         .Prepend(new DependencyInjectionContainer2Attribute())
-                        .Append(new AlternativePatcherAttribute())
+                        .Append(new UseContainerAttribute())
                         .ToArray();
                 }
 
@@ -393,7 +393,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
                 {
                     return result
                         .Select(attribute => attribute is TestCaseAttribute testCaseAttribute
-                            ? (T)(object)new InjectableTestAttribute(testCaseAttribute.Arguments)
+                            ? (T)(object)new TestCaseCombiningAttribute(testCaseAttribute.Arguments)
                             : attribute)
                         .ToArray();
                 }

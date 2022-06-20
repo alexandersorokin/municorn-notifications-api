@@ -12,13 +12,13 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
 #pragma warning disable S2187 // TestCases should contain tests
-    internal class WaiterInjected_Should : IConfigureServices
+    internal class WaiterCombining_Should : IConfigureServices
 #pragma warning restore S2187 // TestCases should contain tests
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterWaiter();
 
-        [InjectableTest(10, 1.1f, 100)]
-        [InjectableTest(11, 1.2d, null)]
+        [TestCaseCombining(10, 1.1f, 100)]
+        [TestCaseCombining(11, 1.2d, null)]
         [Repeat(3)]
         public void Check_Attribute<T1, T2>(
             [Inject(typeof(ThreadSafeRandomNumberGenerator))] object injectFirst,
@@ -33,8 +33,8 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
             injectSecond.Should().NotBeNull();
         }
 
-        [InjectableTest(10, "by")]
-        [InjectableTest(11)]
+        [TestCaseCombining(10, "by")]
+        [TestCaseCombining(11)]
         [Repeat(3)]
         public async Task Wait_Less_Than_N_Seconds([Inject] Waiter waiter, int n, string x = "c")
         {
@@ -43,7 +43,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
             await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(n)).ConfigureAwait(false);
         }
 
-        [InjectableTest]
+        [TestCaseCombining]
         [Repeat(3)]
         public async Task Wait_More_Than_500_Milliseconds()
         {

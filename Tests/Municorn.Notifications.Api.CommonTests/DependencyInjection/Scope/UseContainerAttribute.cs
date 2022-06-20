@@ -7,7 +7,7 @@ using NUnit.Framework.Internal;
 namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
 {
     [AttributeUsage(AttributeTargets.Interface)]
-    internal sealed class AlternativePatcherAttribute : NUnitAttribute, ITestAction
+    internal sealed class UseContainerAttribute : NUnitAttribute, ITestAction
     {
         private readonly ConditionalWeakTable<ITest, IMethodInfo> methodInfos = new();
 

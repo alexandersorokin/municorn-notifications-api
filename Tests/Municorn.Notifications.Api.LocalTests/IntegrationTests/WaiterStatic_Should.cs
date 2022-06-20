@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
-    internal class Waiter_Should : IConfigureServices
+    internal class WaiterStatic_Should : IConfigureServices
     {
         [TestDependency]
         private readonly Waiter waiter = default!;

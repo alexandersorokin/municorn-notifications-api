@@ -12,14 +12,14 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     [MeansImplicitUse(ImplicitUseKindFlags.Access)]
-    internal sealed class InjectableTestAttribute : CombiningStrategyAttribute, ITestBuilder
+    internal sealed class TestCaseCombiningAttribute : CombiningStrategyAttribute, ITestBuilder
     {
         private static readonly ParameterDataSourceProvider DataProvider = new();
         private static readonly CombinatorialStrategy CombinatorialStrategy = new();
         private static readonly NUnitTestCaseBuilder TestCaseBuilder = new();
         private readonly object?[] arguments;
 
-        public InjectableTestAttribute(params object?[] arguments)
+        public TestCaseCombiningAttribute(params object?[] arguments)
             : base(CombinatorialStrategy, new DefaultValueParameterDataSourceProvider())
         {
             this.arguments = arguments;
