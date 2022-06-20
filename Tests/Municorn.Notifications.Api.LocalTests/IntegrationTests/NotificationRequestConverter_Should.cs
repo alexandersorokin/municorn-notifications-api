@@ -9,7 +9,7 @@ using Municorn.Notifications.Api.NotificationFeature.App;
 using Municorn.Notifications.Api.NotificationFeature.Data;
 using Municorn.Notifications.Api.NotificationFeature.View;
 using Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture;
-using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeTestMap;
+using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeTestMap.AsyncLocal;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.Tests.IntegrationTests

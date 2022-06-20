@@ -1,4 +1,4 @@
-﻿namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeTestMap
+﻿namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeTestMap.AsyncLocal
 {
     internal interface IFixtureProvider
     {
