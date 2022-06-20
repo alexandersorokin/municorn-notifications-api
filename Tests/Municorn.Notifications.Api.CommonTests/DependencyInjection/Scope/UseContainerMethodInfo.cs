@@ -7,16 +7,12 @@ using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
 {
-    internal class UseContainerMethodInfo : IMethodInfo
+    [PrimaryConstructor]
+    internal partial class UseContainerMethodInfo : IMethodInfo
     {
         private readonly IMethodInfo implementation;
-        private readonly FixtureServiceProviderMap fixtureServiceProviderMap;
-
-        public UseContainerMethodInfo(IMethodInfo implementation, FixtureServiceProviderMap fixtureServiceProviderMap)
-        {
-            this.implementation = implementation;
-            this.fixtureServiceProviderMap = fixtureServiceProviderMap;
-        }
+        private readonly IServiceProvider serviceProvider;
+        private readonly object ownerFixture;
 
         public T[] GetCustomAttributes<T>(bool inherit)
             where T : class =>
@@ -34,17 +30,13 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
 
         public object? Invoke(object? fixture, params object?[]? args)
         {
-            Lazy<IServiceProvider> serviceProvider = new(() => this.GetServiceProvider(fixture));
-            args = this.ResolveArgs(serviceProvider, args ?? Array.Empty<object?>()).ToArray();
-            return this.implementation.Invoke(fixture, args);
+            var resolvedArguments = this.ownerFixture == fixture
+                ? this.ResolveArgs(args ?? Array.Empty<object?>()).ToArray()
+                : args;
+            return this.implementation.Invoke(fixture, resolvedArguments);
         }
 
-        private IServiceProvider GetServiceProvider(object? fixture) =>
-            fixture is not null && this.fixtureServiceProviderMap.TryGetScope(fixture, out var serviceScope)
-                ? serviceScope.ServiceProvider
-                : throw new InvalidOperationException($"Failed to resolve services for {this.MethodInfo.Name}. No service provider is registered for fixture {fixture}.");
-
-        private IEnumerable<object?> ResolveArgs(Lazy<IServiceProvider> serviceProvider, IReadOnlyList<object?> args)
+        private IEnumerable<object?> ResolveArgs(IReadOnlyList<object?> args)
         {
             var parameters = this.implementation.GetParameters();
             var usedIndex = 0;
@@ -56,7 +48,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
                     var type = resolveArgs?.GetType();
                     if (type is not null && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(InjectedService<>))
                     {
-                        yield return serviceProvider.Value.GetRequiredService(type.GetGenericArguments().Single());
+                        yield return this.serviceProvider.GetRequiredService(type.GetGenericArguments().Single());
                     }
                     else
                     {

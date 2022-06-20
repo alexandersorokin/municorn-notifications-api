@@ -86,12 +86,14 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
         {
             var sp = this.GetServiceProvider(test);
             var serviceScope = sp.CreateAsyncScope();
-            test.GetFixtureServiceProviderMap().AddScope(sp.GetRequiredService<IConfigureServices>(), serviceScope);
+            var serviceProviderMap = test.GetFixtureServiceProviderMap();
+            var fixture = sp.GetRequiredService<IConfigureServices>();
+            serviceProviderMap.AddScope(fixture, serviceScope);
 
             var testMethod = (TestMethod)test;
-            var methodInfo = testMethod.Method;
-            this.methodInfos.Add(test, methodInfo);
-            testMethod.Method = new UseContainerMethodInfo(methodInfo, test.GetFixtureServiceProviderMap());
+            var originalMethodInfo = testMethod.Method;
+            this.methodInfos.Add(test, originalMethodInfo);
+            testMethod.Method = new UseContainerMethodInfo(originalMethodInfo, serviceScope.ServiceProvider, fixture);
         }
 
         private void AfterTestCase(ITest test)

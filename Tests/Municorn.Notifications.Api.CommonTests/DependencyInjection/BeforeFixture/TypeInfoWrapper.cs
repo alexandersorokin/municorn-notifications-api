@@ -349,19 +349,21 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
             {
                 var sp = this.GetServiceProvider(test);
                 var serviceScope = sp.CreateAsyncScope();
-                test.GetFixtureServiceProviderMap().AddScope(this.fixture!, serviceScope);
+                var ownFixture = this.GetFixture(test);
+                test.GetFixtureServiceProviderMap().AddScope(ownFixture, serviceScope);
 
                 var testMethod = (TestMethod)test;
                 var methodInfo = testMethod.Method;
                 this.methodInfos.Add(test, methodInfo);
-                testMethod.Method = new UseContainerMethodInfo(methodInfo, test.GetFixtureServiceProviderMap());
+                testMethod.Method = new UseContainerMethodInfo(methodInfo, serviceScope.ServiceProvider, ownFixture);
             }
 
             private void AfterTestCase(ITest test)
             {
                 var map = test.GetFixtureServiceProviderMap();
-                map.GetScope(this.fixture!).DisposeSynchronously();
-                map.RemoveScope(this.fixture!);
+                var ownFixture = this.GetFixture(test);
+                map.GetScope(ownFixture).DisposeSynchronously();
+                map.RemoveScope(ownFixture);
 
                 var testMethod = (TestMethod)test;
                 testMethod.Method = this.methodInfos.GetValue(
@@ -388,6 +390,9 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
 
             [MemberNotNull(nameof(serviceProvider))]
             private ServiceProvider GetServiceProvider(ITest test) => this.serviceProvider ?? throw new InvalidOperationException($"Service provider is not initialized for {test.FullName}");
+
+            [MemberNotNull(nameof(fixture))]
+            private object GetFixture(ITest test) => this.fixture ?? throw new InvalidOperationException($"Service provider is not initialized for {test.FullName}");
         }
 
         private class ReplaceTestBuilderMethodWrapper : IMethodInfo
