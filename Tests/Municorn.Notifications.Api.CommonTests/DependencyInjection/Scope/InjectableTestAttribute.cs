@@ -30,13 +30,10 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
             try
             {
                 var sources = this.GetSources(method.GetParameters()).ToArray<IEnumerable>();
-                return CombinatorialStrategy.GetTestCases(sources).Select(
-                    testCaseData =>
-                    {
-                        var buildTestMethod = TestCaseBuilder.BuildTestMethod(method, suite, (TestCaseParameters)testCaseData);
-                        buildTestMethod.Method = new UseContainerMethodWrapper(buildTestMethod.Method, buildTestMethod);
-                        return buildTestMethod;
-                    })
+                return CombinatorialStrategy
+                    .GetTestCases(sources)
+                    .Select(
+                        testCaseData => TestCaseBuilder.BuildTestMethod(method, suite, (TestCaseParameters)testCaseData))
                     .ToArray();
             }
             catch (Exception ex)

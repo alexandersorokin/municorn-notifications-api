@@ -338,7 +338,9 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
                     throw new InvalidOperationException($"Test {test.FullName} with fixture {testFixture}");
                 }
 
-                this.serviceProvider = ServiceProviders.GetValue(notNullFixture, _ => throw new InvalidOperationException("Fixture is not found"));
+                this.serviceProvider = ServiceProviders.GetValue(
+                    notNullFixture,
+                    _ => throw new InvalidOperationException("Fixture is not found"));
                 this.fixture = notNullFixture;
             }
 
