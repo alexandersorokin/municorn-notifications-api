@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -7,8 +6,6 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.NotificationFeature.App;
-using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject;
-using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeTestMap;
 using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeTestMap.AsyncLocal;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -64,6 +61,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
 
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<IFixtureProvider>(fixtureProvider)
+                .AddSingleton<TestActionMethodManager>()
                 .AddSingleton<AsyncLocalTestCaseServiceResolver>()
                 .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>))
                 .RegisterFixtures(TestExecutionContext.CurrentContext.CurrentTest)
@@ -311,7 +309,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
 
         private sealed class DependencyInjectionContainer2Attribute : NUnitAttribute, ITestAction
         {
-            private readonly ConcurrentDictionary<ITest, TestData> scopes = new();
             private ServiceProvider? serviceProvider;
 
             public ActionTargets Targets => ActionTargets.Suite | ActionTargets.Test;
@@ -356,32 +353,13 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
             private void BeforeTestCase(ITest test)
             {
                 var sp = this.GetServiceProvider(test);
-                var serviceScope = sp.CreateAsyncScope();
-
-                var testMethod = (TestMethod)test;
-                var originalMethodInfo = testMethod.Method;
-                var map = test.GetFixtureServiceProviderMap();
-                if (!this.scopes.TryAdd(test, new(serviceScope, originalMethodInfo, map)))
-                {
-                    throw new InvalidOperationException($"Failed to save original MethodInfo for {test.FullName}");
-                }
-
-                var ownFixture = sp.GetRequiredService<IFixtureProvider>().Fixture;
-                testMethod.Method = new UseContainerMethodInfo(originalMethodInfo, serviceScope.ServiceProvider, ownFixture);
-
-                map.AddScope(ownFixture, serviceScope.ServiceProvider);
+                sp.GetRequiredService<TestActionMethodManager>().BeforeTestCase(sp, test);
             }
 
             private void AfterTestCase(ITest test)
             {
-                if (!this.scopes.TryRemove(test, out var testData))
-                {
-                    throw new InvalidOperationException($"Failed to get saved TestData for {test.FullName}");
-                }
-
-                ((TestMethod)test).Method = testData.OriginalMethodInfo;
-                testData.Scope.DisposeSynchronously();
-                testData.Map.RemoveScope(this.GetServiceProvider(test).GetRequiredService<IFixtureProvider>().Fixture);
+                var sp = this.GetServiceProvider(test);
+                sp.GetRequiredService<TestActionMethodManager>().AfterTestCase(sp, test);
             }
 
             private void AfterTestSuite(ITest test)
@@ -399,8 +377,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
 
             [MemberNotNull(nameof(serviceProvider))]
             private ServiceProvider GetServiceProvider(ITest test) => this.serviceProvider ?? throw new InvalidOperationException($"Service provider is not initialized for {test.FullName}");
-
-            private record TestData(AsyncServiceScope Scope, IMethodInfo OriginalMethodInfo, FixtureServiceProviderMap Map);
         }
 
         private class ReplaceTestBuilderMethodWrapper : IMethodInfo

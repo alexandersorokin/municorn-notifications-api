@@ -22,7 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\UseContainerMethodInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\InjectAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeMethodInject\InjectedService.TService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\AsyncLocal\IFixtureProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\IFixtureProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\TestMapExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\AsyncLocal\AsyncLocalTestCaseServiceResolver.TService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeTestMap\AsyncLocal\FixtureExtensions.cs" />
@@ -33,6 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixtureConstructor\DependencyInjectionContainerAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixtureConstructor\IConfigureServices.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixtureConstructor\TestDependencyAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\TestActionMethodManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GlobalLog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\NUnitTextWriterProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\ITextWriterProvider.cs" />
