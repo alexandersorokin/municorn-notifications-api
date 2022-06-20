@@ -27,7 +27,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\AsyncLocalTestCaseServiceResolver.TService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\ConfigureServicesExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\TestCaseCombiningAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\UseContainerMethodWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ServiceCollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\AsyncLocalTestCaseServiceResolver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\FixtureServiceProviderMap.cs" />
