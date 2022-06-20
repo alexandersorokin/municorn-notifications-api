@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.Tests.DependencyInjection.Scope;
 using NUnit.Framework;
@@ -19,6 +20,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
             ValidateScopes = true,
         };
 
+        private readonly ConditionalWeakTable<ITest, IMethodInfo> methodInfos = new();
         private ServiceProvider? serviceProvider;
 
         public ActionTargets Targets => ActionTargets.Suite | ActionTargets.Test;
@@ -85,6 +87,11 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
             var sp = this.GetServiceProvider(test);
             var serviceScope = sp.CreateAsyncScope();
             test.GetFixtureServiceProviderMap().AddScope(sp.GetRequiredService<IConfigureServices>(), serviceScope);
+
+            var testMethod = (TestMethod)test;
+            var methodInfo = testMethod.Method;
+            this.methodInfos.Add(test, methodInfo);
+            testMethod.Method = new UseContainerMethodInfo(methodInfo, test.GetFixtureServiceProviderMap());
         }
 
         private void AfterTestCase(ITest test)
@@ -93,6 +100,15 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixture
             var map = test.GetFixtureServiceProviderMap();
             map.GetScope(fixture).DisposeSynchronously();
             map.RemoveScope(fixture);
+
+            var testMethod = (TestMethod)test;
+            testMethod.Method = this.methodInfos.GetValue(
+                test,
+                _ => throw new InvalidOperationException($"Failed to restore MethodInfo for {test.FullName}"));
+            if (!this.methodInfos.Remove(test))
+            {
+                throw new InvalidOperationException($"Failed to clear saved MethodInfo for {test.FullName}");
+            }
         }
 
         private void AfterTestSuite(ITest test)

@@ -136,7 +136,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
                     return customAttributes
                         .Cast<ITestAction>()
                         .Prepend(new DependencyInjectionContainer2Attribute())
-                        .Append(new UseContainerToResolveTestArgumentsAttribute())
                         .ToArray();
                 }
 
@@ -302,6 +301,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
 
         private sealed class DependencyInjectionContainer2Attribute : NUnitAttribute, ITestAction
         {
+            private readonly ConditionalWeakTable<ITest, IMethodInfo> methodInfos = new();
             private ServiceProvider? serviceProvider;
             private object? fixture;
 
@@ -350,6 +350,11 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
                 var sp = this.GetServiceProvider(test);
                 var serviceScope = sp.CreateAsyncScope();
                 test.GetFixtureServiceProviderMap().AddScope(this.fixture!, serviceScope);
+
+                var testMethod = (TestMethod)test;
+                var methodInfo = testMethod.Method;
+                this.methodInfos.Add(test, methodInfo);
+                testMethod.Method = new UseContainerMethodInfo(methodInfo, test.GetFixtureServiceProviderMap());
             }
 
             private void AfterTestCase(ITest test)
@@ -357,6 +362,15 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
                 var map = test.GetFixtureServiceProviderMap();
                 map.GetScope(this.fixture!).DisposeSynchronously();
                 map.RemoveScope(this.fixture!);
+
+                var testMethod = (TestMethod)test;
+                testMethod.Method = this.methodInfos.GetValue(
+                    test,
+                    _ => throw new InvalidOperationException($"Failed to restore MethodInfo for {test.FullName}"));
+                if (!this.methodInfos.Remove(test))
+                {
+                    throw new InvalidOperationException($"Failed to clear saved MethodInfo for {test.FullName}");
+                }
             }
 
             private void AfterTestSuite(ITest test)
