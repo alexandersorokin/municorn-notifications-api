@@ -27,16 +27,16 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
 
         IEnumerable<TestMethod> ITestBuilder.BuildFrom(IMethodInfo method, Test? suite)
         {
-            var parameters = new HideInjectedMethodWrapper(method, int.MaxValue).GetParameters();
-
             try
             {
-                var sources = this.GetSources(parameters).ToArray<IEnumerable>();
+                var sources = this.GetSources(method.GetParameters()).ToArray<IEnumerable>();
 
                 return CombinatorialStrategy.GetTestCases(sources).Select(
                     testCaseData =>
                     {
-                        var buildTestMethod = TestCaseBuilder.BuildTestMethod(new HideInjectedMethodWrapper(method, testCaseData.Arguments.Length), suite, (TestCaseParameters)testCaseData);
+                        var limitOptionalMethodInfo = new LimitOptionalArgumentsForGenericValidationMethodInfo(method.MethodInfo, testCaseData.Arguments.Length);
+                        var limitOptionalArguments = new MethodWrapper(method.TypeInfo.Type, limitOptionalMethodInfo);
+                        var buildTestMethod = TestCaseBuilder.BuildTestMethod(limitOptionalArguments, suite, (TestCaseParameters)testCaseData);
                         var genericArgumentsAppliedMethod = method.IsGenericMethodDefinition
                             ? method.MakeGenericMethod(buildTestMethod.Method.GetGenericArguments())
                             : method;
