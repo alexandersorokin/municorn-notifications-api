@@ -27,9 +27,8 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
                 throw new InvalidOperationException($"Failed to save original MethodInfo for {test.FullName}");
             }
 
-            testMethod.Method = new UseContainerMethodInfo(originalMethodInfo, serviceScope.ServiceProvider, this.fixtureProvider.Fixture);
-
             map.AddScope(this.fixtureProvider.Fixture, serviceScope.ServiceProvider);
+            testMethod.Method = new UseContainerMethodInfo(originalMethodInfo, serviceScope.ServiceProvider, this.fixtureProvider.Fixture);
         }
 
         internal void AfterTestCase(ServiceProvider serviceProvider, ITest test)
@@ -40,8 +39,8 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection
             }
 
             ((TestMethod)test).Method = testData.OriginalMethodInfo;
-            testData.Scope.DisposeSynchronously();
             testData.Map.RemoveScope(this.fixtureProvider.Fixture);
+            testData.Scope.DisposeSynchronously();
         }
 
         private record TestData(AsyncServiceScope Scope, IMethodInfo OriginalMethodInfo, FixtureServiceProviderMap Map);
