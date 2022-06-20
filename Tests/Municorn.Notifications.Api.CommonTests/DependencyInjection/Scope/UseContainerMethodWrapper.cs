@@ -34,9 +34,15 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
 
         public object? Invoke(object? fixture, params object?[]? args)
         {
-            return fixture is { } methodTarget
-                ? this.implementation.Invoke(methodTarget, this.ResolveArgs(methodTarget, args ?? Array.Empty<object?>()).ToArray())
-                : throw new InvalidOperationException("Method is not bound to fixture instance");
+            if (fixture is { } methodTarget)
+            {
+                var arguments = this.ResolveArgs(methodTarget, args ?? Array.Empty<object?>()).ToArray();
+                return this.implementation.Invoke(methodTarget, arguments);
+            }
+            else
+            {
+                throw new InvalidOperationException("Method is not bound to fixture instance");
+            }
         }
 
         private IEnumerable<object?> ResolveArgs(object fixture, IReadOnlyList<object?> args)

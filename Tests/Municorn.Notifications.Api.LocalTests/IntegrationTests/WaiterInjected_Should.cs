@@ -28,6 +28,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
             [Values("string", 777)] T1 automaticInfer,
             T2 testCaseInfer,
             int? testCaseDataConversion,
+            [Values(true, null)] bool? valuesConversion,
             string testCaseOptional = "hello")
         {
             injectSecond.Should().NotBeNull();
