@@ -12,14 +12,14 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     [MeansImplicitUse(ImplicitUseKindFlags.Access)]
-    internal sealed class TestInjectedAttribute : CombiningStrategyAttribute, ITestBuilder
+    internal sealed class InjectableTestAttribute : CombiningStrategyAttribute, ITestBuilder
     {
         private static readonly ParameterDataSourceProvider DataProvider = new();
         private static readonly CombinatorialStrategy CombinatorialStrategy = new();
         private static readonly NUnitTestCaseBuilder TestCaseBuilder = new();
         private readonly object?[] arguments;
 
-        public TestInjectedAttribute(params object?[] arguments)
+        public InjectableTestAttribute(params object?[] arguments)
             : base(CombinatorialStrategy, new DefaultValueParameterDataSourceProvider())
         {
             this.arguments = arguments;
@@ -30,17 +30,11 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
             try
             {
                 var sources = this.GetSources(method.GetParameters()).ToArray<IEnumerable>();
-
                 return CombinatorialStrategy.GetTestCases(sources).Select(
                     testCaseData =>
                     {
-                        var limitOptionalMethodInfo = new LimitOptionalArgumentsForGenericValidationMethodInfo(method.MethodInfo, testCaseData.Arguments.Length);
-                        var limitOptionalArguments = new MethodWrapper(method.TypeInfo.Type, limitOptionalMethodInfo);
-                        var buildTestMethod = TestCaseBuilder.BuildTestMethod(limitOptionalArguments, suite, (TestCaseParameters)testCaseData);
-                        var genericArgumentsAppliedMethod = method.IsGenericMethodDefinition
-                            ? method.MakeGenericMethod(buildTestMethod.Method.GetGenericArguments())
-                            : method;
-                        buildTestMethod.Method = new UseContainerMethodWrapper(genericArgumentsAppliedMethod, buildTestMethod);
+                        var buildTestMethod = TestCaseBuilder.BuildTestMethod(method, suite, (TestCaseParameters)testCaseData);
+                        buildTestMethod.Method = new UseContainerMethodWrapper(buildTestMethod.Method, buildTestMethod);
                         return buildTestMethod;
                     })
                     .ToArray();

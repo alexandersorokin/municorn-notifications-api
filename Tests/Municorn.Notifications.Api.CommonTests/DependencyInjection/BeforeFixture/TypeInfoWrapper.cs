@@ -13,7 +13,8 @@ using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
 {
-    internal class TypeInfoWrapper : ITypeInfo
+    [PrimaryConstructor]
+    internal partial class TypeInfoWrapper : ITypeInfo
     {
         private static readonly ConditionalWeakTable<object, ServiceProvider> ServiceProviders = new();
 
@@ -24,8 +25,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixture
         };
 
         private readonly ITypeInfo implementation;
-
-        public TypeInfoWrapper(ITypeInfo implementation) => this.implementation = implementation;
 
         public T[] GetCustomAttributes<T>(bool inherit)
             where T : class =>

@@ -7,16 +7,11 @@ using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
 {
-    internal class UseContainerMethodWrapper : IMethodInfo
+    [PrimaryConstructor]
+    internal partial class UseContainerMethodWrapper : IMethodInfo
     {
         private readonly IMethodInfo implementation;
         private readonly ITest test;
-
-        public UseContainerMethodWrapper(IMethodInfo implementation, ITest test)
-        {
-            this.implementation = implementation;
-            this.test = test;
-        }
 
         public T[] GetCustomAttributes<T>(bool inherit)
             where T : class =>
@@ -39,10 +34,8 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.Scope
                 var arguments = this.ResolveArgs(methodTarget, args ?? Array.Empty<object?>()).ToArray();
                 return this.implementation.Invoke(methodTarget, arguments);
             }
-            else
-            {
-                throw new InvalidOperationException("Method is not bound to fixture instance");
-            }
+
+            throw new InvalidOperationException("Method is not bound to fixture instance");
         }
 
         private IEnumerable<object?> ResolveArgs(object fixture, IReadOnlyList<object?> args)

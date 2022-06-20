@@ -20,12 +20,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixture\IModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixture\TypeInfoWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\InjectAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\LimitOptionalArgumentsForGenericValidationMethodInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\InjectedService.TService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\TestMapExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\AsyncLocalTestCaseServiceResolver.TService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\ConfigureServicesExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\TestInjectedAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\InjectableTestAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\Scope\UseContainerMethodWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ServiceCollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixture\AsyncLocalTestCaseServiceResolver.cs" />

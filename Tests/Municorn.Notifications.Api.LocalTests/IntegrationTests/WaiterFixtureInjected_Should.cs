@@ -19,8 +19,8 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
             this.waiter = waiter;
         }
 
-        [TestInjected(10)]
-        [TestInjected(11)]
+        [InjectableTest(10)]
+        [InjectableTest(11)]
         [Repeat(3)]
         public async Task Wait_Less_Than_N_Seconds([Inject] Waiter w, int n)
         {
