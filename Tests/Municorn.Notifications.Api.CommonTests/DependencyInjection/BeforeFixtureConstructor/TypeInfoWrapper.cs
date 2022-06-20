@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -240,10 +239,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
                 public override MethodImplAttributes GetMethodImplementationFlags() =>
                     this.implementation.GetMethodImplementationFlags();
 
-                public override ParameterInfo[] GetParameters() => this.implementation
-                    .GetParameters()
-                    .Select(parameter => new ParameterInfoWrapper(parameter))
-                    .ToArray();
+                public override ParameterInfo[] GetParameters() => Array.Empty<ParameterInfo>();
 
                 public override object? Invoke(
                     object? obj,
@@ -262,56 +258,6 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
                 public override MethodAttributes Attributes => this.implementation.Attributes;
 
                 public override RuntimeMethodHandle MethodHandle => this.implementation.MethodHandle;
-
-                private class ParameterInfoWrapper : ParameterInfo
-                {
-                    private readonly ParameterInfo implementation;
-
-                    public ParameterInfoWrapper(ParameterInfo implementation)
-                    {
-                        this.implementation = implementation;
-                        this.AttrsImpl = implementation.Attributes;
-                        this.ClassImpl = implementation.ParameterType;
-                        this.MemberImpl = implementation.Member;
-                        this.NameImpl = implementation.Name;
-                        this.PositionImpl = implementation.Position;
-                    }
-
-                    public override ParameterAttributes Attributes => this.implementation.Attributes | ParameterAttributes.Optional;
-
-                    public override MemberInfo Member => this.implementation.Member;
-
-                    public override string? Name => this.implementation.Name;
-
-                    public override Type ParameterType => this.implementation.ParameterType;
-
-                    public override int Position => this.implementation.Position;
-
-                    public override object? DefaultValue => this.implementation.DefaultValue;
-
-                    public override object? RawDefaultValue => this.implementation.RawDefaultValue;
-
-                    public override bool HasDefaultValue => this.implementation.HasDefaultValue;
-
-                    public override bool IsDefined(Type attributeType, bool inherit) =>
-                        this.implementation.IsDefined(attributeType, inherit);
-
-                    public override IEnumerable<CustomAttributeData> CustomAttributes => this.implementation.CustomAttributes;
-
-                    public override IList<CustomAttributeData> GetCustomAttributesData() =>
-                        this.implementation.GetCustomAttributesData();
-
-                    public override object[] GetCustomAttributes(bool inherit) => this.implementation.GetCustomAttributes(inherit);
-
-                    public override object[] GetCustomAttributes(Type attributeType, bool inherit) =>
-                        this.implementation.GetCustomAttributes(attributeType, inherit);
-
-                    public override Type[] GetOptionalCustomModifiers() => this.implementation.GetOptionalCustomModifiers();
-
-                    public override Type[] GetRequiredCustomModifiers() => this.implementation.GetRequiredCustomModifiers();
-
-                    public override int MetadataToken => this.implementation.MetadataToken;
-                }
             }
         }
 
