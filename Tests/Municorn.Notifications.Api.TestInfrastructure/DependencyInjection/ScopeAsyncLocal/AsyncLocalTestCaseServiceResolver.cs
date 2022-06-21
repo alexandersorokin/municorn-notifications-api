@@ -8,7 +8,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeAsyncLocal
     {
         private readonly IFixtureProvider fixtureProvider;
 
-        internal TService ResolveService<TService>()
+        public TService ResolveService<TService>()
             where TService : notnull =>
             TestExecutionContext.CurrentContext.CurrentTest
                 .GetFixtureServiceProviderMap()
