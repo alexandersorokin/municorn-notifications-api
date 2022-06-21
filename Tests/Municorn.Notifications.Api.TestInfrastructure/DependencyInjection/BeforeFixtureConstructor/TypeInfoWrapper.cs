@@ -62,13 +62,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);
 
-            var ctorArgs = this.originalType
+            var constructorInfo = this.originalType
                 .GetConstructors()
-                .First()
-                .GetParameters()
-                .Select(p => p.ParameterType)
-                .Select(type => serviceProvider.GetRequiredService(type))
-                .ToArray();
+                .First();
+            var ctorArgs = ResolveArguments(serviceProvider, constructorInfo);
 
             var fixture = this.Construct(ctorArgs);
 
@@ -110,6 +107,20 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             return result;
         }
 
+        private static object[] ResolveArguments(IServiceProvider serviceProvider, MethodBase constructorInfo) =>
+            constructorInfo
+                .GetParameters()
+                .Select(p => p.ParameterType)
+                .Select(type => serviceProvider.GetRequiredService(type))
+                .ToArray();
+
+        private static ServiceProvider GetServiceProviderByFixture(object fixture)
+        {
+            return ServiceProviders.GetValue(
+                fixture,
+                _ => throw new InvalidOperationException("Fixture is not found"));
+        }
+
         private class FixtureActionMethodInfo : MethodWrapper, IMethodInfo
         {
             public FixtureActionMethodInfo(Type type, IMethodInfo methodInfo)
@@ -121,7 +132,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
-                return this.Invoke(fixture, args);
+                var sp = GetServiceProviderByFixture(fixture ?? throw new InvalidOperationException($"Fixture is not passed to {this.MethodInfo.Name} method call"));
+                return this.Invoke(fixture, ResolveArguments(sp, this.MethodInfo));
             }
         }
 
@@ -174,9 +186,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                     throw new InvalidOperationException($"Test {test.FullName} with fixture {testFixture}");
                 }
 
-                this.serviceProvider = ServiceProviders.GetValue(
-                    notNullFixture,
-                    _ => throw new InvalidOperationException("Fixture is not found"));
+                this.serviceProvider = GetServiceProviderByFixture(notNullFixture);
             }
 
             private void BeforeTestCase(ITest test)
