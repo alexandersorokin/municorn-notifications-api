@@ -26,7 +26,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [Repeat(2)]
         public void Cases(int value)
         {
-            this.ResolveService<TestAccessor>().Test.Should().Be(TestExecutionContext.CurrentContext.CurrentTest);
+            this.GetRequiredService<TestAccessor>().Test.Should().Be(TestExecutionContext.CurrentContext.CurrentTest);
         }
     }
 }

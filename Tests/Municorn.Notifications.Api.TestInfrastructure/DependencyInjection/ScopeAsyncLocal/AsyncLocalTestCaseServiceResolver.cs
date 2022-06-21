@@ -9,10 +9,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scop
 
         internal AsyncLocalTestCaseServiceResolver(IFixtureProvider fixtureProvider) => this.fixtureProvider = fixtureProvider;
 
-        public TService ResolveService<TService>()
+        public TService GetRequiredService<TService>()
             where TService : notnull =>
-            TestExecutionContext.CurrentContext.CurrentTest
-                .GetServiceProvider(this.fixtureProvider.Fixture)
-                .GetRequiredService<TService>();
+            ServiceProviderServiceExtensions.GetRequiredService<TService>(TestExecutionContext.CurrentContext.CurrentTest
+                    .GetServiceProvider(this.fixtureProvider.Fixture));
     }
 }

@@ -2,8 +2,8 @@
 {
     public static class FixtureExtensions
     {
-        public static TService ResolveService<TService>(this object fixture)
+        public static TService GetRequiredService<TService>(this object fixture)
             where TService : notnull =>
-            new AsyncLocalTestCaseServiceResolver(new FixtureProvider(fixture)).ResolveService<TService>();
+            new AsyncLocalTestCaseServiceResolver(new FixtureProvider(fixture)).GetRequiredService<TService>();
     }
 }

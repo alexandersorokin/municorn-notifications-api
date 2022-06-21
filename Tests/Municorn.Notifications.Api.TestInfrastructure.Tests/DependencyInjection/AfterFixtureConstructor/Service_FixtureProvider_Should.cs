@@ -24,7 +24,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [Repeat(2)]
         public void Cases(int value)
         {
-            this.ResolveService<Service_FixtureProvider_Should>().Should().Be(this);
+            this.GetRequiredService<Service_FixtureProvider_Should>().Should().Be(this);
         }
     }
 }

@@ -6,6 +6,6 @@
     {
         private readonly AsyncLocalTestCaseServiceResolver asyncLocalTestCaseServiceResolver;
 
-        public TService Value => this.asyncLocalTestCaseServiceResolver.ResolveService<TService>();
+        public TService Value => this.asyncLocalTestCaseServiceResolver.GetRequiredService<TService>();
     }
 }

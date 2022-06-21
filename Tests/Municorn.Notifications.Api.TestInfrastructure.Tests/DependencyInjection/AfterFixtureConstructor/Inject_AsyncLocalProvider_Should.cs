@@ -19,20 +19,20 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [SetUp]
         public void SetUp()
         {
-            this.resolver.ResolveService<ILog>().Should().NotBeNull();
+            this.resolver.GetRequiredService<ILog>().Should().NotBeNull();
         }
 
         [TearDown]
         public void TearDown()
         {
-            this.resolver.ResolveService<ILog>().Should().NotBeNull();
+            this.resolver.GetRequiredService<ILog>().Should().NotBeNull();
         }
 
         [Test]
         [Repeat(2)]
         public void Case()
         {
-            this.resolver.ResolveService<ILog>().Should().NotBeNull();
+            this.resolver.GetRequiredService<ILog>().Should().NotBeNull();
         }
 
         [TestCase(10)]
@@ -40,7 +40,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [Repeat(2)]
         public void Cases(int value)
         {
-            this.resolver.ResolveService<ILog>().Should().NotBeNull();
+            this.resolver.GetRequiredService<ILog>().Should().NotBeNull();
         }
     }
 }
