@@ -16,7 +16,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         public void Dispose()
         {
-            this.log.Info($"Fixture finished. Elapsed: {this.stopWatch?.Elapsed}");
+            var stopwatch = this.stopWatch ?? throw new InvalidOperationException("Run wasn't called");
+            this.log.Info($"Fixture finished. Elapsed: {stopwatch.Elapsed}");
             this.counter.Increment();
         }
     }

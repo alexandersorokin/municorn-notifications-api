@@ -18,7 +18,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         public void Dispose()
         {
-            this.log.Info($"Test {this.testAccessor.Test.FullName} finished. Elapsed: {this.stopWatch?.Elapsed}");
+            var stopwatch = this.stopWatch ?? throw new InvalidOperationException("Run wasn't called");
+            this.log.Info($"Test {this.testAccessor.Test.FullName} finished. Elapsed: {stopwatch.Elapsed}");
             this.counter.Increment();
         }
     }
