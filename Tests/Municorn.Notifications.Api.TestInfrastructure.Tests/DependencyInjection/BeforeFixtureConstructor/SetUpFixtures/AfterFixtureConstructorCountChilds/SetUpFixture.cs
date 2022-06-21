@@ -11,9 +11,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [SetUpFixture]
     internal sealed class SetUpFixture : IConfigureServices, IDisposable
     {
-        [TestDependency]
-        private readonly Counter counter = default!;
-
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddBoundLog()
@@ -21,9 +18,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
                 .AddSingleton<IFixtureOneTimeSetUp, FixtureTimeLogger>()
                 .AddScoped<IFixtureSetUp, TestTimeLogger>();
 
+        [field: TestDependency]
+        public Counter Counter { get; } = default!;
+
         public void Dispose()
         {
-            this.counter.Value.Should().Be(5);
+            this.Counter.Value.Should().Be(7);
         }
     }
 }
