@@ -5,11 +5,10 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.Constructors
 {
     [TestFixtureInjectable("passed")]
-    internal class Inject_Argument_Should
+    [PrimaryConstructor]
+    internal partial class Inject_Argument_Should
     {
         private readonly string argument;
-
-        public Inject_Argument_Should(string argument) => this.argument = argument;
 
         [Test]
         public void Case()
