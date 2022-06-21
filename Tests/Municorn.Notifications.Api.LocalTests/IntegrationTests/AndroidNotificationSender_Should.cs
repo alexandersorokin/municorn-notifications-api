@@ -7,6 +7,7 @@ using Municorn.Notifications.Api.NotificationFeature.App;
 using Municorn.Notifications.Api.NotificationFeature.Data;
 using Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConstructor;
 using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeAsyncLocal;
+using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
@@ -16,12 +17,6 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     {
         [TestDependency]
         private readonly AsyncLocalTestCaseServiceResolver<AndroidNotificationSender> androidNotificationSender = default!;
-
-        [TestDependency]
-        private readonly AsyncLocalTestCaseServiceResolver<LogMessageContainer> logMessageContainer = default!;
-
-        [TestDependency]
-        private readonly AsyncLocalTestCaseServiceResolver<NotificationStatusRepository> notificationStatusRepository = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
@@ -57,19 +52,19 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         }
 
         [Test]
-        public async Task Save_Status_To_Repository()
+        public async Task Save_Status_To_Repository([Inject] NotificationStatusRepository notificationStatusRepository)
         {
             var result = await this.androidNotificationSender.Value
                 .Send(new("token", "message", "title"))
                 .ConfigureAwait(false);
 
-            var status = this.notificationStatusRepository.Value.GetStatus(result.Id);
+            var status = notificationStatusRepository.GetStatus(result.Id);
 
             status.HasSome.Should().BeTrue();
         }
 
         [Test]
-        public async Task Write_Message_To_Log()
+        public async Task Write_Message_To_Log([Inject] LogMessageContainer logMessageContainer)
         {
             var token = Guid.NewGuid().ToString();
             var message = Guid.NewGuid().ToString();
@@ -89,22 +84,20 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
                 title,
                 condition,
             };
-            this
-                .logMessageContainer.Value
+            logMessageContainer
                 .GetMessages()
                 .Should()
                 .Contain(logMessage => expectedMessages.All(logMessage.Contains));
         }
 
         [Test]
-        public async Task Write_Sender_Name_To_Log()
+        public async Task Write_Sender_Name_To_Log([Inject] LogMessageContainer logMessageContainer)
         {
             await this.androidNotificationSender.Value
                 .Send(new("token", "message", "title"))
                 .ConfigureAwait(false);
 
-            this
-                .logMessageContainer.Value
+            logMessageContainer
                 .GetMessages()
                 .Should()
                 .Contain(logMessage => logMessage.Contains("AndroidSender"));

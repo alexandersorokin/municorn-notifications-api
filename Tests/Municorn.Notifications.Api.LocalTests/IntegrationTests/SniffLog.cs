@@ -1,5 +1,4 @@
-﻿using System;
-using Vostok.Logging.Abstractions;
+﻿using Vostok.Logging.Abstractions;
 using Vostok.Logging.Formatting;
 
 namespace Municorn.Notifications.Api.Tests.IntegrationTests

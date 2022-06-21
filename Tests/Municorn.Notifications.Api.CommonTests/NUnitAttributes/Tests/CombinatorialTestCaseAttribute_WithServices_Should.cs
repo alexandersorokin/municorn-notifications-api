@@ -5,7 +5,7 @@ using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject;
 using Municorn.Notifications.Api.Tests.Logging;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.Tests
+namespace Municorn.Notifications.Api.Tests.NUnitAttributes.Tests
 {
     [TestFixture]
     internal class CombinatorialTestCaseAttribute_WithServices_Should : IConfigureServices
@@ -13,10 +13,9 @@ namespace Municorn.Notifications.Api.Tests
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection.AddSingleton<NUnitTextWriterProvider>();
 
-        [CombinatorialTestCase(10, 1.1f, 100, "let")]
+        [CombinatorialTestCase(10, 1.1f, 100, "provided")]
         [CombinatorialTestCase(11, 1.2d, null)]
-        [Repeat(3)]
-        public void Deduce_Generic_With_Optional<T1, T2>(
+        public void Integration<T1, T2>(
             [Inject(typeof(NUnitTextWriterProvider))] object injectFirst,
             [Values] bool automaticData,
             int testCaseData,
@@ -25,67 +24,80 @@ namespace Municorn.Notifications.Api.Tests
             T2 testCaseInfer,
             int? testCaseDataConversion,
             [Values(true, null)] bool? valuesConversion,
-            [Inject] GlobalLog setupFixture,
-            string t = "var")
+            [Inject] SetUpFixture setupFixture,
+            string optional = "default")
         {
             injectSecond.Should().NotBeNull();
         }
 
-        [CombinatorialTestCase(10, "by")]
-        [CombinatorialTestCase(11)]
-        [Repeat(3)]
-        public void Process_Optional_Without_Generic([Inject] NUnitTextWriterProvider injected, int n, string x = "c")
-        {
-            injected.Should().NotBeNull();
-        }
-
         [CombinatorialTestCase(10)]
-        [Repeat(3)]
-        public void Deduce_Case_Generic_Without_Optional<T>(T testCaseInfer)
+        public void Deduce_Generic_From_Case<T>(T value)
         {
-            testCaseInfer.Should().NotBeNull();
+            value.Should().NotBeNull();
         }
 
         [CombinatorialTestCase]
-        [Repeat(3)]
-        public void Deduce_Value_Provider_Generic_Without_Optional<T>([Values("string", 777)] T automaticInfer)
+        public void Deduce_Generic_From_Provider<T>([Values("string", 777)] T value)
         {
-            automaticInfer.Should().NotBeNull();
+            value.Should().NotBeNull();
+        }
+
+        [CombinatorialTestCase("provided")]
+        [CombinatorialTestCase]
+        public void Process_Optional_With_Container([Inject] NUnitTextWriterProvider service, string optional = "default")
+        {
+            optional.Should().NotBeNull();
+        }
+
+        [CombinatorialTestCase("provided")]
+        [CombinatorialTestCase]
+        public void Process_Optional_With_Provider([Values] bool value, string optional = "default")
+        {
+            optional.Should().NotBeNull();
+        }
+
+        [CombinatorialTestCase(10, "provided")]
+        [CombinatorialTestCase(11)]
+        public void Process_Optional_With_Case(int value, string optional = "default")
+        {
+            optional.Should().NotBeNull();
+        }
+
+        [CombinatorialTestCase("provided")]
+        [CombinatorialTestCase]
+        public void Process_Optional(string optional = "default")
+        {
+            optional.Should().NotBeNull();
         }
 
         [CombinatorialTestCase(10)]
         [CombinatorialTestCase(11)]
-        [Repeat(3)]
-        public void Inject_From_Container_And_Case([Inject] NUnitTextWriterProvider injected, int value)
+        public void Inject_From_Container_And_Case([Inject] NUnitTextWriterProvider service, int value)
         {
-            injected.Should().NotBeNull();
+            service.Should().NotBeNull();
             value.Should().BePositive();
         }
 
         [CombinatorialTestCase]
-        [Repeat(3)]
-        public void Inject_From_Container([Inject] GlobalLog injected)
+        public void Inject_From_Container([Inject] NUnitTextWriterProvider service)
         {
-            injected.Should().NotBeNull();
+            service.Should().NotBeNull();
         }
 
         [CombinatorialTestCase]
-        [Repeat(3)]
-        public void Inject_From_Value_Provider([Values(1, 2)] int value)
+        public void Inject_From_Provider([Values(1, 2)] int value)
         {
             value.Should().BePositive();
         }
 
         [CombinatorialTestCase(1)]
         [CombinatorialTestCase(2)]
-        [Repeat(3)]
         public void Inject_From_Case(int value)
         {
             value.Should().BePositive();
         }
 
         [CombinatorialTestCase]
-        [Repeat(3)]
         public void Work_Without_Arguments()
         {
             true.Should().BeTrue();

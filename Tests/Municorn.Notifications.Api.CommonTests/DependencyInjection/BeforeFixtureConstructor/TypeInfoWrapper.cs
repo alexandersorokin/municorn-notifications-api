@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeAsyncLocal;
+using Municorn.Notifications.Api.Tests.NUnitAttributes;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
@@ -23,17 +24,22 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
             ValidateScopes = true,
         };
 
+        private readonly Type originalType;
+        private readonly Type wrappedType;
+
         public TypeInfoWrapper(Type type)
             : base(type)
         {
+            this.originalType = type;
+            this.wrappedType = new TypeWrapper(type);
         }
+
+        Type ITypeInfo.Type => this.wrappedType;
 
         IMethodInfo[] ITypeInfo.GetMethods(BindingFlags flags) => this
             .GetMethods(flags)
             .Select(method => new ReplaceTestBuilderMethodWrapper(method))
             .ToArray<IMethodInfo>();
-
-        Type ITypeInfo.Type => new TypeWrapper(this.Type);
 
         object ITypeInfo.Construct(object?[]? args)
         {
@@ -54,7 +60,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
 
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);
 
-            var ctorArgs = this.Type
+            var ctorArgs = this.originalType
                 .GetConstructors()
                 .First()
                 .GetParameters()
@@ -62,7 +68,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
                 .Select(type => serviceProvider.GetRequiredService(type))
                 .ToArray();
 
-            var fixture = this.Construct(ctorArgs);
+            var fixture = Reflect.Construct(this.originalType, ctorArgs);
 
             fixtureProvider.Fixture = fixture;
             ServiceProviders.Add(fixture, serviceProvider);
@@ -73,7 +79,8 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
         IMethodInfo[] ITypeInfo.GetMethodsWithAttribute<T>(bool inherit)
             where T : class
         {
-            var result = this.GetMethodsWithAttribute<T>(inherit);
+            var result = this
+                .GetMethodsWithAttribute<T>(inherit);
 
             HashSet<Type> attributesToPatch = new()
             {
@@ -85,7 +92,9 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
 
             if (attributesToPatch.Contains(typeof(T)))
             {
-                return result.Select(method => new FixtureActionMethodInfo(method)).ToArray<IMethodInfo>();
+                return result
+                    .Select(method => new FixtureActionMethodInfo(method))
+                    .ToArray<IMethodInfo>();
             }
 
             return result;
@@ -382,16 +391,20 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureCons
                 where T : class
             {
                 var result = this.GetCustomAttributes<T>(inherit);
-                if (typeof(T) == typeof(ITestBuilder))
-                {
-                    return result
-                        .Select(attribute => attribute is TestCaseAttribute testCaseAttribute
-                            ? (T)(object)new CombinatorialTestCaseAttribute(testCaseAttribute.Arguments)
-                            : attribute)
-                        .ToArray();
-                }
+                return typeof(T) == typeof(ITestBuilder)
+                    ? result.Select(ReplaceAttribute).ToArray()
+                    : result;
+            }
 
-                return result;
+            private static T ReplaceAttribute<T>(T attribute)
+                where T : class
+            {
+                return attribute switch
+                {
+                    TestCaseAttribute testCaseAttribute => (T)(object)new CombinatorialTestCaseAttribute(testCaseAttribute),
+                    TestCaseSourceAttribute testCaseSourceAttribute => (T)(object)new CombinatorialTestCaseSourceAttribute(testCaseSourceAttribute),
+                    _ => attribute,
+                };
             }
         }
     }

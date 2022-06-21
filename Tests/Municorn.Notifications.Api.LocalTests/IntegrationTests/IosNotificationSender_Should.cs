@@ -8,6 +8,7 @@ using Municorn.Notifications.Api.NotificationFeature.App;
 using Municorn.Notifications.Api.NotificationFeature.Data;
 using Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConstructor;
 using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeAsyncLocal;
+using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
@@ -16,7 +17,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     internal class IosNotificationSender_Should : IConfigureServices
     {
         [TestDependency]
-        private readonly AsyncLocalTestCaseServiceResolver serviceResolver = default!;
+        private readonly AsyncLocalTestCaseServiceResolver<IosNotificationSender> iosNotificationSender = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
@@ -29,7 +30,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         [Test]
         public async Task Deliver_Message()
         {
-            var result = await this.CreateNotificationSender()
+            var result = await this.iosNotificationSender.Value
                 .Send(new("token", "alert"))
                 .ConfigureAwait(false);
 
@@ -39,7 +40,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         [Test]
         public async Task Not_Deliver_Fifth_Message()
         {
-            var sender = this.CreateNotificationSender();
+            var sender = this.iosNotificationSender.Value;
             IosNotificationData data = new("token", "alert");
 
             await sender.Send(data).ConfigureAwait(false);
@@ -52,19 +53,19 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         }
 
         [Test]
-        public async Task Save_Status_To_Repository()
+        public async Task Save_Status_To_Repository([Inject] NotificationStatusRepository notificationStatusRepository)
         {
-            var result = await this.CreateNotificationSender()
+            var result = await this.iosNotificationSender.Value
                 .Send(new("token", "alert"))
                 .ConfigureAwait(false);
 
-            var status = this.serviceResolver.ResolveService<NotificationStatusRepository>().GetStatus(result.Id);
+            var status = notificationStatusRepository.GetStatus(result.Id);
 
             status.HasSome.Should().BeTrue();
         }
 
         [Test]
-        public async Task Write_Message_To_Log()
+        public async Task Write_Message_To_Log([Inject] LogMessageContainer logMessageContainer)
         {
             var token = Guid.NewGuid().ToString();
             var alert = Guid.NewGuid().ToString();
@@ -75,7 +76,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
                 IsBackground = false,
             };
 
-            await this.CreateNotificationSender().Send(data).ConfigureAwait(false);
+            await this.iosNotificationSender.Value.Send(data).ConfigureAwait(false);
 
             var expectedMessages = new[]
             {
@@ -84,29 +85,23 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
                 priority.ToString(CultureInfo.InvariantCulture),
                 bool.FalseString,
             };
-            this
-                .GetLogMessageContainer()
+            logMessageContainer
                 .GetMessages()
                 .Should()
                 .Contain(logMessage => expectedMessages.All(logMessage.Contains));
         }
 
         [Test]
-        public async Task Write_Sender_Name_To_Log()
+        public async Task Write_Sender_Name_To_Log([Inject] LogMessageContainer logMessageContainer)
         {
-            await this.CreateNotificationSender()
+            await this.iosNotificationSender.Value
                 .Send(new("token", "alert"))
                 .ConfigureAwait(false);
 
-            this
-                .GetLogMessageContainer()
+            logMessageContainer
                 .GetMessages()
                 .Should()
                 .Contain(logMessage => logMessage.Contains("IosSender"));
         }
-
-        private LogMessageContainer GetLogMessageContainer() => this.serviceResolver.ResolveService<LogMessageContainer>();
-
-        private IosNotificationSender CreateNotificationSender() => this.serviceResolver.ResolveService<IosNotificationSender>();
     }
 }

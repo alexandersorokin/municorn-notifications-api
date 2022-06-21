@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.Tests.DependencyInjection.AutoMethods;
 using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeAsyncLocal;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.Tests.Logging;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.Tests.ApiTests
 {
@@ -8,8 +7,7 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
     {
         internal static IServiceCollection RegisterClientFactory(this IServiceCollection serviceCollection) =>
             serviceCollection
-                .AddSingleton<ITextWriterProvider, NUnitTextWriterProvider>()
-                .AddSingleton<ILog, TextWriterLog>()
+                .AddContextualLog()
                 .RegisterClientTopologyFactory()
                 .AddSingleton<ClientFactory>();
     }

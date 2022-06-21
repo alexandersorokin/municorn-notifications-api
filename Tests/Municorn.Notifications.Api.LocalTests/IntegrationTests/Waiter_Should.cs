@@ -5,32 +5,26 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.NotificationFeature.App;
 using Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConstructor;
-using Municorn.Notifications.Api.Tests.Logging;
 using NUnit.Framework;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
-    internal class Waiter_AttributeInject_Static_Should : IConfigureServices
+    internal class Waiter_Should : IConfigureServices
     {
         [TestDependency]
         private readonly Waiter waiter = default!;
 
-        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
-            .RegisterWaiter()
-            .AddSingleton<ITextWriterProvider, NUnitTextWriterProvider>()
-            .AddSingleton<ILog, TextWriterLog>()
-            .AddSingleton<IFixtureOneTimeSetUp, FixtureTimeLogger>();
+        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterWaiter();
 
         [TestCase(10)]
         [TestCase(11)]
         [Repeat(3)]
-        public async Task Wait_Less_Than_N_Seconds(int n)
+        public async Task Wait_Less_Than_N_Seconds(int seconds)
         {
             Func<Task> action = this.waiter.Wait;
 
-            await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(n)).ConfigureAwait(false);
+            await action.Should().CompleteWithinAsync(TimeSpan.FromSeconds(seconds)).ConfigureAwait(false);
         }
 
         [Test]

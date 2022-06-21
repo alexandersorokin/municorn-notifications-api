@@ -1,4 +1,4 @@
-﻿namespace Municorn.Notifications.Api.Tests.DependencyInjection
+﻿namespace Municorn.Notifications.Api.Tests.DependencyInjection.AutoMethods
 {
     internal interface IFixtureSetUp
     {

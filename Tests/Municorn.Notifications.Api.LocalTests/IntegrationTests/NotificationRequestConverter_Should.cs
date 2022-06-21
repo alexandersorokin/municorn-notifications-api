@@ -9,7 +9,8 @@ using Municorn.Notifications.Api.NotificationFeature.App;
 using Municorn.Notifications.Api.NotificationFeature.Data;
 using Municorn.Notifications.Api.NotificationFeature.View;
 using Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConstructor;
-using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeAsyncLocal;
+using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject;
+using Municorn.Notifications.Api.Tests.NUnitAttributes;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
@@ -69,16 +70,18 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
             }
         }
 
-        [TestCaseSource(nameof(Cases))]
+        [CombinatorialTestCaseSource(nameof(Cases))]
         public async Task Write_Message_To_Log(
+            [Inject] NotificationRequestConverter notificationRequestConverter,
+            [Inject] LogMessageContainer logMessageContainer,
             SendNotificationRequest request,
             IEnumerable<string> expectedMessages)
         {
-            var notification = request.Accept(this.ResolveService<NotificationRequestConverter>());
+            var notification = request.Accept(notificationRequestConverter);
 
             await notification.Send().ConfigureAwait(false);
-            this
-                .ResolveService<LogMessageContainer>()
+
+            logMessageContainer
                 .GetMessages()
                 .Should()
                 .Contain(logMessage => expectedMessages.All(logMessage.Contains));

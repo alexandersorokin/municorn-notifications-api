@@ -11,10 +11,12 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject
     {
         private readonly IServiceProvider serviceProvider;
         private readonly object containerFixture;
+        private readonly IMethodInfo methodInfo;
 
         public UseContainerMethodInfo(IMethodInfo methodInfo, IServiceProvider serviceProvider, object containerFixture)
             : base(methodInfo.TypeInfo.Type, methodInfo.MethodInfo)
         {
+            this.methodInfo = methodInfo;
             this.serviceProvider = serviceProvider;
             this.containerFixture = containerFixture;
         }
@@ -22,7 +24,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject
         object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
         {
             var resolvedArguments = this.ResolveArgs(fixture, args ?? Enumerable.Empty<object?>()).ToArray();
-            return this.Invoke(fixture, resolvedArguments);
+            return this.methodInfo.Invoke(fixture, resolvedArguments);
         }
 
         private IEnumerable<object?> ResolveArgs(object? methodFixture, IEnumerable<object?> args)
