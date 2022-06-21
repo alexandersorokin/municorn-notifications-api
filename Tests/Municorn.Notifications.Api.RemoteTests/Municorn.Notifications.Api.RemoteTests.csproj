@@ -8,7 +8,6 @@
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.5.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-    <PackageReference Include="Vostok.Logging.Microsoft" Version="2.0.13" />
   </ItemGroup>
 
   <ItemGroup>
