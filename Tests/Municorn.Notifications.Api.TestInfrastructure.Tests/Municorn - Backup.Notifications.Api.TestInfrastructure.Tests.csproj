@@ -14,4 +14,9 @@
     <ProjectReference Include="..\Municorn.Notifications.Api.TestInfrastructure\Municorn.Notifications.Api.TestInfrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DependencyInjection\AfterFixtureConstructor\" />
+    <Folder Include="DependencyInjection\BeforeFixtureConstructor\" />
+  </ItemGroup>
+
 </Project>

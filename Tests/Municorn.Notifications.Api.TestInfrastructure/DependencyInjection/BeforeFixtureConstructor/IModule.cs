@@ -2,7 +2,7 @@
 
 namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureConstructor
 {
-    internal interface IModule
+    public interface IModule
     {
         void ConfigureServices(IServiceCollection serviceCollection);
     }

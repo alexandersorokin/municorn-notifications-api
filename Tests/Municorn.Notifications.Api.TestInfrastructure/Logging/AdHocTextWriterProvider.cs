@@ -7,6 +7,6 @@ namespace Municorn.Notifications.Api.Tests.Logging
     {
         private readonly TextWriter textWriter;
 
-        public TextWriter Get() => this.textWriter;
+        public TextWriter GetWriter() => this.textWriter;
     }
 }

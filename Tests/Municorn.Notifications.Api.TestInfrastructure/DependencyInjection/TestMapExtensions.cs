@@ -2,11 +2,11 @@
 
 namespace Municorn.Notifications.Api.Tests.DependencyInjection
 {
-    internal static class TestMapExtensions
+    public static class TestMapExtensions
     {
         private const string Key = "FixtureServiceProviderMap";
 
-        internal static FixtureServiceProviderMap GetFixtureServiceProviderMap(this ITest test)
+        public static FixtureServiceProviderMap GetFixtureServiceProviderMap(this ITest test)
         {
             var properties = test.Properties;
             if (properties.Get(Key) is FixtureServiceProviderMap alreadyCreatedValue)

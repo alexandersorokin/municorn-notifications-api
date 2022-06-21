@@ -5,7 +5,7 @@ namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConst
 {
     [AttributeUsage(AttributeTargets.Field)]
     [MeansImplicitUse(ImplicitUseKindFlags.Assign)]
-    internal sealed class TestDependencyAttribute : Attribute
+    public sealed class TestDependencyAttribute : Attribute
     {
     }
 }

@@ -3,16 +3,16 @@ using System.Runtime.CompilerServices;
 
 namespace Municorn.Notifications.Api.Tests.DependencyInjection
 {
-    internal class FixtureServiceProviderMap
+    public class FixtureServiceProviderMap
     {
         private readonly ConditionalWeakTable<object, IServiceProvider> serviceScopes = new();
 
-        internal void AddScope(object fixture, IServiceProvider serviceScope) => this.serviceScopes.Add(fixture, serviceScope);
-
-        internal IServiceProvider GetScope(object fixture) =>
+        public IServiceProvider GetScope(object fixture) =>
             this.serviceScopes.TryGetValue(fixture, out var serviceScope)
                 ? serviceScope
                 : throw CreateNotFoundException(fixture);
+
+        internal void AddScope(object fixture, IServiceProvider serviceScope) => this.serviceScopes.Add(fixture, serviceScope);
 
         internal void RemoveScope(object fixture)
         {

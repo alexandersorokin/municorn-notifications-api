@@ -1,8 +1,8 @@
 ﻿namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeAsyncLocal
 {
-    internal static class FixtureExtensions
+    public static class FixtureExtensions
     {
-        internal static TService ResolveService<TService>(this object fixture)
+        public static TService ResolveService<TService>(this object fixture)
             where TService : notnull =>
             new AsyncLocalTestCaseServiceResolver(new FixtureProvider(fixture)).ResolveService<TService>();
 

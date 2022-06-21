@@ -2,8 +2,8 @@
 
 namespace Municorn.Notifications.Api.Tests.Logging
 {
-    internal interface ITextWriterProvider
+    public interface ITextWriterProvider
     {
-        TextWriter Get();
+        TextWriter GetWriter();
     }
 }

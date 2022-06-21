@@ -3,7 +3,7 @@ using Vostok.Logging.Formatting;
 
 namespace Municorn.Notifications.Api.Tests.Logging
 {
-    internal class TextWriterLog : ILog
+    public class TextWriterLog : ILog
     {
         private static readonly OutputTemplate Template = new OutputTemplateBuilder()
             .AddTimestamp()
@@ -30,7 +30,7 @@ namespace Municorn.Notifications.Api.Tests.Logging
             }
 
             var message = LogEventFormatter.Format(@event, Template);
-            this.textWriterProvider.Get().Write(message);
+            this.textWriterProvider.GetWriter().Write(message);
         }
 
         public bool IsEnabledFor(LogLevel level) => true;

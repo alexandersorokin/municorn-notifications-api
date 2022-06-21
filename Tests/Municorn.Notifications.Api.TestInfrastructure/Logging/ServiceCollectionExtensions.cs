@@ -4,15 +4,15 @@ using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.Tests.Logging
 {
-    internal static class ServiceCollectionExtensions
+    public static class ServiceCollectionExtensions
     {
-        internal static IServiceCollection AddBoundLog(this IServiceCollection serviceCollection) =>
+        public static IServiceCollection AddBoundLog(this IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddSingleton(TestContext.Out)
                 .AddSingleton<ITextWriterProvider, AdHocTextWriterProvider>()
                 .AddSingleton<ILog, TextWriterLog>();
 
-        internal static IServiceCollection AddContextualLog(this IServiceCollection serviceCollection) =>
+        public static IServiceCollection AddContextualLog(this IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddSingleton<ITextWriterProvider, NUnitTextWriterProvider>()
                 .AddSingleton<ILog, TextWriterLog>();

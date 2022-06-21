@@ -2,7 +2,7 @@
 
 namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject
 {
-    internal class InjectedService<TService> : IInjectedService
+    public class InjectedService<TService> : IInjectedService
     {
         public override string ToString() => $"Service<{typeof(TService).Name}>";
 
