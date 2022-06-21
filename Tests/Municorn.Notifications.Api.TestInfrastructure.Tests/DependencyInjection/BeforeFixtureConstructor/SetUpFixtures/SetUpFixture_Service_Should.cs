@@ -7,7 +7,7 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.SetUpFixtures
 {
     [TestFixtureInjectable]
-    [TestModule]
+    [LogModule]
     internal class SetUpFixture_Service_Should
     {
         [Test]

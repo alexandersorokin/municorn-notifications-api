@@ -6,7 +6,7 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [TestFixtureInjectable]
-    [TestModule]
+    [LogModule]
     [PrimaryConstructor]
     internal partial class Inject_Constructor_Should
     {
