@@ -48,7 +48,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<IFixtureProvider>(fixtureProvider)
                 .AddSingleton<TestActionMethodManager>()
-                .AddSingleton<AsyncLocalTestCaseServiceResolver>()
+                .AddSingleton(sp => new AsyncLocalTestCaseServiceResolver(sp.GetRequiredService<IFixtureProvider>()))
                 .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>))
                 .RegisterFixtures(TestExecutionContext.CurrentContext.CurrentTest)
                 .AddScoped<TestAccessor>();

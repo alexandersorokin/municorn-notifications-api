@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
 using Vostok.Logging.Abstractions;
 
@@ -10,7 +9,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal sealed partial class FixtureTimeLogger : IFixtureOneTimeSetUp, IDisposable
     {
         private readonly Counter counter;
-        private readonly IFixtureProvider fixtureProvider;
         private readonly ILog log;
         private Stopwatch? stopWatch;
 
@@ -18,7 +16,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         public void Dispose()
         {
-            this.log.Info($"Fixture {this.fixtureProvider.Fixture} finished. Elapsed: {this.stopWatch?.Elapsed}");
+            this.log.Info($"Fixture finished. Elapsed: {this.stopWatch?.Elapsed}");
             this.counter.Increment();
         }
     }

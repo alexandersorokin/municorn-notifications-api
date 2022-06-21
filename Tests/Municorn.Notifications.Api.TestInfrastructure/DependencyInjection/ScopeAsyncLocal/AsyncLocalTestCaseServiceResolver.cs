@@ -3,10 +3,11 @@ using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeAsyncLocal
 {
-    [PrimaryConstructor]
-    public partial class AsyncLocalTestCaseServiceResolver
+    public class AsyncLocalTestCaseServiceResolver
     {
         private readonly IFixtureProvider fixtureProvider;
+
+        internal AsyncLocalTestCaseServiceResolver(IFixtureProvider fixtureProvider) => this.fixtureProvider = fixtureProvider;
 
         public TService ResolveService<TService>()
             where TService : notnull =>
