@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Municorn.Notifications.Api.Client\Municorn.Notifications.Api.Client.csproj" />
     <ProjectReference Include="..\..\Municorn.Notifications.Api\Municorn.Notifications.Api.csproj" />
+    <ProjectReference Include="..\Municorn.Notifications.Api.TestInfrastructure\Municorn.Notifications.Api.TestInfrastructure.csproj" />
   </ItemGroup>
 
   <Import Project="..\Municorn.Notifications.Api.CommonTests\Municorn.Notifications.Api.CommonTests.projitems" Label="Shared" />
