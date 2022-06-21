@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes
 {
     [TestFixture]
-    internal class CombinatorialTestCaseSourceAttribute_Should
+    internal class CombinatorialTestCaseSourceAttribute_Inject_Should
     {
         private static readonly TestCaseData[] ValueData =
         {

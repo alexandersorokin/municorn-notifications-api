@@ -24,6 +24,32 @@ namespace Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes
         {
         }
 
+        public CombinatorialTestCaseSourceAttribute(Type sourceType, string sourceName, object?[]? methodParams)
+            : this(new TestCaseSourceAttribute(sourceType, sourceName, methodParams))
+        {
+        }
+
+        public CombinatorialTestCaseSourceAttribute(Type sourceType, string sourceName)
+            : this(new TestCaseSourceAttribute(sourceType, sourceName))
+        {
+        }
+
+        public CombinatorialTestCaseSourceAttribute(string sourceName, object?[]? methodParams)
+            : this(new TestCaseSourceAttribute(sourceName, methodParams))
+        {
+        }
+
+        public CombinatorialTestCaseSourceAttribute(Type sourceType)
+            : this(new TestCaseSourceAttribute(sourceType))
+        {
+        }
+
+        public string? Category
+        {
+            get => this.implementation.Category;
+            set => this.implementation.Category = value;
+        }
+
         IEnumerable<TestMethod> ITestBuilder.BuildFrom(IMethodInfo method, Test? suite)
         {
             var testCaseDatas = this.GetTestCasesFor(method);
