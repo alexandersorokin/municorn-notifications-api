@@ -72,10 +72,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);
 
+            var originalArgs = args ?? Array.Empty<object?>();
             var constructorInfo = this.originalType
                 .GetConstructors()
-                .First();
-            var originalArgs = args ?? Array.Empty<object?>();
+                .First(constructor => constructor.GetParameters().Length >= originalArgs.Length);
             var parameterInfos = constructorInfo.GetParameters().Skip(originalArgs.Length);
             var ctorArgs = ResolveArguments(serviceProvider, parameterInfos);
 
