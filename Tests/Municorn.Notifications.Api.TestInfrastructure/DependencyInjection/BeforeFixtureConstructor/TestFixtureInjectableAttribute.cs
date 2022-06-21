@@ -9,12 +9,26 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class TestFixtureInjectableAttribute : NUnitAttribute, IFixtureBuilder2
     {
-        private readonly TestFixtureAttribute implementation = new();
+        private readonly object?[] arguments;
 
-        public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo) => this.implementation.BuildFrom(CreateWrapper(typeInfo));
+        public TestFixtureInjectableAttribute(params object?[] arguments) => this.arguments = arguments;
 
-        public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo, IPreFilter filter) => this.implementation.BuildFrom(CreateWrapper(typeInfo), filter);
+        public TestFixtureInjectableAttribute()
+            : this(Array.Empty<object>())
+        {
+        }
+
+        public Type[] TypeArgs { get; set; } = Array.Empty<Type>();
+
+        public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo) => this.CreateImplementation().BuildFrom(CreateWrapper(typeInfo));
+
+        public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo, IPreFilter filter) => this.CreateImplementation().BuildFrom(CreateWrapper(typeInfo), filter);
 
         private static TypeInfoWrapper CreateWrapper(ITypeInfo typeInfo) => new(typeInfo.Type);
+
+        private TestFixtureAttribute CreateImplementation() => new(this.arguments)
+        {
+            TypeArgs = this.TypeArgs,
+        };
     }
 }
