@@ -76,16 +76,15 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
                 .AddSingleton(sp => new AsyncLocalTestCaseServiceResolver(sp.GetRequiredService<IFixtureProvider>()))
                 .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>))
                 .RegisterFixtures(test)
+                .AddSingleton<FixtureOneTimeSetUpRunner>()
+                .AddScoped<FixtureSetUpRunner>()
                 .AddScoped<TestAccessor>();
             configureServices.ConfigureServices(serviceCollection);
 
             this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
             InitializeSingletonFields(configureServices, this.serviceProvider);
 
-            foreach (var fixtureOneTimeSetUp in this.serviceProvider.GetServices<IFixtureOneTimeSetUp>())
-            {
-                fixtureOneTimeSetUp.Run();
-            }
+            this.serviceProvider.GetRequiredService<FixtureOneTimeSetUpRunner>().Run();
         }
 
         private void BeforeTestCase(ITest test)

@@ -32,10 +32,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
             testMethod.Method = new UseContainerMethodInfo(originalMethodInfo, scopeServiceProvider, this.fixtureProvider.Fixture);
             map.AddScope(this.fixtureProvider.Fixture, scopeServiceProvider);
 
-            foreach (var fixtureSetUp in scopeServiceProvider.GetServices<IFixtureSetUp>())
-            {
-                fixtureSetUp.Run();
-            }
+            scopeServiceProvider.GetRequiredService<FixtureSetUpRunner>().Run();
         }
 
         internal void AfterTestCase(ITest test)
