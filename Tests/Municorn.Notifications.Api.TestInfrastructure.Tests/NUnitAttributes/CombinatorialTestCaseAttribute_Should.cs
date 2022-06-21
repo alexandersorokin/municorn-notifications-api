@@ -7,6 +7,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes
     [TestFixture]
     internal class CombinatorialTestCaseAttribute_Should
     {
+        [CombinatorialTestCase(1, ExpectedResult = 1)]
+        public int Return_Value(int value) => value;
+
         [CombinatorialTestCase(10, 1.1f, 100, "provided")]
         [CombinatorialTestCase(11, 1.2d, null)]
         public void Integration<T1, T2>(

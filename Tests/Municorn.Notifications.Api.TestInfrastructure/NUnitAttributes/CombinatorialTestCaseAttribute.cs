@@ -20,11 +20,24 @@ namespace Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes
         private static readonly NUnitTestCaseBuilder TestCaseBuilder = new();
 
         private readonly ITestCaseData testCaseData;
+        private object? expectedResult;
 
         public CombinatorialTestCaseAttribute(params object?[] arguments)
             : this(new TestCaseData(arguments))
         {
         }
+
+        public object? ExpectedResult
+        {
+            get => this.expectedResult;
+            set
+            {
+                this.expectedResult = value;
+                this.HasExpectedResult = true;
+            }
+        }
+
+        public bool HasExpectedResult { get; private set; }
 
         IEnumerable<TestMethod> ITestBuilder.BuildFrom(IMethodInfo method, Test? suite)
         {
@@ -105,6 +118,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes
             if (this.testCaseData.HasExpectedResult)
             {
                 parameters.ExpectedResult = this.testCaseData.ExpectedResult;
+            }
+
+            if (this.HasExpectedResult)
+            {
+                parameters.ExpectedResult = this.ExpectedResult;
             }
 
             var properties = this.testCaseData.Properties;
