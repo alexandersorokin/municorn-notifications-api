@@ -57,7 +57,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             foreach (var module in this.GetCustomAttributes<IModule>(true))
             {
-                module.ConfigureServices(serviceCollection);
+                module.ConfigureServices(serviceCollection, this);
             }
 
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);
@@ -70,7 +70,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                 .Select(type => serviceProvider.GetRequiredService(type))
                 .ToArray();
 
-            var fixture = Reflect.Construct(this.originalType, ctorArgs);
+            var fixture = this.Construct(ctorArgs);
 
             fixtureProvider.Fixture = fixture;
             ServiceProviders.Add(fixture, serviceProvider);
@@ -81,8 +81,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
         IMethodInfo[] ITypeInfo.GetMethodsWithAttribute<T>(bool inherit)
             where T : class
         {
-            var result = this
-                .GetMethodsWithAttribute<T>(inherit);
+            var result = this.GetMethodsWithAttribute<T>(inherit);
 
             HashSet<Type> attributesToPatch = new()
             {
