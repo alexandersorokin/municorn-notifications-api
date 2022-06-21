@@ -11,8 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scop
         public TService ResolveService<TService>()
             where TService : notnull =>
             TestExecutionContext.CurrentContext.CurrentTest
-                .GetFixtureServiceProviderMap()
-                .GetScope(this.fixtureProvider.Fixture)
+                .GetServiceProvider(this.fixtureProvider.Fixture)
                 .GetRequiredService<TService>();
     }
 }

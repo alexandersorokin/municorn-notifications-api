@@ -28,8 +28,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         private void EnsureHaveContainer(ITest test)
         {
             var service = test
-                .GetFixtureServiceProviderMap()
-                .GetScope(this.testFixture ?? throw new InvalidOperationException("Fixture is not found"))
+                .GetServiceProvider(this.testFixture ?? throw new InvalidOperationException("Fixture is not found"))
                 .GetRequiredService<ILog>();
             service.Should().NotBeNull();
         }
