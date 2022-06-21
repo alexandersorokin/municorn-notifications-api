@@ -70,9 +70,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             var constructorInfo = this.originalType
                 .GetConstructors()
                 .First();
-            var ctorArgs = ResolveArguments(serviceProvider, constructorInfo);
+            var originalArgs = args ?? Array.Empty<object?>();
+            var parameterInfos = constructorInfo.GetParameters().Skip(originalArgs.Length);
+            var ctorArgs = ResolveArguments(serviceProvider, parameterInfos);
 
-            var fixture = this.Construct(ctorArgs);
+            var fixture = this.Construct(originalArgs.Concat(ctorArgs).ToArray());
 
             fixtureProvider.Fixture = fixture;
             ServiceProviders.Add(fixture, serviceProvider);
@@ -126,9 +128,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             // only MethodInfo is required
         }
 
-        private static object[] ResolveArguments(IServiceProvider serviceProvider, MethodBase methodInfo) =>
+        private static object[] ResolveArguments(IServiceProvider serviceProvider, IEnumerable<ParameterInfo> methodInfo) =>
             methodInfo
-                .GetParameters()
                 .Select(p => p.ParameterType)
                 .Select(type => serviceProvider.GetRequiredService(type))
                 .ToArray();
@@ -152,7 +153,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
                 var sp = GetServiceProviderByFixture(fixture, $"Fixture is not passed to {this.MethodInfo.Name} method call");
-                return this.Invoke(fixture, ResolveArguments(sp, this.MethodInfo));
+                return this.Invoke(fixture, ResolveArguments(sp, this.MethodInfo.GetParameters()));
             }
         }
 
@@ -169,7 +170,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             {
                 var sp = TestExecutionContext.CurrentContext.CurrentTest
                     .GetServiceProvider(fixture ?? throw new InvalidOperationException("Fixture is found for fixture method"));
-                return this.Invoke(fixture, ResolveArguments(sp, this.MethodInfo));
+                return this.Invoke(fixture, ResolveArguments(sp, this.MethodInfo.GetParameters()));
             }
         }
 
