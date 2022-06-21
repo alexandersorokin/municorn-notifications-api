@@ -11,7 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes
         private static readonly CombinatorialStrategy CombinatorialStrategy = new();
         private static readonly NothingDataSourceProvider NothingProvider = new();
 
-        protected DisableCombiningStrategyAttribute()
+        private protected DisableCombiningStrategyAttribute()
             : base(CombinatorialStrategy, NothingProvider)
         {
         }
