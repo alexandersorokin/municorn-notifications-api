@@ -8,15 +8,15 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor
 {
     [TestFixture]
-    internal class Service_FixtureProvider_Should : IConfigureServices
+    internal class Service_Fixture_Should : IConfigureServices
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.AddSingleton<object>();
 
         [Test]
         [Repeat(2)]
-        public void Case([Inject] Service_FixtureProvider_Should fixtureProvider)
+        public void Case([Inject] Service_Fixture_Should fixture)
         {
-            fixtureProvider.Should().Be(this);
+            fixture.Should().Be(this);
         }
 
         [TestCase(10)]
@@ -24,7 +24,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [Repeat(2)]
         public void Cases(int value)
         {
-            this.GetRequiredService<Service_FixtureProvider_Should>().Should().Be(this);
+            this.GetRequiredService<Service_Fixture_Should>().Should().Be(this);
         }
     }
 }

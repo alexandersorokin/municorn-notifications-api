@@ -1,34 +1,24 @@
 ﻿using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeMethodInject;
-using Municorn.Notifications.Api.TestInfrastructure.Logging;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes
 {
     [TestFixture]
-    internal class CombinatorialTestCaseAttribute_WithServices_Should : IConfigureServices
+    internal class CombinatorialTestCaseAttribute_Should
     {
-        public void ConfigureServices(IServiceCollection serviceCollection) =>
-            serviceCollection.AddSingleton<NUnitTextWriterProvider>();
-
         [CombinatorialTestCase(10, 1.1f, 100, "provided")]
         [CombinatorialTestCase(11, 1.2d, null)]
         public void Integration<T1, T2>(
-            [Inject(typeof(NUnitTextWriterProvider))] object injectFirst,
             [Values] bool automaticData,
             int testCaseData,
-            [Inject] NUnitTextWriterProvider injectSecond,
             [Values("string", 777)] T1 automaticInfer,
             T2 testCaseInfer,
             int? testCaseDataConversion,
             [Values(true, null)] bool? valuesConversion,
-            [Inject] SetUpFixture setupFixture,
             string optional = "default")
         {
-            injectSecond.Should().NotBeNull();
+            automaticInfer.Should().NotBeNull();
         }
 
         [CombinatorialTestCase(10)]
@@ -41,13 +31,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes
         public void Deduce_Generic_From_Provider<T>([Values("string", 777)] T value)
         {
             value.Should().NotBeNull();
-        }
-
-        [CombinatorialTestCase("provided")]
-        [CombinatorialTestCase]
-        public void Process_Optional_With_Container([Inject] NUnitTextWriterProvider service, string optional = "default")
-        {
-            optional.Should().NotBeNull();
         }
 
         [CombinatorialTestCase("provided")]
@@ -73,16 +56,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes
 
         [CombinatorialTestCase(10)]
         [CombinatorialTestCase(11)]
-        public void Inject_From_Container_And_Case([Inject] NUnitTextWriterProvider service, int value)
+        public void Inject_From_Provider_And_Case([Values] bool provided, int value)
         {
-            service.Should().NotBeNull();
             value.Should().BePositive();
-        }
-
-        [CombinatorialTestCase]
-        public void Inject_From_Container([Inject] NUnitTextWriterProvider service)
-        {
-            service.Should().NotBeNull();
         }
 
         [CombinatorialTestCase]
