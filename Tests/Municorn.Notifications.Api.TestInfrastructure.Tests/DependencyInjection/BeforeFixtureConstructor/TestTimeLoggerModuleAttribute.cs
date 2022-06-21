@@ -13,7 +13,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         public void ConfigureServices(IServiceCollection serviceCollection, ITypeInfo typeInfo) =>
             LogModule.ConfigureServices(
-                serviceCollection.AddSingleton<Counter>()
+                serviceCollection
+                    .AddSingleton<Counter>()
                     .AddScoped<IFixtureSetUp, TestTimeLogger>(),
                 typeInfo);
     }
