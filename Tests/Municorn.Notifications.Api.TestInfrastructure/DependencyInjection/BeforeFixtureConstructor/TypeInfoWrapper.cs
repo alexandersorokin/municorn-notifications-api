@@ -27,11 +27,16 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
         private readonly Type originalType;
         private readonly Type wrappedType;
 
-        public TypeInfoWrapper(Type type)
+        public TypeInfoWrapper(Type type, object?[] arguments, Type[] typeArgs)
             : base(type)
         {
             this.originalType = type;
-            this.wrappedType = new TypeWrapper(type);
+            if (type.IsGenericTypeDefinition && !typeArgs.Any())
+            {
+                arguments = arguments.SkipWhile(arg => arg?.GetType() == typeof(Type)).ToArray();
+            }
+
+            this.wrappedType = new TypeWrapper(type, arguments);
         }
 
         Type ITypeInfo.Type => this.wrappedType;
@@ -121,8 +126,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             // only MethodInfo is required
         }
 
-        private static object[] ResolveArguments(IServiceProvider serviceProvider, MethodBase constructorInfo) =>
-            constructorInfo
+        private static object[] ResolveArguments(IServiceProvider serviceProvider, MethodBase methodInfo) =>
+            methodInfo
                 .GetParameters()
                 .Select(p => p.ParameterType)
                 .Select(type => serviceProvider.GetRequiredService(type))
@@ -199,8 +204,13 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
         private class TypeWrapper : Type
         {
             private readonly Type implementation;
+            private readonly object?[] arguments;
 
-            public TypeWrapper(Type implementation) => this.implementation = implementation;
+            public TypeWrapper(Type implementation, object?[] arguments)
+            {
+                this.implementation = implementation;
+                this.arguments = arguments;
+            }
 
             public override bool IsDefined(Type attributeType, bool inherit) =>
                 this.implementation.IsDefined(attributeType, inherit);
@@ -299,7 +309,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             public override ConstructorInfo[] GetConstructors(BindingFlags bindingAttr) =>
                 this.implementation.GetConstructors(bindingAttr)
-                    .Select(constructorInfo => new ConstructorInfoParameterLess(constructorInfo))
+                    .Select(constructorInfo => new ConstructorInfoLimitParameters(constructorInfo, this.arguments))
                     .ToArray<ConstructorInfo>();
 
             public override object[] GetCustomAttributes(Type attributeType, bool inherit)
@@ -351,14 +361,21 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                 }
             }
 
-            private class ConstructorInfoParameterLess : ConstructorInfo
+            private class ConstructorInfoLimitParameters : ConstructorInfo
             {
                 private readonly ConstructorInfo implementation;
+                private readonly object?[] arguments;
 
-                public ConstructorInfoParameterLess(ConstructorInfo implementation) =>
+                public ConstructorInfoLimitParameters(ConstructorInfo implementation, object?[] arguments)
+                {
                     this.implementation = implementation;
+                    this.arguments = arguments;
+                }
 
-                public override ParameterInfo[] GetParameters() => Array.Empty<ParameterInfo>();
+                public override ParameterInfo[] GetParameters() => this.implementation
+                    .GetParameters()
+                    .Take(this.arguments.Length)
+                    .ToArray();
 
                 public override object[] GetCustomAttributes(bool inherit) =>
                     this.implementation.GetCustomAttributes(inherit);

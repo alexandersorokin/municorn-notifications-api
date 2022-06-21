@@ -20,11 +20,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
         public Type[] TypeArgs { get; set; } = Array.Empty<Type>();
 
-        public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo) => this.CreateImplementation().BuildFrom(CreateWrapper(typeInfo));
+        public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo) => this.CreateImplementation().BuildFrom(this.CreateWrapper(typeInfo));
 
-        public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo, IPreFilter filter) => this.CreateImplementation().BuildFrom(CreateWrapper(typeInfo), filter);
+        public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo, IPreFilter filter) => this.CreateImplementation().BuildFrom(this.CreateWrapper(typeInfo), filter);
 
-        private static TypeInfoWrapper CreateWrapper(ITypeInfo typeInfo) => new(typeInfo.Type);
+        private TypeInfoWrapper CreateWrapper(ITypeInfo typeInfo) => new(typeInfo.Type, this.arguments, this.TypeArgs);
 
         private TestFixtureAttribute CreateImplementation() => new(this.arguments)
         {
