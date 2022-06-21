@@ -100,7 +100,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                     var tearDownMethodExample = this.GetType().GetMethod(nameof(TearDownMethodExample), BindingFlags.Public | BindingFlags.Static)
                         ?? throw new InvalidOperationException(nameof(TearDownMethodExample) + " is not found");
                     var type = this.originalType.BaseType ?? this.originalType;
-                    result = result.Prepend(new FixtureActionMethodInfo(type, tearDownMethodExample)).ToArray();
+                    result = result.Prepend(new DisposeFixtureMethodInfo(type, tearDownMethodExample)).ToArray();
                 }
             }
 
