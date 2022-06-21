@@ -83,18 +83,27 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
         {
             var result = this.GetMethodsWithAttribute<T>(inherit);
 
-            HashSet<Type> attributesToPatch = new()
+            HashSet<Type> fixtureMethods = new()
             {
                 typeof(OneTimeSetUpAttribute),
                 typeof(OneTimeTearDownAttribute),
+            };
+            if (fixtureMethods.Contains(typeof(T)))
+            {
+                return result
+                    .Select(method => new FixtureActionMethodInfo(this.wrappedType, method))
+                    .ToArray<IMethodInfo>();
+            }
+
+            HashSet<Type> typeMethods = new()
+            {
                 typeof(SetUpAttribute),
                 typeof(TearDownAttribute),
             };
-
-            if (attributesToPatch.Contains(typeof(T)))
+            if (typeMethods.Contains(typeof(T)))
             {
                 return result
-                    .Select(method => new FixtureActionMethodInfo(method))
+                    .Select(method => new FixtureActionMethodInfo(this.originalType, method))
                     .ToArray<IMethodInfo>();
             }
 
@@ -103,8 +112,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
         private class FixtureActionMethodInfo : MethodWrapper, IMethodInfo
         {
-            public FixtureActionMethodInfo(IMethodInfo methodInfo)
-                : base(methodInfo.TypeInfo.Type, methodInfo.MethodInfo)
+            public FixtureActionMethodInfo(Type type, IMethodInfo methodInfo)
+                : base(type, methodInfo.MethodInfo)
             {
             }
 

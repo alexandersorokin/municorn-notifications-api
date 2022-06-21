@@ -6,7 +6,7 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMeth
 using Municorn.Notifications.Api.TestInfrastructure.Logging;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.SetUpFixtures
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.SetUpFixtures.AfterFixtureConstructorCountChilds
 {
     [SetUpFixture]
     internal sealed class SetUpFixture : IConfigureServices, IDisposable

@@ -4,7 +4,7 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeMet
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.SetUpFixtures
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.SetUpFixtures.Empty
 {
     [TestFixtureInjectable]
     [LogModule]
