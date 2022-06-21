@@ -6,7 +6,7 @@ using NUnit.Framework.Internal.Builders;
 
 namespace Municorn.Notifications.Api.Tests.NUnitAttributes
 {
-    internal abstract class DisableCombiningStrategyAttribute : CombiningStrategyAttribute
+    public abstract class DisableCombiningStrategyAttribute : CombiningStrategyAttribute
     {
         private static readonly CombinatorialStrategy CombinatorialStrategy = new();
         private static readonly NothingDataSourceProvider NothingProvider = new();

@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="6.5.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="NUnit" Version="3.13.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Municorn.Notifications.Api.RemoteTests\Municorn.Notifications.Api.RemoteTests.csproj" />
     <ProjectReference Include="..\Municorn.Notifications.Api.TestInfrastructure\Municorn.Notifications.Api.TestInfrastructure.csproj" />
   </ItemGroup>
 

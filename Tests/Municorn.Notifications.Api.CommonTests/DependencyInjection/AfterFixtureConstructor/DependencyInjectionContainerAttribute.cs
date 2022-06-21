@@ -12,7 +12,7 @@ using NUnit.Framework.Internal;
 namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConstructor
 {
     [AttributeUsage(AttributeTargets.Interface)]
-    internal sealed class DependencyInjectionContainerAttribute : NUnitAttribute, ITestAction
+    public sealed class DependencyInjectionContainerAttribute : NUnitAttribute, ITestAction
     {
         private static readonly ServiceProviderOptions Options = new()
         {

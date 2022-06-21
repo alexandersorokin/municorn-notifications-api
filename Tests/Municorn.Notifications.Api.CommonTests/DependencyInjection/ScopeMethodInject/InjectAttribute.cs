@@ -6,7 +6,7 @@ using NUnit.Framework.Interfaces;
 namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject
 {
     [AttributeUsage(AttributeTargets.Parameter)]
-    internal sealed class InjectAttribute : NUnitAttribute, IParameterDataSource
+    public sealed class InjectAttribute : NUnitAttribute, IParameterDataSource
     {
         private readonly Type? type;
 

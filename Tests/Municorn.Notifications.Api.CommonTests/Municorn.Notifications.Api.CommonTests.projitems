@@ -50,10 +50,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixtureConstructor\Tests\Inject_Field_Should.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixtureConstructor\Tests\Inject_Method_CombinatorialTestCase_Should.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\ServiceCollectionExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NUnitAttributes\DisableCombiningStrategyAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NUnitAttributes\CombinatorialTestCaseSourceAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NUnitAttributes\Tests\CombinatorialTestCaseSourceAttribute_Should.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NUnitAttributes\Tests\CombinatorialTestCaseAttribute_WithoutServices_Should.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AsyncEnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixtureConstructor\TestFixtureInjectableAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\BeforeFixtureConstructor\IModule.cs" />
@@ -69,7 +65,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\TestMapExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeAsyncLocal\AsyncLocalTestCaseServiceResolver.TService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeAsyncLocal\FixtureExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NUnitAttributes\CombinatorialTestCaseAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ServiceCollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeAsyncLocal\AsyncLocalTestCaseServiceResolver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\FixtureServiceProviderMap.cs" />
@@ -77,12 +72,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixtureConstructor\IConfigureServices.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\AfterFixtureConstructor\TestDependencyAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DependencyInjection\TestActionMethodManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NUnitAttributes\Tests\SetUpFixture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\NUnitTextWriterProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\ITextWriterProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NUnit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\TextWriterLog.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NUnitAttributes\Tests\CombinatorialTestCaseAttribute_WithServices_Should.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)DependencyInjection\ScopeAsyncLocal\" />

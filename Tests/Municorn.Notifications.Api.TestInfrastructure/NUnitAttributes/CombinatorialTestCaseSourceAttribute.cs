@@ -12,7 +12,7 @@ namespace Municorn.Notifications.Api.Tests.NUnitAttributes
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     [MeansImplicitUse(ImplicitUseKindFlags.Access)]
     [PrimaryConstructor]
-    internal sealed partial class CombinatorialTestCaseSourceAttribute : DisableCombiningStrategyAttribute, ITestBuilder
+    public sealed partial class CombinatorialTestCaseSourceAttribute : DisableCombiningStrategyAttribute, ITestBuilder
     {
         private static readonly MethodInfo? GetTestCasesForImplementation = typeof(TestCaseSourceAttribute)
             .GetMethod("GetTestCasesFor", BindingFlags.Instance | BindingFlags.NonPublic);

@@ -13,7 +13,7 @@ namespace Municorn.Notifications.Api.Tests.NUnitAttributes
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     [MeansImplicitUse(ImplicitUseKindFlags.Access)]
     [PrimaryConstructor]
-    internal sealed partial class CombinatorialTestCaseAttribute : DisableCombiningStrategyAttribute, ITestBuilder
+    public sealed partial class CombinatorialTestCaseAttribute : DisableCombiningStrategyAttribute, ITestBuilder
     {
         private static readonly ParameterDataSourceProvider DataProvider = new();
         private static readonly CombinatorialStrategy CombinatorialStrategy = new();
