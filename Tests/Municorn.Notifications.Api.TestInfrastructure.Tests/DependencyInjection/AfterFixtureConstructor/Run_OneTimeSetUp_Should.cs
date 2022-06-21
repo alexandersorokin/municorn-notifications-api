@@ -2,7 +2,6 @@
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
 using Municorn.Notifications.Api.TestInfrastructure.Logging;
 using NUnit.Framework;
 
@@ -16,8 +15,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddContextualLog()
-            .AddSingleton<Counter>()
-            .AddSingleton<IFixtureOneTimeSetUp, FixtureTimeLogger>();
+            .AddFixtureTimeLogger();
 
         [Test]
         [Repeat(2)]

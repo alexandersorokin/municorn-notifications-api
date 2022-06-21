@@ -2,14 +2,13 @@
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeMethodInject;
-using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [TestFixtureInjectable]
     [TestTimeLoggerModule]
-    internal class Inject_CombinatorialTestCase_Should
+    internal class Test_Methods_Inject_Method_Should
     {
         [Test]
         [Repeat(2)]
@@ -18,17 +17,17 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
             service.Should().NotBeNull();
         }
 
-        [CombinatorialTestCase(10)]
-        [CombinatorialTestCase(11)]
+        [TestCase(10)]
+        [TestCase(11)]
         [Repeat(2)]
         public void Cases([Inject] IFixtureSetUp service, int value)
         {
             service.Should().NotBeNull();
         }
 
-        [CombinatorialTestCaseSource(nameof(CaseValues))]
+        [TestCaseSource(nameof(CaseValues))]
         [Repeat(2)]
-        public void CaseSource(int value, [Inject] IFixtureSetUp service)
+        public void CaseSource([Inject] IFixtureSetUp service, int value)
         {
             service.Should().NotBeNull();
         }

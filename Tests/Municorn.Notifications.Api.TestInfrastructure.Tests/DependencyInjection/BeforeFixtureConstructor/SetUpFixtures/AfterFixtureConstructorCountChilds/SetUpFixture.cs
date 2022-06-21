@@ -14,8 +14,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddBoundLog()
-                .AddSingleton<Counter>()
-                .AddSingleton<IFixtureOneTimeSetUp, FixtureTimeLogger>()
+                .AddFixtureTimeLogger()
                 .AddScoped<IFixtureSetUp, TestTimeLogger>();
 
         [field: TestDependency]
