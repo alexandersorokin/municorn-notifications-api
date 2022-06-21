@@ -36,11 +36,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
         Type ITypeInfo.Type => this.wrappedType;
 
-        public static void TearDownMethodExample()
-        {
-            // not used
-        }
-
         IMethodInfo[] ITypeInfo.GetMethods(BindingFlags flags) => this
             .GetMethods(flags)
             .Select(method => new ReplaceTestBuilderMethodWrapper(method))
@@ -97,10 +92,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
                 if (typeof(T) == typeof(OneTimeTearDownAttribute))
                 {
-                    var tearDownMethodExample = this.GetType().GetMethod(nameof(TearDownMethodExample), BindingFlags.Public | BindingFlags.Static)
-                        ?? throw new InvalidOperationException(nameof(TearDownMethodExample) + " is not found");
-                    var type = this.originalType.BaseType ?? this.originalType;
-                    result = result.Prepend(new DisposeFixtureMethodInfo(type, tearDownMethodExample)).ToArray();
+                    var tearDownMethodExample = this.GetType().GetMethod(nameof(this.TearDownMethodExample), BindingFlags.Public | BindingFlags.Instance)
+                        ?? throw new InvalidOperationException(nameof(this.TearDownMethodExample) + " is not found");
+                    result = result.Prepend(new DisposeFixtureMethodInfo(this.wrappedType, tearDownMethodExample)).ToArray();
                 }
             }
 
@@ -117,6 +111,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             }
 
             return result;
+        }
+
+        public void TearDownMethodExample()
+        {
+            // only MethodInfo is required
         }
 
         private static object[] ResolveArguments(IServiceProvider serviceProvider, MethodBase constructorInfo) =>
