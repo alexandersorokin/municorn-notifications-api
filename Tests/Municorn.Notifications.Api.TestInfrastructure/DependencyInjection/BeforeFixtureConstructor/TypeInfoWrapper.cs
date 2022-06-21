@@ -241,6 +241,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             public override EventInfo[] GetEvents(BindingFlags bindingAttr) =>
                 this.implementation.GetEvents(bindingAttr);
 
+            public override Type[] GetGenericArguments() => this.implementation.GetGenericArguments();
+
             public override FieldInfo? GetField(string name, BindingFlags bindingAttr) =>
                 this.implementation.GetField(name, bindingAttr);
 
