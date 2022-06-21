@@ -9,9 +9,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [AttributeUsage(AttributeTargets.Class)]
     internal sealed class TestTimeLoggerModuleAttribute : Attribute, IModule
     {
+        private static readonly LogModuleAttribute LogModule = new();
+
         public void ConfigureServices(IServiceCollection serviceCollection, ITypeInfo typeInfo) =>
-            serviceCollection
-                .AddSingleton<Counter>()
-                .AddScoped<IFixtureSetUp, TestTimeLogger>();
+            LogModule.ConfigureServices(
+                serviceCollection.AddSingleton<Counter>()
+                    .AddScoped<IFixtureSetUp, TestTimeLogger>(),
+                typeInfo);
     }
 }
