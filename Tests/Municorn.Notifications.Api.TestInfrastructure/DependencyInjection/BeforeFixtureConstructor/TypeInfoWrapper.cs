@@ -90,7 +90,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             if (fixtureMethods.Contains(typeof(T)))
             {
                 result = result
-                    .Select(method => new FixtureActionMethodInfo(this.wrappedType, method.MethodInfo))
+                    .Select(method => new FixtureOneTimeActionMethodInfo(this.wrappedType, method.MethodInfo))
                     .ToArray<IMethodInfo>();
 
                 if (typeof(T) == typeof(OneTimeTearDownAttribute))
@@ -133,6 +133,22 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             return ServiceProviders.GetValue(
                 fixture ?? throw new InvalidOperationException(reason),
                 _ => throw new InvalidOperationException("Fixture is not found"));
+        }
+
+        private class FixtureOneTimeActionMethodInfo : MethodWrapper, IMethodInfo
+        {
+            public FixtureOneTimeActionMethodInfo(Type type, MethodInfo methodInfo)
+                : base(type, methodInfo)
+            {
+            }
+
+            IParameterInfo[] IMethodInfo.GetParameters() => Array.Empty<IParameterInfo>();
+
+            object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
+            {
+                var sp = GetServiceProviderByFixture(fixture, $"Fixture is not passed to {this.MethodInfo.Name} method call");
+                return this.Invoke(fixture, ResolveArguments(sp, this.MethodInfo));
+            }
         }
 
         private class FixtureActionMethodInfo : MethodWrapper, IMethodInfo
