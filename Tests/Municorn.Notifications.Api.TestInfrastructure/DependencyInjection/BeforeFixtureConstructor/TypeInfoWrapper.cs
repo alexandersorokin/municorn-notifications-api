@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -15,7 +14,7 @@ using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor
 {
-    internal class TypeInfoWrapper : TypeWrapper, ITypeInfo
+    internal sealed class TypeInfoWrapper : TypeWrapper, ITypeInfo
     {
         private static readonly ConditionalWeakTable<object, ServiceProvider> ServiceProviders = new();
 
@@ -36,6 +35,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
         }
 
         Type ITypeInfo.Type => this.wrappedType;
+
+        public static void TearDownMethodExample()
+        {
+            // not used
+        }
 
         IMethodInfo[] ITypeInfo.GetMethods(BindingFlags flags) => this
             .GetMethods(flags)
@@ -87,9 +91,17 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             };
             if (fixtureMethods.Contains(typeof(T)))
             {
-                return result
-                    .Select(method => new FixtureActionMethodInfo(this.wrappedType, method))
+                result = result
+                    .Select(method => new FixtureActionMethodInfo(this.wrappedType, method.MethodInfo))
                     .ToArray<IMethodInfo>();
+
+                if (typeof(T) == typeof(OneTimeTearDownAttribute))
+                {
+                    var tearDownMethodExample = this.GetType().GetMethod(nameof(TearDownMethodExample), BindingFlags.Public | BindingFlags.Static)
+                        ?? throw new InvalidOperationException(nameof(TearDownMethodExample) + " is not found");
+                    var type = this.originalType.BaseType ?? this.originalType;
+                    result = result.Prepend(new FixtureActionMethodInfo(type, tearDownMethodExample)).ToArray();
+                }
             }
 
             HashSet<Type> typeMethods = new()
@@ -99,8 +111,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             };
             if (typeMethods.Contains(typeof(T)))
             {
-                return result
-                    .Select(method => new FixtureActionMethodInfo(this.originalType, method))
+                result = result
+                    .Select(method => new FixtureActionMethodInfo(this.originalType, method.MethodInfo))
                     .ToArray<IMethodInfo>();
             }
 
@@ -114,17 +126,17 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                 .Select(type => serviceProvider.GetRequiredService(type))
                 .ToArray();
 
-        private static ServiceProvider GetServiceProviderByFixture(object fixture)
+        private static ServiceProvider GetServiceProviderByFixture(object? fixture, string reason)
         {
             return ServiceProviders.GetValue(
-                fixture,
+                fixture ?? throw new InvalidOperationException(reason),
                 _ => throw new InvalidOperationException("Fixture is not found"));
         }
 
         private class FixtureActionMethodInfo : MethodWrapper, IMethodInfo
         {
-            public FixtureActionMethodInfo(Type type, IMethodInfo methodInfo)
-                : base(type, methodInfo.MethodInfo)
+            public FixtureActionMethodInfo(Type type, MethodInfo methodInfo)
+                : base(type, methodInfo)
             {
             }
 
@@ -132,8 +144,25 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
-                var sp = GetServiceProviderByFixture(fixture ?? throw new InvalidOperationException($"Fixture is not passed to {this.MethodInfo.Name} method call"));
+                var sp = GetServiceProviderByFixture(fixture, $"Fixture is not passed to {this.MethodInfo.Name} method call");
                 return this.Invoke(fixture, ResolveArguments(sp, this.MethodInfo));
+            }
+        }
+
+        private class DisposeFixtureMethodInfo : MethodWrapper, IMethodInfo
+        {
+            public DisposeFixtureMethodInfo(Type type, MethodInfo methodInfo)
+                : base(type, methodInfo)
+            {
+            }
+
+            IParameterInfo[] IMethodInfo.GetParameters() => Array.Empty<IParameterInfo>();
+
+            object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
+            {
+                var sp = GetServiceProviderByFixture(fixture, "Fixture is not passed to container dispose method");
+                sp.DisposeSynchronously();
+                return null;
             }
         }
 
@@ -148,104 +177,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             }
         }
 
-        private sealed class DependencyInjectionContainer2Attribute : NUnitAttribute, ITestAction
-        {
-            private ServiceProvider? serviceProvider;
-
-            public ActionTargets Targets => ActionTargets.Suite | ActionTargets.Test;
-
-            public void BeforeTest(ITest test)
-            {
-                if (test.IsSuite)
-                {
-                    this.BeforeTestSuite(test);
-                }
-                else
-                {
-                    this.BeforeTestCase(test);
-                }
-            }
-
-            public void AfterTest(ITest test)
-            {
-                if (test.IsSuite)
-                {
-                    this.AfterTestSuite(test);
-                }
-                else
-                {
-                    this.AfterTestCase(test);
-                }
-            }
-
-            private void BeforeTestSuite(ITest test)
-            {
-                var testFixture = test.Fixture;
-                if (testFixture is not { } notNullFixture)
-                {
-                    throw new InvalidOperationException($"Test {test.FullName} with fixture {testFixture}");
-                }
-
-                this.serviceProvider = GetServiceProviderByFixture(notNullFixture);
-            }
-
-            private void BeforeTestCase(ITest test)
-            {
-                var sp = this.GetServiceProvider(test);
-                sp.GetRequiredService<TestActionMethodManager>().BeforeTestCase(sp, test);
-            }
-
-            private void AfterTestCase(ITest test) =>
-                this.GetServiceProvider(test)
-                    .GetRequiredService<TestActionMethodManager>()
-                    .AfterTestCase(test);
-
-            private void AfterTestSuite(ITest test)
-            {
-                // workaround https://github.com/nunit/nunit/issues/2938
-                try
-                {
-                    this.GetServiceProvider(test).DisposeSynchronously();
-                }
-                catch (Exception ex)
-                {
-                    TestExecutionContext.CurrentContext.CurrentResult.RecordTearDownException(ex);
-                }
-            }
-
-            [MemberNotNull(nameof(serviceProvider))]
-            private ServiceProvider GetServiceProvider(ITest test) => this.serviceProvider ??
-                                                                      throw new InvalidOperationException(
-                                                                          $"Service provider is not initialized for {test.FullName}");
-        }
-
         private class TypeWrapper : Type
         {
             private readonly Type implementation;
 
             public TypeWrapper(Type implementation) => this.implementation = implementation;
-
-            public override ConstructorInfo[] GetConstructors(BindingFlags bindingAttr) =>
-                this.implementation.GetConstructors(bindingAttr)
-                    .Select(constructorInfo => new ConstructorInfoParameterLess(constructorInfo))
-                    .ToArray<ConstructorInfo>();
-
-            public override object[] GetCustomAttributes(Type attributeType, bool inherit)
-            {
-                var customAttributes = this.implementation.GetCustomAttributes(attributeType, inherit);
-                if (attributeType == typeof(ITestAction))
-                {
-                    return customAttributes
-                        .Cast<ITestAction>()
-                        .Prepend(new DependencyInjectionContainer2Attribute())
-                        .ToArray();
-                }
-
-                return customAttributes;
-            }
-
-            public override object[] GetCustomAttributes(bool inherit) =>
-                this.implementation.GetCustomAttributes(inherit);
 
             public override bool IsDefined(Type attributeType, bool inherit) =>
                 this.implementation.IsDefined(attributeType, inherit);
@@ -342,6 +278,28 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             public override Type[] GetInterfaces() => this.implementation.GetInterfaces();
 
+            public override ConstructorInfo[] GetConstructors(BindingFlags bindingAttr) =>
+                this.implementation.GetConstructors(bindingAttr)
+                    .Select(constructorInfo => new ConstructorInfoParameterLess(constructorInfo))
+                    .ToArray<ConstructorInfo>();
+
+            public override object[] GetCustomAttributes(Type attributeType, bool inherit)
+            {
+                var customAttributes = this.implementation.GetCustomAttributes(attributeType, inherit);
+                if (attributeType == typeof(ITestAction))
+                {
+                    return customAttributes
+                        .Cast<ITestAction>()
+                        .Prepend(new ScopesManagerAttribute())
+                        .ToArray();
+                }
+
+                return customAttributes;
+            }
+
+            public override object[] GetCustomAttributes(bool inherit) =>
+                this.implementation.GetCustomAttributes(inherit);
+
             protected override PropertyInfo? GetPropertyImpl(
                 string name,
                 BindingFlags bindingAttr,
@@ -352,6 +310,27 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                 this.implementation.GetProperty(name, bindingAttr, binder, returnType, types ?? throw new InvalidOperationException("Should not be called"), modifiers);
 
             protected override bool HasElementTypeImpl() => this.implementation.HasElementType;
+
+            private sealed class ScopesManagerAttribute : NUnitAttribute, ITestAction
+            {
+                public ActionTargets Targets => ActionTargets.Test;
+
+                public void BeforeTest(ITest test)
+                {
+                    var sp = GetServiceProvider(test);
+                    sp.GetRequiredService<TestActionMethodManager>().BeforeTestCase(sp, test);
+                }
+
+                public void AfterTest(ITest test) =>
+                    GetServiceProvider(test)
+                        .GetRequiredService<TestActionMethodManager>()
+                        .AfterTestCase(test);
+
+                private static ServiceProvider GetServiceProvider(ITest test)
+                {
+                    return GetServiceProviderByFixture(test.Fixture, $"Test {test.FullName}");
+                }
+            }
 
             private class ConstructorInfoParameterLess : ConstructorInfo
             {
