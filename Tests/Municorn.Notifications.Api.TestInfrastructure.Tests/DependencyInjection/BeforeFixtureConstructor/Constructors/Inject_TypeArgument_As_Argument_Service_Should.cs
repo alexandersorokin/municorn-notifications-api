@@ -5,18 +5,16 @@ using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.Constructors
 {
-    [TestFixtureInjectable("passed", TypeArgs = new[] { typeof(int) })]
+    [TestFixtureInjectable(TypeArgs = new[] { typeof(int) })]
     [PrimaryConstructor]
-    internal partial class Inject_TypeArgument_As_Argument_Argument_And_Service_Should<T>
+    internal partial class Inject_TypeArgument_As_Argument_Service_Should<T>
     {
-        private readonly string argument;
         private readonly AsyncLocalTestCaseServiceResolver service;
 
         [Test]
         public void Case()
         {
             typeof(T).Should().Be(typeof(int));
-            this.argument.Should().Be("passed");
             this.service.Should().NotBeNull();
         }
     }

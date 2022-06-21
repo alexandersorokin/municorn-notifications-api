@@ -7,7 +7,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixtureInjectable("passed")]
     [PrimaryConstructor]
-    internal partial class Inject_Argument_And_Service_Should
+    internal partial class Inject_Argument_Service_Should
     {
         private readonly string argument;
         private readonly AsyncLocalTestCaseServiceResolver service;
