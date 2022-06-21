@@ -11,6 +11,7 @@ using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
+using ITypeInfo = NUnit.Framework.Interfaces.ITypeInfo;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor
 {
@@ -26,16 +27,20 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
         private readonly Type originalType;
         private readonly Type wrappedType;
+        private readonly object?[] arguments;
 
         public TypeInfoWrapper(Type type, object?[] arguments, Type[] typeArgs)
             : base(type)
         {
             this.originalType = type;
-            if (type.IsGenericTypeDefinition && !typeArgs.Any())
+            if (type.ContainsGenericParameters && !typeArgs.Any())
             {
-                arguments = arguments.SkipWhile(arg => arg?.GetType() == typeof(Type)).ToArray();
+                arguments = arguments
+                    .SkipWhile(arg => arg?.GetType().IsAssignableTo(typeof(Type)) == true)
+                    .ToArray();
             }
 
+            this.arguments = arguments;
             this.wrappedType = new TypeWrapper(type, arguments);
         }
 
@@ -83,6 +88,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             return fixture;
         }
+
+        ITypeInfo ITypeInfo.MakeGenericType(Type[] typeArgs) =>
+            new TypeInfoWrapper(
+                this.originalType.MakeGenericType(typeArgs),
+                this.arguments,
+                Array.Empty<Type>());
 
         IMethodInfo[] ITypeInfo.GetMethodsWithAttribute<T>(bool inherit)
             where T : class
