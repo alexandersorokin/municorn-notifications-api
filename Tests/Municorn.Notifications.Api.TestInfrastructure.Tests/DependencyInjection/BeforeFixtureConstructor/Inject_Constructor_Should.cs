@@ -7,10 +7,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixtureInjectable]
     [LogModule]
-    [PrimaryConstructor]
-    internal partial class Inject_Constructor_Should
+    internal class Inject_Constructor_Should
     {
         private readonly ILog service;
+
+        public Inject_Constructor_Should(ILog service) => this.service = service;
 
         [Test]
         [Repeat(2)]

@@ -5,7 +5,7 @@ using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeMethodInject
 {
-    [AttributeUsage(AttributeTargets.Parameter)]
+    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
     public sealed class InjectAttribute : NUnitAttribute, IParameterDataSource
     {
         private readonly Type? type;

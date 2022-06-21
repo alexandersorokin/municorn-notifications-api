@@ -29,6 +29,13 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(2)]
+        public void Select_Two_Services([Inject(typeof(ILog)), Inject(typeof(Inject_Method_Should))] object service)
+        {
+            service.Should().NotBeNull();
+        }
+
+        [Test]
+        [Repeat(2)]
         public void Case_With_Provider([Inject] ILog service, [Values] bool value)
         {
             service.Should().NotBeNull();
