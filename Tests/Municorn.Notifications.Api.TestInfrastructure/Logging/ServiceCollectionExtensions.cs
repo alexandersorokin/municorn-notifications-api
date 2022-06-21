@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 
-namespace Municorn.Notifications.Api.Tests.Logging
+namespace Municorn.Notifications.Api.TestInfrastructure.Logging
 {
     public static class ServiceCollectionExtensions
     {

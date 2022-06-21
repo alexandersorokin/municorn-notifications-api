@@ -6,13 +6,13 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeAsyncLocal;
-using Municorn.Notifications.Api.Tests.NUnitAttributes;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeAsyncLocal;
+using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureConstructor
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor
 {
     internal class TypeInfoWrapper : TypeWrapper, ITypeInfo
     {

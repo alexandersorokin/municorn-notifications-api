@@ -1,4 +1,4 @@
-﻿namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeAsyncLocal
+﻿namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeAsyncLocal
 {
     public static class FixtureExtensions
     {

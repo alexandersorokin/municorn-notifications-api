@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection
 {
     internal class Counter
     {

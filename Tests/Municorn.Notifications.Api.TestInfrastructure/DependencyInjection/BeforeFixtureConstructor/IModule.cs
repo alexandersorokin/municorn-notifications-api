@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureConstructor
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor
 {
     public interface IModule
     {

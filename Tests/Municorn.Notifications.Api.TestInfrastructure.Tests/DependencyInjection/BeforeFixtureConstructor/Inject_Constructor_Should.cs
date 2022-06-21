@@ -1,8 +1,9 @@
 ﻿using FluentAssertions;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureConstructor.Tests
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [TestFixtureInjectable]
     [TestModule]

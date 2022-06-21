@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Municorn.Notifications.Api.Tests.Logging
+namespace Municorn.Notifications.Api.TestInfrastructure.Logging
 {
     public interface ITextWriterProvider
     {

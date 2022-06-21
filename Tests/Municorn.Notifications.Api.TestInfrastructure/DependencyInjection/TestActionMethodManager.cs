@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.Tests.DependencyInjection.AutoMethods;
-using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeMethodInject;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
     [PrimaryConstructor]
     internal partial class TestActionMethodManager

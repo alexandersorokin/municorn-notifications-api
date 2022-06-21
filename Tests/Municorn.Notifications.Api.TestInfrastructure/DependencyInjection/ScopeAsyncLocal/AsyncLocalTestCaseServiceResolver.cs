@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.ScopeAsyncLocal
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeAsyncLocal
 {
     [PrimaryConstructor]
     public partial class AsyncLocalTestCaseServiceResolver

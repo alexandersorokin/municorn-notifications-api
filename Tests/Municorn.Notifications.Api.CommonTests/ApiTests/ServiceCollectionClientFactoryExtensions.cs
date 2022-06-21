@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.Tests.Logging;
+using Municorn.Notifications.Api.TestInfrastructure.Logging;
 
 namespace Municorn.Notifications.Api.Tests.ApiTests
 {

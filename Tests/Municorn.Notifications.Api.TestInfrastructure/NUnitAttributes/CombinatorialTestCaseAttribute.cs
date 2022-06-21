@@ -8,7 +8,7 @@ using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 using NUnit.Framework.Internal.Builders;
 
-namespace Municorn.Notifications.Api.Tests.NUnitAttributes
+namespace Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     [MeansImplicitUse(ImplicitUseKindFlags.Access)]

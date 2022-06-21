@@ -1,7 +1,8 @@
 ﻿using FluentAssertions;
+using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.Tests.NUnitAttributes.Tests
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes
 {
     [TestFixture]
     internal class CombinatorialTestCaseSourceAttribute_Should

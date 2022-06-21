@@ -1,11 +1,12 @@
 ﻿using System;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using Vostok.Logging.Abstractions;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConstructor.Tests.Communication
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor.Communication
 {
     internal sealed class TestActionLoggerAttribute : NUnitAttribute, ITestAction
     {

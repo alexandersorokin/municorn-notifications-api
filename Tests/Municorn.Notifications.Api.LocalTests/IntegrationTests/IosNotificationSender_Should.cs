@@ -6,9 +6,9 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.NotificationFeature.App;
 using Municorn.Notifications.Api.NotificationFeature.Data;
-using Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConstructor;
-using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeAsyncLocal;
-using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeAsyncLocal;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeMethodInject;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.Tests.IntegrationTests

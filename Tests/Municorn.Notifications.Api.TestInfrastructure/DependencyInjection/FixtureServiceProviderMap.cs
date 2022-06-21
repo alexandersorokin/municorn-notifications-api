@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
     public class FixtureServiceProviderMap
     {

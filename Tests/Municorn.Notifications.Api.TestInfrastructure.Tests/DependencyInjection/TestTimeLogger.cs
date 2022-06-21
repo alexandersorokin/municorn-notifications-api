@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
 using Vostok.Logging.Abstractions;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.AutoMethods
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection
 {
     [PrimaryConstructor]
     internal sealed partial class TestTimeLogger : IFixtureSetUp, IDisposable

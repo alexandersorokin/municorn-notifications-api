@@ -1,7 +1,7 @@
 ﻿using Vostok.Logging.Abstractions;
 using Vostok.Logging.Formatting;
 
-namespace Municorn.Notifications.Api.Tests.Logging
+namespace Municorn.Notifications.Api.TestInfrastructure.Logging
 {
     public class TextWriterLog : ILog
     {

@@ -4,7 +4,7 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal.Builders;
 
-namespace Municorn.Notifications.Api.Tests.NUnitAttributes
+namespace Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes
 {
     public abstract class DisableCombiningStrategyAttribute : CombiningStrategyAttribute
     {

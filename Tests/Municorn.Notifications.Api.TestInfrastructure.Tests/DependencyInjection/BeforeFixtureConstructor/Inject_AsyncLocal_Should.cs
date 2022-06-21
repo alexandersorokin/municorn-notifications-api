@@ -1,9 +1,10 @@
 ﻿using FluentAssertions;
-using Municorn.Notifications.Api.Tests.DependencyInjection.AutoMethods;
-using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeAsyncLocal;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeAsyncLocal;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.BeforeFixtureConstructor.Tests
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [TestFixtureInjectable]
     [TestModule]

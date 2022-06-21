@@ -1,11 +1,12 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConstructor;
-using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject;
-using Municorn.Notifications.Api.Tests.Logging;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeMethodInject;
+using Municorn.Notifications.Api.TestInfrastructure.Logging;
+using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.Tests.NUnitAttributes.Tests
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes
 {
     [TestFixture]
     internal class CombinatorialTestCaseAttribute_WithServices_Should : IConfigureServices

@@ -1,10 +1,11 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.Tests.DependencyInjection.ScopeMethodInject;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeMethodInject;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConstructor.Tests
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor
 {
     [TestFixture]
     internal class Inject_Method_Should : IConfigureServices

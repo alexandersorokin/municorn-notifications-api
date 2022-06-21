@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection.AfterFixtureConstructor
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor
 {
     [AttributeUsage(AttributeTargets.Field)]
     [MeansImplicitUse(ImplicitUseKindFlags.Assign)]

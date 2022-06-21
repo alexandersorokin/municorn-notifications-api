@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.Tests.DependencyInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
     internal static class ServiceCollectionExtensions
     {
