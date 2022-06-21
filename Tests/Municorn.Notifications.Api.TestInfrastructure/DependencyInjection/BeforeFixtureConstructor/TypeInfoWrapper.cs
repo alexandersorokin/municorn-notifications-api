@@ -162,7 +162,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
-                var sp = GetServiceProviderByFixture(fixture, $"Fixture is not passed to {this.MethodInfo.Name} method call");
+                var sp = TestExecutionContext.CurrentContext.CurrentTest
+                    .GetServiceProvider(fixture ?? throw new InvalidOperationException("Fixture is found for fixture method"));
                 return this.Invoke(fixture, ResolveArguments(sp, this.MethodInfo));
             }
         }
