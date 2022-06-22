@@ -33,17 +33,17 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         private class ScopedProvider<TService>
         {
-            private readonly TestAccessor testAccessor;
+            private readonly IFixtureProvider fixtureProvider;
 
-            public ScopedProvider(TestAccessor testAccessor)
+            public ScopedProvider(IFixtureProvider fixtureProvider)
             {
-                this.testAccessor = testAccessor;
+                this.fixtureProvider = fixtureProvider;
             }
 
             public TService Get()
             {
-                var fixture = (this.testAccessor.Test.Fixture as IScoped<TService>)
-                              ?? throw new InvalidOperationException("Scoped service provider is not found");
+                var fixture = (this.fixtureProvider.Fixture as IScoped<TService>)
+                              ?? throw new InvalidOperationException($"Fixture do not implement {typeof(IScoped<TService>).FullName}");
                 return fixture.Get();
             }
         }

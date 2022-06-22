@@ -12,6 +12,7 @@ using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
+using NUnit.Framework.Internal.Commands;
 using ITypeInfo = NUnit.Framework.Interfaces.ITypeInfo;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor
@@ -49,7 +50,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
         IMethodInfo[] ITypeInfo.GetMethods(BindingFlags flags) => this
             .GetMethods(flags)
-            .Select(method => new ReplaceTestBuilderMethodWrapper(method))
+            .Select(method => new PatchAttributesMethodWrapper(method))
             .ToArray<IMethodInfo>();
 
         object ITypeInfo.Construct(object?[]? args)
@@ -143,11 +144,16 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                 .Select(type => serviceProvider.GetRequiredService(type))
                 .ToArray();
 
-        private static ServiceProvider GetServiceProviderByFixture(object? fixture, string reason)
+        private static ServiceProvider GetServiceProvider(object? fixture, string reason)
+        {
+            return GetServiceProvider(fixture ?? throw new InvalidOperationException(reason));
+        }
+
+        private static ServiceProvider GetServiceProvider(object fixture)
         {
             return ServiceProviders.GetValue(
-                fixture ?? throw new InvalidOperationException(reason),
-                _ => throw new InvalidOperationException("Fixture is not found"));
+                fixture,
+                _ => throw new InvalidOperationException($"Service provider for {fixture} fixture is not found"));
         }
 
         private class FixtureOneTimeActionMethodInfo : MethodWrapper, IMethodInfo
@@ -161,7 +167,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
-                var sp = GetServiceProviderByFixture(fixture, $"Fixture is not passed to {this.MethodInfo.Name} method call");
+                var sp = GetServiceProvider(fixture, $"Fixture is not passed to {this.MethodInfo.Name} method call");
                 return this.Invoke(fixture, ResolveArguments(sp, this.MethodInfo.GetParameters()));
             }
         }
@@ -194,7 +200,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
-                var sp = GetServiceProviderByFixture(fixture, "Fixture is not passed to container dispose method");
+                var sp = GetServiceProvider(fixture, "Fixture is not passed to container dispose method");
                 return sp.DisposeAsync().AsTask();
             }
         }
@@ -207,6 +213,82 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             {
                 get => this.fixture ?? throw new InvalidOperationException("Fixture is not yet set");
                 set => this.fixture = value;
+            }
+        }
+
+        private class PatchAttributesMethodWrapper : MethodWrapper, IReflectionInfo
+        {
+            public PatchAttributesMethodWrapper(IMethodInfo methodInfo)
+                : base(methodInfo.TypeInfo.Type, methodInfo.MethodInfo)
+            {
+            }
+
+            T[] IReflectionInfo.GetCustomAttributes<T>(bool inherit)
+                where T : class
+            {
+                var customAttributes = this.GetCustomAttributes<T>(inherit);
+                if (typeof(T) == typeof(IApplyToContext))
+                {
+                    return customAttributes.Append((T)(object)new FirstSetUpAction()).ToArray();
+                }
+
+                if (typeof(T) == typeof(IWrapSetUpTearDown))
+                {
+                    return customAttributes.Append((T)(object)new LastTearDownAction()).ToArray();
+                }
+
+                return typeof(T) == typeof(ITestBuilder)
+                    ? customAttributes.Select(ReplaceAttribute).ToArray()
+                    : customAttributes;
+            }
+
+            private static T ReplaceAttribute<T>(T attribute)
+                where T : class
+            {
+                return attribute switch
+                {
+                    TestCaseAttribute testCaseAttribute => (T)(object)new CombinatorialTestCaseAttribute(testCaseAttribute),
+                    TestCaseSourceAttribute testCaseSourceAttribute => (T)(object)new CombinatorialTestCaseSourceAttribute(testCaseSourceAttribute),
+                    _ => attribute,
+                };
+            }
+
+            private class FirstSetUpAction : IApplyToContext
+            {
+                public void ApplyToContext(TestExecutionContext context)
+                {
+                    var test = context.CurrentTest;
+                    if (!test.IsSuite)
+                    {
+                        var sp = GetServiceProvider(context.TestObject);
+                        sp.GetRequiredService<TestActionMethodManager>().BeforeTestCase(sp, test);
+                    }
+                }
+            }
+
+            private class LastTearDownAction : IWrapSetUpTearDown
+            {
+                public TestCommand Wrap(TestCommand command) => new LastTearDownCommand(command);
+
+                private class LastTearDownCommand : TestCommand
+                {
+                    private readonly TestCommand command;
+
+                    public LastTearDownCommand(TestCommand command)
+                        : base(command.Test) =>
+                        this.command = command;
+
+                    public override TestResult Execute(TestExecutionContext context)
+                    {
+                        var result = this.command.Execute(context);
+
+                        GetServiceProvider(context.TestObject)
+                            .GetRequiredService<TestActionMethodManager>()
+                            .AfterTestCase(context.CurrentTest);
+
+                        return result;
+                    }
+                }
             }
         }
 
@@ -323,19 +405,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                     .Select(constructorInfo => new ConstructorInfoLimitParameters(constructorInfo, this.arguments))
                     .ToArray<ConstructorInfo>();
 
-            public override object[] GetCustomAttributes(Type attributeType, bool inherit)
-            {
-                var customAttributes = this.implementation.GetCustomAttributes(attributeType, inherit);
-                if (attributeType == typeof(ITestAction))
-                {
-                    return customAttributes
-                        .Cast<ITestAction>()
-                        .Prepend(new ScopesManagerAttribute())
-                        .ToArray();
-                }
-
-                return customAttributes;
-            }
+            public override object[] GetCustomAttributes(Type attributeType, bool inherit) =>
+                this.implementation.GetCustomAttributes(attributeType, inherit);
 
             public override object[] GetCustomAttributes(bool inherit) =>
                 this.implementation.GetCustomAttributes(inherit);
@@ -350,27 +421,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                 this.implementation.GetProperty(name, bindingAttr, binder, returnType, types ?? throw new InvalidOperationException("Should not be called"), modifiers);
 
             protected override bool HasElementTypeImpl() => this.implementation.HasElementType;
-
-            private sealed class ScopesManagerAttribute : NUnitAttribute, ITestAction
-            {
-                public ActionTargets Targets => ActionTargets.Test;
-
-                public void BeforeTest(ITest test)
-                {
-                    var sp = GetServiceProvider(test);
-                    sp.GetRequiredService<TestActionMethodManager>().BeforeTestCase(sp, test);
-                }
-
-                public void AfterTest(ITest test) =>
-                    GetServiceProvider(test)
-                        .GetRequiredService<TestActionMethodManager>()
-                        .AfterTestCase(test);
-
-                private static ServiceProvider GetServiceProvider(ITest test)
-                {
-                    return GetServiceProviderByFixture(test.Fixture, $"Test {test.FullName}");
-                }
-            }
 
             private class ConstructorInfoLimitParameters : ConstructorInfo
             {
@@ -423,34 +473,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                 public override MethodAttributes Attributes => this.implementation.Attributes;
 
                 public override RuntimeMethodHandle MethodHandle => this.implementation.MethodHandle;
-            }
-        }
-
-        private class ReplaceTestBuilderMethodWrapper : MethodWrapper, IReflectionInfo
-        {
-            public ReplaceTestBuilderMethodWrapper(IMethodInfo methodInfo)
-                : base(methodInfo.TypeInfo.Type, methodInfo.MethodInfo)
-            {
-            }
-
-            T[] IReflectionInfo.GetCustomAttributes<T>(bool inherit)
-                where T : class
-            {
-                var result = this.GetCustomAttributes<T>(inherit);
-                return typeof(T) == typeof(ITestBuilder)
-                    ? result.Select(ReplaceAttribute).ToArray()
-                    : result;
-            }
-
-            private static T ReplaceAttribute<T>(T attribute)
-                where T : class
-            {
-                return attribute switch
-                {
-                    TestCaseAttribute testCaseAttribute => (T)(object)new CombinatorialTestCaseAttribute(testCaseAttribute),
-                    TestCaseSourceAttribute testCaseSourceAttribute => (T)(object)new CombinatorialTestCaseSourceAttribute(testCaseSourceAttribute),
-                    _ => attribute,
-                };
             }
         }
     }
