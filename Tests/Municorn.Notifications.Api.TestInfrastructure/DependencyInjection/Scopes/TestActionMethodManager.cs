@@ -19,6 +19,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scop
             }
 
             var scopeServiceProvider = serviceScope.ServiceProvider;
+
             var testAccessor = scopeServiceProvider.GetRequiredService<TestAccessor>();
             testAccessor.Test = test;
             testAccessor.ServiceProvider = scopeServiceProvider;

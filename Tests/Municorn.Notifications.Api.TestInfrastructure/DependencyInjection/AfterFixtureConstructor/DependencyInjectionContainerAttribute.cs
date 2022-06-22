@@ -81,7 +81,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
 
             this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
 
-            test.GetFixtureServiceProviderMap().AddScope(testFixture, this.serviceProvider);
+            var serviceProviderAccessor = this.serviceProvider.GetRequiredService<ServiceProviderAccessor>();
+            serviceProviderAccessor.ServiceProvider = this.serviceProvider;
+
             InitializeSingletonFields(notNullFixture, this.serviceProvider);
             this.serviceProvider.GetRequiredService<FixtureOneTimeSetUpRunner>().Run();
         }
@@ -102,10 +104,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
             // workaround https://github.com/nunit/nunit/issues/2938
             try
             {
-                var provider = this.GetServiceProvider(test);
-                var fixture = provider.GetRequiredService<IFixtureProvider>().Fixture;
-                ((IAsyncDisposable)provider).DisposeAsync().AsTask().GetAwaiter().GetResult();
-                test.GetFixtureServiceProviderMap().RemoveScope(fixture);
+                this.GetServiceProvider(test).DisposeAsync().AsTask().GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {

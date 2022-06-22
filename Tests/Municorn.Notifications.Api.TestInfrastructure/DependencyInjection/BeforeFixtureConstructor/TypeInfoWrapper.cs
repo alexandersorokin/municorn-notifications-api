@@ -69,19 +69,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);
 
-            var originalArgs = args ?? Array.Empty<object?>();
-            var constructorInfo = this.originalType
-                .GetConstructors()
-                .First(constructor => constructor.GetParameters().Length >= originalArgs.Length);
-            var parameterInfos = constructorInfo.GetParameters().Skip(originalArgs.Length);
-            var ctorArgs = ResolveArguments(serviceProvider, parameterInfos);
+            var serviceProviderAccessor = serviceProvider.GetRequiredService<ServiceProviderAccessor>();
+            serviceProviderAccessor.ServiceProvider = serviceProvider;
 
-            var fixture = this.Construct(originalArgs.Concat(ctorArgs).ToArray());
-
+            var fixture = this.CreateFixture(args, serviceProvider);
             fixtureProvider.Fixture = fixture;
+
             ServiceProviders.Add(fixture, serviceProvider);
 
-            currentTest.GetFixtureServiceProviderMap().AddScope(fixture, serviceProvider);
             serviceProvider.GetRequiredService<FixtureOneTimeSetUpRunner>().Run();
 
             return fixture;
@@ -134,12 +129,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
         public Task TearDownMethodExample() => Task.CompletedTask;
 
-        private static object[] ResolveArguments(IServiceProvider serviceProvider, IEnumerable<ParameterInfo> methodInfo) =>
-            methodInfo
-                .Select(p => p.ParameterType)
-                .Select(type => serviceProvider.GetRequiredService(type))
-                .ToArray();
-
         private static ServiceProvider GetServiceProvider(object? fixture, string reason)
         {
             return GetServiceProvider(fixture ?? throw new InvalidOperationException(reason));
@@ -150,6 +139,24 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             return ServiceProviders.GetValue(
                 fixture,
                 _ => throw new InvalidOperationException($"Service provider for {fixture} fixture is not found"));
+        }
+
+        private static object[] ResolveArguments(IServiceProvider serviceProvider, IEnumerable<ParameterInfo> methodInfo) =>
+            methodInfo
+                .Select(p => p.ParameterType)
+                .Select(type => serviceProvider.GetRequiredService(type))
+                .ToArray();
+
+        private object CreateFixture(object?[]? args, IServiceProvider serviceProvider)
+        {
+            var originalArgs = args ?? Array.Empty<object?>();
+            var constructorInfo = this.originalType
+                .GetConstructors()
+                .First(constructor => constructor.GetParameters().Length >= originalArgs.Length);
+            var parameterInfos = constructorInfo.GetParameters().Skip(originalArgs.Length);
+            var ctorArgs = ResolveArguments(serviceProvider, parameterInfos);
+
+            return this.Construct(originalArgs.Concat(ctorArgs).ToArray());
         }
 
         private class FixtureOneTimeActionMethodInfo : MethodWrapper, IMethodInfo
@@ -194,19 +201,17 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             IParameterInfo[] IMethodInfo.GetParameters() => Array.Empty<IParameterInfo>();
 
-            object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
+            object IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
-                var sp = GetServiceProvider(fixture ?? throw new InvalidOperationException("Fixture is not passed to container dispose method"));
-                var test = sp.GetRequiredService<ITest>();
-                return sp
+                var serviceProvider = GetServiceProvider(fixture ?? throw new InvalidOperationException("Fixture is not passed to container dispose method"));
+                if (!ServiceProviders.Remove(fixture))
+                {
+                    throw new InvalidOperationException($"Failed to remove {fixture} from saved providers");
+                }
+
+                return serviceProvider
                     .DisposeAsync()
-                    .AsTask()
-                    .ContinueWith(
-                        _ =>
-                        {
-                            test.GetFixtureServiceProviderMap().RemoveScope(fixture);
-                        },
-                        TaskScheduler.Current);
+                    .AsTask();
             }
         }
 
