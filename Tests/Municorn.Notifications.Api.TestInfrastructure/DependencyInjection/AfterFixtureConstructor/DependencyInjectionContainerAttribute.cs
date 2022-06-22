@@ -65,14 +65,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
         private void BeforeTestSuite(ITest test)
         {
             var testFixture = test.Fixture;
-            if (testFixture is not ITestFixture configureServices)
+            if (testFixture is not ITestFixture notNullFixture)
             {
                 throw new InvalidOperationException($"Test {test.FullName} with fixture {testFixture} do not implement {nameof(ITestFixture)}");
             }
 
             var serviceCollection = new ServiceCollection()
                 .AddSingleton(test)
-                .AddSingleton<IFixtureProvider>(new FixtureProvider(configureServices))
+                .AddSingleton<IFixtureProvider>(new FixtureProvider(notNullFixture))
                 .AddSingleton<TestActionMethodManager>()
                 .AddSingleton(sp => new AsyncLocalTestCaseServiceResolver(sp.GetRequiredService<IFixtureProvider>()))
                 .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>))
@@ -80,12 +80,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
                 .AddSingleton<FixtureOneTimeSetUpRunner>()
                 .AddScoped<FixtureSetUpRunner>()
                 .AddScoped<TestAccessor>();
-            configureServices.ConfigureServices(serviceCollection);
+            notNullFixture.ConfigureServices(serviceCollection);
 
             this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
 
             test.GetFixtureServiceProviderMap().AddScope(testFixture, this.serviceProvider);
-            InitializeSingletonFields(configureServices, this.serviceProvider);
+            InitializeSingletonFields(notNullFixture, this.serviceProvider);
             this.serviceProvider.GetRequiredService<FixtureOneTimeSetUpRunner>().Run();
         }
 
