@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeAsyncLocal
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal
 {
-    public class AsyncLocalTestCaseServiceResolver
+    public class AsyncLocalServiceProvider
     {
         private readonly IFixtureProvider fixtureProvider;
 
-        internal AsyncLocalTestCaseServiceResolver(IFixtureProvider fixtureProvider) => this.fixtureProvider = fixtureProvider;
+        internal AsyncLocalServiceProvider(IFixtureProvider fixtureProvider) => this.fixtureProvider = fixtureProvider;
 
         public TService GetRequiredService<TService>()
             where TService : notnull =>

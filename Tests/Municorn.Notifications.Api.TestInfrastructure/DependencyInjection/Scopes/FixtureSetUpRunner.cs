@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.TestActionManagers
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes
 {
     [PrimaryConstructor]
     internal partial class FixtureSetUpRunner

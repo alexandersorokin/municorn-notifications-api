@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -265,7 +266,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                     if (!test.IsSuite)
                     {
                         var sp = GetServiceProvider(context.TestObject);
-                        sp.GetRequiredService<TestActionManagers.TestActionMethodManager>().BeforeTestCase(sp, test);
+                        sp.GetRequiredService<TestActionMethodManager>().BeforeTestCase(sp, test);
                     }
                 }
             }
@@ -287,7 +288,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                         var result = this.command.Execute(context);
 
                         GetServiceProvider(context.TestObject)
-                            .GetRequiredService<TestActionManagers.TestActionMethodManager>()
+                            .GetRequiredService<TestActionMethodManager>()
                             .AfterTestCase(context.CurrentTest);
 
                         return result;

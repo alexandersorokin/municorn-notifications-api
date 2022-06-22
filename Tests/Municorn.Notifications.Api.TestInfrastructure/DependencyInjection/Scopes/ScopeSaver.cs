@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.TestActionManagers
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes
 {
     internal sealed class ScopeSaver : IFixtureSetUp, IDisposable
     {

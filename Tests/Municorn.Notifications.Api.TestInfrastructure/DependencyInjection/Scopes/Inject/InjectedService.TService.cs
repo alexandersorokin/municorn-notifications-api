@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeMethodInject
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.Inject
 {
     public class InjectedService<TService> : IInjectedService
     {

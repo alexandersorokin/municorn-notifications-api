@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeAsyncLocal;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 
@@ -11,7 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal class Inject_AsyncLocalProvider_Should : ITestFixture
     {
         [TestDependency]
-        private readonly AsyncLocalTestCaseServiceResolver resolver = default!;
+        private readonly AsyncLocalServiceProvider provider = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddScoped<ILog, SilentLog>();
@@ -19,20 +19,20 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [SetUp]
         public void SetUp()
         {
-            this.resolver.GetRequiredService<ILog>().Should().NotBeNull();
+            this.provider.GetRequiredService<ILog>().Should().NotBeNull();
         }
 
         [TearDown]
         public void TearDown()
         {
-            this.resolver.GetRequiredService<ILog>().Should().NotBeNull();
+            this.provider.GetRequiredService<ILog>().Should().NotBeNull();
         }
 
         [Test]
         [Repeat(2)]
         public void Case()
         {
-            this.resolver.GetRequiredService<ILog>().Should().NotBeNull();
+            this.provider.GetRequiredService<ILog>().Should().NotBeNull();
         }
 
         [TestCase(10)]
@@ -40,7 +40,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [Repeat(2)]
         public void Cases(int value)
         {
-            this.resolver.GetRequiredService<ILog>().Should().NotBeNull();
+            this.provider.GetRequiredService<ILog>().Should().NotBeNull();
         }
     }
 }

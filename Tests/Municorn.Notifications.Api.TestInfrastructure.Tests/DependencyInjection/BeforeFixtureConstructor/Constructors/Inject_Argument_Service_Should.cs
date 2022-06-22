@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeAsyncLocal;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.Constructors
@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal partial class Inject_Argument_Service_Should
     {
         private readonly string argument;
-        private readonly AsyncLocalTestCaseServiceResolver service;
+        private readonly AsyncLocalServiceProvider service;
 
         [Test]
         public void Case()

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
@@ -88,12 +89,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
         private void BeforeTestCase(ITest test)
         {
             var sp = this.GetServiceProvider(test);
-            sp.GetRequiredService<TestActionManagers.TestActionMethodManager>().BeforeTestCase(sp, test);
+            sp.GetRequiredService<TestActionMethodManager>().BeforeTestCase(sp, test);
         }
 
         private void AfterTestCase(ITest test) =>
             this.GetServiceProvider(test)
-                .GetRequiredService<TestActionManagers.TestActionMethodManager>()
+                .GetRequiredService<TestActionMethodManager>()
                 .AfterTestCase(test);
 
         private void AfterTestSuite(ITest test)

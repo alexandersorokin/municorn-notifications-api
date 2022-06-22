@@ -1,9 +1,9 @@
 ﻿using System;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeMethodInject;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.Inject;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.TestActionManagers
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes
 {
     internal sealed class MethodPatcher : IFixtureSetUp, IDisposable
     {
