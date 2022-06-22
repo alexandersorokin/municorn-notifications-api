@@ -9,23 +9,27 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixtureInjectable]
     [ScopedInterfaceModule]
-    internal class Use_Scoped_Interface_Should : IScoped<ILog>
+    internal class Use_Two_Scoped_Interfaces_Should : IScoped<ILog>, IScoped<Counter>
     {
-        public ILog Get() => new TextWriterLog(new NUnitTextWriterProvider());
+        ILog IScoped<ILog>.Get() => new TextWriterLog(new NUnitTextWriterProvider());
+
+        Counter IScoped<Counter>.Get() => new();
 
         [Test]
         [Repeat(2)]
-        public void Case([Inject] ILog service)
+        public void Case([Inject] ILog service1, [Inject] Counter service2)
         {
-            service.Should().NotBeNull();
+            service1.Should().NotBeNull();
+            service2.Should().NotBeNull();
         }
 
         [TestCase(10)]
         [TestCase(11)]
         [Repeat(2)]
-        public void Cases([Inject] ILog service, int value)
+        public void Cases([Inject] ILog service1, int value, [Inject] Counter service2)
         {
-            service.Should().NotBeNull();
+            service1.Should().NotBeNull();
+            service2.Should().NotBeNull();
         }
     }
 }
