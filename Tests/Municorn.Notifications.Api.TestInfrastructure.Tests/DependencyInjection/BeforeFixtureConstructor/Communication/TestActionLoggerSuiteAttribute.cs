@@ -8,11 +8,11 @@ using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.Communication
 {
-    internal sealed class TestActionLoggerAttribute : NUnitAttribute, ITestAction
+    internal sealed class TestActionLoggerSuiteAttribute : NUnitAttribute, ITestAction
     {
         private object? testFixture;
 
-        public ActionTargets Targets => ActionTargets.Test;
+        public ActionTargets Targets => ActionTargets.Suite;
 
         public void BeforeTest(ITest test)
         {

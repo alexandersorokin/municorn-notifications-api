@@ -57,12 +57,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
         {
             FixtureProvider fixtureProvider = new();
 
+            var currentTest = TestExecutionContext.CurrentContext.CurrentTest;
             var serviceCollection = new ServiceCollection()
+                .AddSingleton<ITest>(currentTest)
                 .AddSingleton<IFixtureProvider>(fixtureProvider)
                 .AddSingleton<TestActionMethodManager>()
                 .AddSingleton(sp => new AsyncLocalTestCaseServiceResolver(sp.GetRequiredService<IFixtureProvider>()))
                 .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>))
-                .RegisterFixtures(TestExecutionContext.CurrentContext.CurrentTest)
+                .RegisterFixtures(currentTest)
                 .AddSingleton<FixtureOneTimeSetUpRunner>()
                 .AddScoped<FixtureSetUpRunner>()
                 .AddScoped<TestAccessor>();
@@ -86,6 +88,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             fixtureProvider.Fixture = fixture;
             ServiceProviders.Add(fixture, serviceProvider);
 
+            currentTest.GetFixtureServiceProviderMap().AddScope(fixture, serviceProvider);
             serviceProvider.GetRequiredService<FixtureOneTimeSetUpRunner>().Run();
 
             return fixture;
@@ -200,8 +203,17 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
-                var sp = GetServiceProvider(fixture, "Fixture is not passed to container dispose method");
-                return sp.DisposeAsync().AsTask();
+                var sp = GetServiceProvider(fixture ?? throw new InvalidOperationException("Fixture is not passed to container dispose method"));
+                var test = sp.GetRequiredService<ITest>();
+                return sp
+                    .DisposeAsync()
+                    .AsTask()
+                    .ContinueWith(
+                        _ =>
+                        {
+                            test.GetFixtureServiceProviderMap().RemoveScope(fixture);
+                        },
+                        TaskScheduler.Current);
             }
         }
 

@@ -1,18 +1,15 @@
 ﻿using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
 using NUnit.Framework;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.Communication
 {
-    [TestFixture]
-    [TestActionLogger]
-    internal class Pass_Container_To_Attribute_Should : ITestFixture
+    [TestFixtureInjectable]
+    [LogModule]
+    [TestActionLoggerSuite]
+    [TestActionLoggerTest]
+    internal class Pass_Container_To_TestAction_Attribute_Should
     {
-        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
-            .AddScoped<ILog, SilentLog>();
-
         [Test]
         [Repeat(2)]
         public void Case()

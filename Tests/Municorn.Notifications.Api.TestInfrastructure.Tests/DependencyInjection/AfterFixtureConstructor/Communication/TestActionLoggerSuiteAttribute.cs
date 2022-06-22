@@ -4,15 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor.Communication
 {
-    internal sealed class TestActionLoggerAttribute : NUnitAttribute, ITestAction
+    internal sealed class TestActionLoggerSuiteAttribute : NUnitAttribute, ITestAction
     {
         private object? testFixture;
 
-        public ActionTargets Targets => ActionTargets.Test;
+        public ActionTargets Targets => ActionTargets.Suite;
 
         public void BeforeTest(ITest test)
         {
@@ -29,7 +28,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         {
             var service = test
                 .GetServiceProvider(this.testFixture ?? throw new InvalidOperationException("Fixture is not found"))
-                .GetRequiredService<ILog>();
+                .GetRequiredService<Pass_Container_To_Attribute_Should>();
             service.Should().NotBeNull();
         }
     }
