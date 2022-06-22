@@ -67,7 +67,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             foreach (var module in this.GetCustomAttributes<IModule>(true))
             {
-                module.ConfigureServices(serviceCollection, this);
+                module.ConfigureServices(serviceCollection, new NUnit.Framework.Internal.TypeWrapper(this.originalType));
             }
 
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);

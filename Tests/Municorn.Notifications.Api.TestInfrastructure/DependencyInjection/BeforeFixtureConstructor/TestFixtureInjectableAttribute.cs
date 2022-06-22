@@ -18,7 +18,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
         {
         }
 
-        public Type[] TypeArgs { get; set; } = Array.Empty<Type>();
+        public Type[] TypeArgs { get; init; } = Array.Empty<Type>();
 
         public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo) => this.CreateImplementation().BuildFrom(this.CreateWrapper(typeInfo));
 

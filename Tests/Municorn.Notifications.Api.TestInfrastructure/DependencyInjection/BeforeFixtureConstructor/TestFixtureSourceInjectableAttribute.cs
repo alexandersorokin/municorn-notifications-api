@@ -31,7 +31,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
         public Type? SourceType { get; }
 
-        public string? Category { get; set; }
+        public string? Category { get; init; }
 
         public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo) =>
             this.CreateImplementation(typeInfo)

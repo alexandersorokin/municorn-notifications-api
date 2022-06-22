@@ -8,12 +8,13 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixtureInjectable]
     [LogModule]
-    [AdHocModule(typeof(Counter))]
+    [ParameterModule]
     [AdHocModule(typeof(IFixtureOneTimeSetUp), typeof(FixtureTimeLogger))]
-    [PrimaryConstructor]
-    internal sealed partial class Run_OneTimeSetUp_Should : IDisposable
+    internal sealed class Run_OneTimeSetUp_Should : IDisposable
     {
         private readonly Counter counter;
+
+        public Run_OneTimeSetUp_Should([Register] Counter counter) => this.counter = counter;
 
         [Test]
         [Repeat(2)]
