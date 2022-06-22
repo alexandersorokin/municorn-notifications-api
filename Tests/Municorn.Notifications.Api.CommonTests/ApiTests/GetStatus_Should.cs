@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.ApiTests
 {
     [TestFixture]
-    internal class GetStatus_Should : IConfigureServices
+    internal class GetStatus_Should : ITestFixture
     {
         [TestDependency]
         private readonly ClientFactory clientFactory = default!;

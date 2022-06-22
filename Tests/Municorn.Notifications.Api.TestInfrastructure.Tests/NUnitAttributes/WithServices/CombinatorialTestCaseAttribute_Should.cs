@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes.WithServices
 {
     [TestFixture]
-    internal class CombinatorialTestCaseAttribute_Should : IConfigureServices
+    internal class CombinatorialTestCaseAttribute_Should : ITestFixture
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection.AddSingleton<NUnitTextWriterProvider>();

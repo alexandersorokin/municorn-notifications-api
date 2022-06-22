@@ -7,7 +7,7 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.Tests.ApiTests
 {
     [SetUpFixture]
-    internal class GlobalLog : IConfigureServices
+    internal class GlobalLog : ITestFixture
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.AddBoundLog();
 

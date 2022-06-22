@@ -67,7 +67,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                 .AddScoped<FixtureSetUpRunner>()
                 .AddScoped<TestAccessor>();
 
-            foreach (var module in this.GetCustomAttributes<IModule>(true))
+            foreach (var module in this.GetCustomAttributes<IFixtureModule>(true))
             {
                 module.ConfigureServices(serviceCollection, new NUnit.Framework.Internal.TypeWrapper(this.originalType));
             }

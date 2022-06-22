@@ -48,7 +48,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
             }
         }
 
-        private static void InitializeSingletonFields(IConfigureServices testFixture, IServiceProvider serviceProvider)
+        private static void InitializeSingletonFields(ITestFixture testFixture, IServiceProvider serviceProvider)
         {
             var fields = testFixture
                 .GetType()
@@ -65,9 +65,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
         private void BeforeTestSuite(ITest test)
         {
             var testFixture = test.Fixture;
-            if (testFixture is not IConfigureServices configureServices)
+            if (testFixture is not ITestFixture configureServices)
             {
-                throw new InvalidOperationException($"Test {test.FullName} with fixture {testFixture} do not implement {nameof(IConfigureServices)}");
+                throw new InvalidOperationException($"Test {test.FullName} with fixture {testFixture} do not implement {nameof(ITestFixture)}");
             }
 
             var serviceCollection = new ServiceCollection()

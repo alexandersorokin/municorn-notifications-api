@@ -8,7 +8,7 @@ using NUnit.Framework.Interfaces;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [AttributeUsage(AttributeTargets.Class)]
-    internal sealed class ParameterModuleAttribute : Attribute, IModule
+    internal sealed class ParameterModuleAttribute : Attribute, IFixtureModule
     {
         public void ConfigureServices(IServiceCollection serviceCollection, ITypeInfo typeInfo)
         {

@@ -6,7 +6,7 @@ using NUnit.Framework.Interfaces;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    internal sealed class AdHocModuleAttribute : Attribute, IModule
+    internal sealed class AdHocModuleAttribute : Attribute, IFixtureModule
     {
         private readonly Type serviceType;
 

@@ -10,7 +10,7 @@ using NUnit.Framework.Internal;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor
 {
     [TestFixture]
-    internal class Service_TestAccessor_Should : IConfigureServices
+    internal class Service_TestAccessor_Should : ITestFixture
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.AddSingleton<object>();
 

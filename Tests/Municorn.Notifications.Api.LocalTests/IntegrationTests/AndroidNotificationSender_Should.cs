@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
-    internal class AndroidNotificationSender_Should : IConfigureServices
+    internal class AndroidNotificationSender_Should : ITestFixture
     {
         [TestDependency]
         private readonly AsyncLocalTestCaseServiceResolver<AndroidNotificationSender> androidNotificationSender = default!;

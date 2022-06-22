@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.SetUpFixtures.AfterFixtureConstructorCountChilds
 {
     [SetUpFixture]
-    internal sealed class SetUpFixture : IConfigureServices, IDisposable
+    internal sealed class SetUpFixture : ITestFixture, IDisposable
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection

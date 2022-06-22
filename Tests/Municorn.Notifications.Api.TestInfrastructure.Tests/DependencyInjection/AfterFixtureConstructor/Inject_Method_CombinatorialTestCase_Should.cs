@@ -9,7 +9,7 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor
 {
     [TestFixture]
-    internal class Inject_Method_CombinatorialTestCase_Should : IConfigureServices
+    internal class Inject_Method_CombinatorialTestCase_Should : ITestFixture
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddScoped<ILog, SilentLog>();

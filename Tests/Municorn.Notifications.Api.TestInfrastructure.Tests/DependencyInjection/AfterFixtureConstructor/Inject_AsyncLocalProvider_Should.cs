@@ -8,7 +8,7 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor
 {
     [TestFixture]
-    internal class Inject_AsyncLocalProvider_Should : IConfigureServices
+    internal class Inject_AsyncLocalProvider_Should : ITestFixture
     {
         [TestDependency]
         private readonly AsyncLocalTestCaseServiceResolver resolver = default!;

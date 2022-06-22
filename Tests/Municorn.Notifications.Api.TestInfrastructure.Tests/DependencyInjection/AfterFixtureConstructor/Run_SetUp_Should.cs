@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor
 {
     [TestFixture]
-    internal sealed class Run_SetUp_Should : IConfigureServices, IDisposable
+    internal sealed class Run_SetUp_Should : ITestFixture, IDisposable
     {
         [TestDependency]
         private readonly Counter counter = default!;

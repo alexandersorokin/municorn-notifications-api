@@ -4,7 +4,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scop
 {
     public static class FixtureExtensions
     {
-        public static TService GetRequiredService<TService>(this IConfigureServices fixture)
+        public static TService GetRequiredService<TService>(this ITestFixture fixture)
             where TService : notnull =>
             new AsyncLocalTestCaseServiceResolver(new FixtureProvider(fixture)).GetRequiredService<TService>();
     }

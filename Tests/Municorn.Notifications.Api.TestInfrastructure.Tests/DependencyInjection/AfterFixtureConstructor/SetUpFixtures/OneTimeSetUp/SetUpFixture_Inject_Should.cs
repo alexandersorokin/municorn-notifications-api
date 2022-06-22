@@ -8,7 +8,7 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor.SetUpFixtures.OneTimeSetUp
 {
     [TestFixture]
-    internal class SetUpFixture_Inject_Should : IConfigureServices
+    internal class SetUpFixture_Inject_Should : ITestFixture
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddScoped<ILog, SilentLog>();
