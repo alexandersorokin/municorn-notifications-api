@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeAsyncLocal;
@@ -134,10 +135,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             return result;
         }
 
-        public void TearDownMethodExample()
-        {
-            // only MethodInfo is required
-        }
+        public Task TearDownMethodExample() => Task.CompletedTask;
 
         private static object[] ResolveArguments(IServiceProvider serviceProvider, IEnumerable<ParameterInfo> methodInfo) =>
             methodInfo
@@ -197,8 +195,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
                 var sp = GetServiceProviderByFixture(fixture, "Fixture is not passed to container dispose method");
-                sp.DisposeSynchronously();
-                return null;
+                return sp.DisposeAsync().AsTask();
             }
         }
 
