@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeAsyncLocal;
 using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
     internal static class ServiceCollectionExtensions
     {
-        internal static IServiceCollection RegisterFixtures(this IServiceCollection serviceCollection, ITest? currentTest)
+        internal static IServiceCollection AddFixtures(this IServiceCollection serviceCollection, ITest? currentTest)
         {
             while (currentTest != null)
             {
@@ -20,7 +22,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
             return serviceCollection;
         }
 
-        internal static IServiceCollection RegisterModules(this IServiceCollection serviceCollection, ITypeInfo typeInfo)
+        internal static IServiceCollection AddFixtureModules(this IServiceCollection serviceCollection, ITypeInfo typeInfo)
         {
             foreach (var module in typeInfo.GetCustomAttributes<IFixtureModule>(true))
             {
@@ -29,5 +31,15 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 
             return serviceCollection;
         }
+
+        internal static IServiceCollection AddAsyncLocal(this IServiceCollection serviceCollection) =>
+            serviceCollection
+                .AddSingleton(sp => new AsyncLocalTestCaseServiceResolver(sp.GetRequiredService<IFixtureProvider>()))
+                .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>));
+
+        internal static IServiceCollection AddAutoMethods(this IServiceCollection serviceCollection) =>
+            serviceCollection
+                .AddSingleton<FixtureOneTimeSetUpRunner>()
+                .AddScoped<FixtureSetUpRunner>();
     }
 }

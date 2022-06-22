@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.TestInfrastructure
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
     public interface IFixtureModule
     {

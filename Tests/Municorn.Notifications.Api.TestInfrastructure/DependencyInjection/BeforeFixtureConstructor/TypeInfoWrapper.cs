@@ -7,7 +7,6 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeAsyncLocal;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -59,16 +58,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             var currentTest = TestExecutionContext.CurrentContext.CurrentTest;
             var serviceCollection = new ServiceCollection()
-                .AddSingleton<ITest>(currentTest)
                 .AddSingleton<IFixtureProvider>(fixtureProvider)
-                .AddSingleton<TestActionMethodManager>()
-                .AddSingleton(sp => new AsyncLocalTestCaseServiceResolver(sp.GetRequiredService<IFixtureProvider>()))
-                .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>))
-                .RegisterFixtures(currentTest)
-                .AddSingleton<FixtureOneTimeSetUpRunner>()
-                .AddScoped<FixtureSetUpRunner>()
+                .AddSingleton<ITest>(currentTest)
                 .AddScoped<TestAccessor>()
-                .RegisterModules(new NUnit.Framework.Internal.TypeWrapper(this.originalType));
+                .AddSingleton<TestActionMethodManager>()
+                .AddAsyncLocal()
+                .AddFixtures(currentTest)
+                .AddAutoMethods()
+                .AddFixtureModules(new NUnit.Framework.Internal.TypeWrapper(this.originalType));
 
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);
 

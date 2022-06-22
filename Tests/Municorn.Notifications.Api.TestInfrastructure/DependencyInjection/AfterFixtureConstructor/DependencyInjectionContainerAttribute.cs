@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeAsyncLocal;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
@@ -71,15 +70,13 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
             }
 
             var serviceCollection = new ServiceCollection()
-                .AddSingleton(test)
                 .AddSingleton<IFixtureProvider>(new FixtureProvider(notNullFixture))
+                .AddSingleton(test)
+                .AddScoped<TestAccessor>()
                 .AddSingleton<TestActionMethodManager>()
-                .AddSingleton(sp => new AsyncLocalTestCaseServiceResolver(sp.GetRequiredService<IFixtureProvider>()))
-                .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>))
-                .RegisterFixtures(test)
-                .AddSingleton<FixtureOneTimeSetUpRunner>()
-                .AddScoped<FixtureSetUpRunner>()
-                .AddScoped<TestAccessor>();
+                .AddAsyncLocal()
+                .AddFixtures(test)
+                .AddAutoMethods();
             notNullFixture.ConfigureServices(serviceCollection);
 
             this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
