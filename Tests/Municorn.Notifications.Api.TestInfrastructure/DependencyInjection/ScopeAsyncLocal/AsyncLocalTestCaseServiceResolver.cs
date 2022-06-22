@@ -11,7 +11,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scop
 
         public TService GetRequiredService<TService>()
             where TService : notnull =>
-            ServiceProviderServiceExtensions.GetRequiredService<TService>(TestExecutionContext.CurrentContext.CurrentTest
-                    .GetServiceProvider(this.fixtureProvider.Fixture));
+            TestExecutionContext.CurrentContext.CurrentTest
+                .GetServiceProvider(this.fixtureProvider.Fixture)
+                .GetRequiredService<TService>();
     }
 }
