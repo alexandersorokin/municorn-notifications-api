@@ -72,11 +72,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<IFixtureProvider>(new FixtureProvider(notNullFixture))
                 .AddSingleton(test)
-                .AddScoped<TestAccessor>()
-                .AddSingleton<TestActionMethodManager>()
+                .AddTestActionManager()
                 .AddAsyncLocal()
                 .AddFixtures(test)
-                .AddAutoMethods();
+                .AddFixtureAutoMethods();
             notNullFixture.ConfigureServices(serviceCollection);
 
             this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
@@ -89,12 +88,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
         private void BeforeTestCase(ITest test)
         {
             var sp = this.GetServiceProvider(test);
-            sp.GetRequiredService<TestActionMethodManager>().BeforeTestCase(sp, test);
+            sp.GetRequiredService<TestActionManagers.TestActionMethodManager>().BeforeTestCase(sp, test);
         }
 
         private void AfterTestCase(ITest test) =>
             this.GetServiceProvider(test)
-                .GetRequiredService<TestActionMethodManager>()
+                .GetRequiredService<TestActionManagers.TestActionMethodManager>()
                 .AfterTestCase(test);
 
         private void AfterTestSuite(ITest test)

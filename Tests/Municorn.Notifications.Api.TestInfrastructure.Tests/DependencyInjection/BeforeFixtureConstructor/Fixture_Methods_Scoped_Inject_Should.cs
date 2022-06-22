@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.TestActionManagers;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor

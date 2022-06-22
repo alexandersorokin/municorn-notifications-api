@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeMethodInject;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.TestActionManagers;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 

@@ -2,9 +2,9 @@
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeMethodInject;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.TestActionManagers;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeMethodInject;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.TestActionManagers
 {
     [PrimaryConstructor]
     internal partial class TestActionMethodManager
@@ -21,17 +20,17 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 
             var testMethod = (TestMethod)test;
             var originalMethodInfo = testMethod.Method;
-            var map = test.GetFixtureServiceProviderMap();
-            if (!this.scopes.TryAdd(test, new(serviceScope, originalMethodInfo, map)))
+            if (!this.scopes.TryAdd(test, new(serviceScope, originalMethodInfo)))
             {
                 throw new InvalidOperationException($"Failed to save original MethodInfo for {test.FullName}");
             }
 
             var scopeServiceProvider = serviceScope.ServiceProvider;
-            scopeServiceProvider.GetRequiredService<TestAccessor>().Test = test;
-            testMethod.Method = new UseContainerMethodInfo(originalMethodInfo, scopeServiceProvider, this.fixtureProvider.Fixture);
-            map.AddScope(this.fixtureProvider.Fixture, scopeServiceProvider);
+            var testAccessor = scopeServiceProvider.GetRequiredService<TestAccessor>();
+            testAccessor.Test = test;
+            testAccessor.ServiceProvider = scopeServiceProvider;
 
+            testMethod.Method = new UseContainerMethodInfo(originalMethodInfo, scopeServiceProvider, this.fixtureProvider.Fixture);
             scopeServiceProvider.GetRequiredService<FixtureSetUpRunner>().Run();
         }
 
@@ -43,10 +42,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
             }
 
             ((TestMethod)test).Method = testData.OriginalMethodInfo;
-            testData.Map.RemoveScope(this.fixtureProvider.Fixture);
             testData.Scope.DisposeSynchronously();
         }
 
-        private record TestData(AsyncServiceScope Scope, IMethodInfo OriginalMethodInfo, FixtureServiceProviderMap Map);
+        private record TestData(AsyncServiceScope Scope, IMethodInfo OriginalMethodInfo);
     }
 }

@@ -60,11 +60,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<IFixtureProvider>(fixtureProvider)
                 .AddSingleton<ITest>(currentTest)
-                .AddScoped<TestAccessor>()
-                .AddSingleton<TestActionMethodManager>()
+                .AddTestActionManager()
                 .AddAsyncLocal()
                 .AddFixtures(currentTest)
-                .AddAutoMethods()
+                .AddFixtureAutoMethods()
                 .AddFixtureModules(new NUnit.Framework.Internal.TypeWrapper(this.originalType));
 
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);
@@ -266,7 +265,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                     if (!test.IsSuite)
                     {
                         var sp = GetServiceProvider(context.TestObject);
-                        sp.GetRequiredService<TestActionMethodManager>().BeforeTestCase(sp, test);
+                        sp.GetRequiredService<TestActionManagers.TestActionMethodManager>().BeforeTestCase(sp, test);
                     }
                 }
             }
@@ -288,7 +287,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                         var result = this.command.Execute(context);
 
                         GetServiceProvider(context.TestObject)
-                            .GetRequiredService<TestActionMethodManager>()
+                            .GetRequiredService<TestActionManagers.TestActionMethodManager>()
                             .AfterTestCase(context.CurrentTest);
 
                         return result;

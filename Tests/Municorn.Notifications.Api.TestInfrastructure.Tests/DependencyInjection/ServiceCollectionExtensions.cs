@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.TestActionManagers;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection
 {
