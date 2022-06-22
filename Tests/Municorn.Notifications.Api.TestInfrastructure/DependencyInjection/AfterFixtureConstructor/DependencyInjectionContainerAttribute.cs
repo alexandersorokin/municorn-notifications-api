@@ -74,7 +74,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
                 .AddSingleton(test)
                 .AddSingleton<IFixtureProvider>(new FixtureProvider(notNullFixture))
                 .AddSingleton<TestActionMethodManager>()
-                .AddSingleton(sp => new AsyncLocalTestCaseServiceResolver(sp.GetRequiredService<IFixtureProvider>()))
+                .AddSingleton<AsyncLocalTestCaseServiceResolver>()
                 .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>))
                 .RegisterFixtures(test)
                 .AddSingleton<FixtureOneTimeSetUpRunner>()

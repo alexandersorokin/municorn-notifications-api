@@ -7,7 +7,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scop
     {
         private readonly IFixtureProvider fixtureProvider;
 
-        internal AsyncLocalTestCaseServiceResolver(IFixtureProvider fixtureProvider) => this.fixtureProvider = fixtureProvider;
+        public AsyncLocalTestCaseServiceResolver(IFixtureProvider fixtureProvider) => this.fixtureProvider = fixtureProvider;
 
         public TService GetRequiredService<TService>()
             where TService : notnull =>
