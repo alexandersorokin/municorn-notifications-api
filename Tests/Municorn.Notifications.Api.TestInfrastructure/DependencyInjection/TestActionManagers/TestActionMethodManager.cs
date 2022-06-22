@@ -1,26 +1,19 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.ScopeMethodInject;
 using NUnit.Framework.Interfaces;
-using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.TestActionManagers
 {
     [PrimaryConstructor]
     internal partial class TestActionMethodManager
     {
-        private readonly ConcurrentDictionary<ITest, TestData> scopes = new();
-
-        private readonly IFixtureProvider fixtureProvider;
+        private readonly ConcurrentDictionary<ITest, IAsyncDisposable> scopes = new();
 
         internal void BeforeTestCase(ServiceProvider fixtureServiceProvider, ITest test)
         {
             var serviceScope = fixtureServiceProvider.CreateAsyncScope();
-
-            var testMethod = (TestMethod)test;
-            var originalMethodInfo = testMethod.Method;
-            if (!this.scopes.TryAdd(test, new(serviceScope, originalMethodInfo)))
+            if (!this.scopes.TryAdd(test, serviceScope))
             {
                 throw new InvalidOperationException($"Failed to save original MethodInfo for {test.FullName}");
             }
@@ -30,21 +23,17 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Test
             testAccessor.Test = test;
             testAccessor.ServiceProvider = scopeServiceProvider;
 
-            testMethod.Method = new UseContainerMethodInfo(originalMethodInfo, scopeServiceProvider, this.fixtureProvider.Fixture);
             scopeServiceProvider.GetRequiredService<FixtureSetUpRunner>().Run();
         }
 
         internal void AfterTestCase(ITest test)
         {
-            if (!this.scopes.TryRemove(test, out var testData))
+            if (!this.scopes.TryRemove(test, out var scope))
             {
-                throw new InvalidOperationException($"Failed to get saved TestData for {test.FullName}");
+                throw new InvalidOperationException($"Failed to get saved scope for {test.FullName}");
             }
 
-            ((TestMethod)test).Method = testData.OriginalMethodInfo;
-            testData.Scope.DisposeSynchronously();
+            scope.DisposeAsync().AsTask().GetAwaiter().GetResult();
         }
-
-        private record TestData(AsyncServiceScope Scope, IMethodInfo OriginalMethodInfo);
     }
 }

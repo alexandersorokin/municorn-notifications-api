@@ -103,7 +103,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
             {
                 var provider = this.GetServiceProvider(test);
                 var fixture = provider.GetRequiredService<IFixtureProvider>().Fixture;
-                provider.DisposeSynchronously();
+                ((IAsyncDisposable)provider).DisposeAsync().AsTask().GetAwaiter().GetResult();
                 test.GetFixtureServiceProviderMap().RemoveScope(fixture);
             }
             catch (Exception ex)
