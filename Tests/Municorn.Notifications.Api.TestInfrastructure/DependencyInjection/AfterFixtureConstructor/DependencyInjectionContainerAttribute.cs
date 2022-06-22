@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
@@ -32,7 +30,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
             }
             else
             {
-                this.BeforeTestCase(test);
+                var sp = this.GetServiceProvider(test);
+                sp.GetRequiredService<TestActionMethodManager>().BeforeTestCase(sp, test);
             }
         }
 
@@ -44,21 +43,22 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
             }
             else
             {
-                this.AfterTestCase(test);
+                this.GetServiceProvider(test)
+                    .GetRequiredService<TestActionMethodManager>()
+                    .AfterTestCase(test);
             }
         }
 
-        private static void InitializeSingletonFields(ITestFixture testFixture, IServiceProvider serviceProvider)
+        private void AfterTestSuite(ITest test)
         {
-            var fields = testFixture
-                .GetType()
-                .GetFields(BindingFlags.Instance | BindingFlags.NonPublic)
-                .Where(field => field.GetCustomAttribute<TestDependencyAttribute>() != null);
-
-            foreach (var field in fields)
+            // workaround https://github.com/nunit/nunit/issues/2938
+            try
             {
-                var value = serviceProvider.GetRequiredService(field.FieldType);
-                field.SetValue(testFixture, value);
+                this.GetServiceProvider(test).DisposeAsync().AsTask().GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                TestExecutionContext.CurrentContext.CurrentResult.RecordTearDownException(ex);
             }
         }
 
@@ -76,7 +76,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
                 .AddTestActionManager()
                 .AddAsyncLocal()
                 .AddFixtures(test)
-                .AddFixtureAutoMethods();
+                .AddFixtureAutoMethods()
+                .AddSingleton<IFixtureOneTimeSetUp, SingletonFieldInitializer>();
             notNullFixture.ConfigureServices(serviceCollection);
 
             this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
@@ -84,32 +85,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
             var serviceProviderAccessor = this.serviceProvider.GetRequiredService<ServiceProviderAccessor>();
             serviceProviderAccessor.ServiceProvider = this.serviceProvider;
 
-            InitializeSingletonFields(notNullFixture, this.serviceProvider);
             this.serviceProvider.GetRequiredService<FixtureOneTimeSetUpRunner>().Run();
-        }
-
-        private void BeforeTestCase(ITest test)
-        {
-            var sp = this.GetServiceProvider(test);
-            sp.GetRequiredService<TestActionMethodManager>().BeforeTestCase(sp, test);
-        }
-
-        private void AfterTestCase(ITest test) =>
-            this.GetServiceProvider(test)
-                .GetRequiredService<TestActionMethodManager>()
-                .AfterTestCase(test);
-
-        private void AfterTestSuite(ITest test)
-        {
-            // workaround https://github.com/nunit/nunit/issues/2938
-            try
-            {
-                this.GetServiceProvider(test).DisposeAsync().AsTask().GetAwaiter().GetResult();
-            }
-            catch (Exception ex)
-            {
-                TestExecutionContext.CurrentContext.CurrentResult.RecordTearDownException(ex);
-            }
         }
 
         [MemberNotNull(nameof(serviceProvider))]

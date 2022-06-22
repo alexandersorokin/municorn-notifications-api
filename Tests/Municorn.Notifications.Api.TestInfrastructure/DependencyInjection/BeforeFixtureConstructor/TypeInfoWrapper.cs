@@ -64,6 +64,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                 .AddTestActionManager()
                 .AddAsyncLocal()
                 .AddFixtures(currentTest)
+                .AddSingleton<IFixtureOneTimeSetUp, FixtureSaver>()
                 .AddFixtureAutoMethods()
                 .AddFixtureModules(new NUnit.Framework.Internal.TypeWrapper(this.originalType));
 
@@ -74,8 +75,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             var fixture = this.CreateFixture(args, serviceProvider);
             fixtureProvider.Fixture = fixture;
-
-            ServiceProviders.Add(fixture, serviceProvider);
 
             serviceProvider.GetRequiredService<FixtureOneTimeSetUpRunner>().Run();
 
@@ -175,6 +174,30 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             }
         }
 
+        private sealed class FixtureSaver : IFixtureOneTimeSetUp, IDisposable
+        {
+            private readonly IFixtureProvider fixtureProvider;
+            private readonly ServiceProviderAccessor serviceProviderAccessor;
+
+            public FixtureSaver(IFixtureProvider fixtureProvider, ServiceProviderAccessor serviceProviderAccessor)
+            {
+                this.fixtureProvider = fixtureProvider;
+                this.serviceProviderAccessor = serviceProviderAccessor;
+            }
+
+            public void Run() => ServiceProviders.Add(this.fixtureProvider.Fixture, this.serviceProviderAccessor.ServiceProvider);
+
+            public void Dispose() => RemoveFixture(this.fixtureProvider.Fixture);
+
+            private static void RemoveFixture(object fixture)
+            {
+                if (!ServiceProviders.Remove(fixture))
+                {
+                    throw new InvalidOperationException($"Failed to remove {fixture} from saved providers");
+                }
+            }
+        }
+
         private class FixtureActionMethodInfo : MethodWrapper, IMethodInfo
         {
             public FixtureActionMethodInfo(Type type, MethodInfo methodInfo)
@@ -201,18 +224,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             IParameterInfo[] IMethodInfo.GetParameters() => Array.Empty<IParameterInfo>();
 
-            object IMethodInfo.Invoke(object? fixture, params object?[]? args)
-            {
-                var serviceProvider = GetServiceProvider(fixture ?? throw new InvalidOperationException("Fixture is not passed to container dispose method"));
-                if (!ServiceProviders.Remove(fixture))
-                {
-                    throw new InvalidOperationException($"Failed to remove {fixture} from saved providers");
-                }
-
-                return serviceProvider
+            object IMethodInfo.Invoke(object? fixture, params object?[]? args) =>
+                GetServiceProvider(fixture, "Fixture is not passed to container dispose method")
                     .DisposeAsync()
                     .AsTask();
-            }
         }
 
         private class FixtureProvider : IFixtureProvider

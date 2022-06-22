@@ -1,15 +1,16 @@
 ﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods
 {
-    public class ServiceProviderAccessor
+    internal class ServiceProviderAccessor
     {
-        private IServiceProvider? serviceProvider;
+        private ServiceProvider? serviceProvider;
 
-        public IServiceProvider ServiceProvider
+        internal ServiceProvider ServiceProvider
         {
             get => this.serviceProvider ?? throw new InvalidOperationException("ServiceProvider is not yet set");
-            internal set => this.serviceProvider = value;
+            set => this.serviceProvider = value;
         }
     }
 }
