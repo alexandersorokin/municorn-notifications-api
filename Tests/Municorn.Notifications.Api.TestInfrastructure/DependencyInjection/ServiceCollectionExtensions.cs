@@ -2,9 +2,8 @@
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.Inject;
 using NUnit.Framework.Interfaces;
-using FixtureSetUpRunner = Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.FixtureSetUpRunner;
-using TestActionMethodManager = Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.TestActionMethodManager;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
@@ -38,7 +37,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
         internal static IServiceCollection AddAsyncLocal(this IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddSingleton(sp => new AsyncLocalServiceProvider(sp.GetRequiredService<IFixtureProvider>()))
-                .AddSingleton(typeof(AsyncLocalTestCaseServiceResolver<>));
+                .AddSingleton(typeof(AsyncLocalServiceProvider<>));
 
         internal static IServiceCollection AddFixtureAutoMethods(this IServiceCollection serviceCollection) =>
             serviceCollection

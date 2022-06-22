@@ -1,18 +1,17 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
 using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal
 {
-    public class AsyncLocalServiceProvider
+    public class AsyncLocalServiceProvider : IServiceProvider
     {
         private readonly IFixtureProvider fixtureProvider;
 
         internal AsyncLocalServiceProvider(IFixtureProvider fixtureProvider) => this.fixtureProvider = fixtureProvider;
 
-        public TService GetRequiredService<TService>()
-            where TService : notnull =>
+        public object? GetService(Type serviceType) =>
             TestExecutionContext.CurrentContext.CurrentTest
                 .GetServiceProvider(this.fixtureProvider.Fixture)
-                .GetRequiredService<TService>();
+                .GetService(serviceType);
     }
 }

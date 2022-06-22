@@ -11,7 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal class Inject_AsyncGenericProvider_Should : ITestFixture
     {
         [TestDependency]
-        private readonly AsyncLocalTestCaseServiceResolver<ILog> service = default!;
+        private readonly AsyncLocalServiceProvider<ILog> service = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddScoped<ILog, SilentLog>();

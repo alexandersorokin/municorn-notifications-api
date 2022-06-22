@@ -11,7 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [PrimaryConstructor]
     internal partial class Inject_AsyncLocal_Should
     {
-        private readonly AsyncLocalTestCaseServiceResolver<IFixtureSetUp> service;
+        private readonly AsyncLocalServiceProvider<IFixtureSetUp> service;
 
         [Test]
         [Repeat(2)]

@@ -1,7 +1,9 @@
-﻿namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal
 {
     [PrimaryConstructor]
-    public partial class AsyncLocalTestCaseServiceResolver<TService>
+    public partial class AsyncLocalServiceProvider<TService>
         where TService : notnull
     {
         private readonly AsyncLocalServiceProvider asyncLocalServiceProvider;
