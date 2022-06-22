@@ -1,15 +1,17 @@
 ﻿using FluentAssertions;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
 using NUnit.Framework;
-using NUnit.Framework.Interfaces;
+using Vostok.Logging.Abstractions;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor.Modules
 {
     [TestFixture]
-    internal class Inject_Test_Should : IWithNoServices
+    [FixtureModule(typeof(ILog), typeof(SilentLog))]
+    internal class Inject_Field_Should : IWithNoServices
     {
         [TestDependency]
-        private readonly ITest service = default!;
+        private readonly ILog service = default!;
 
         [Test]
         [Repeat(2)]

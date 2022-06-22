@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [TestFixtureInjectable]
-    [AdHocModule(typeof(Counter))]
+    [FixtureModule(typeof(Counter))]
     internal class Fixture_Methods_Inject_Should
     {
         [OneTimeSetUp]

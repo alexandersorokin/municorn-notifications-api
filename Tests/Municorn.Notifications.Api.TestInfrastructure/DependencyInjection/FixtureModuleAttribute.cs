@@ -2,16 +2,16 @@
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public sealed class AdHocModuleAttribute : Attribute, IFixtureModule
+    public sealed class FixtureModuleAttribute : Attribute, IFixtureModule
     {
         private readonly Type serviceType;
 
         private readonly Type? implementationType;
 
-        public AdHocModuleAttribute(Type serviceType, Type? implementationType = null)
+        public FixtureModuleAttribute(Type serviceType, Type? implementationType = null)
         {
             this.serviceType = serviceType;
             this.implementationType = implementationType;

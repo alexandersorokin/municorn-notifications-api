@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor

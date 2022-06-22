@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
 using NUnit.Framework.Interfaces;
 

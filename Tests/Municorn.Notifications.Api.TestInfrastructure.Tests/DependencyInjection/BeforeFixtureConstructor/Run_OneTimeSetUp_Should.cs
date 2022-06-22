@@ -1,8 +1,8 @@
 ﻿using System;
 using FluentAssertions;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [TestFixtureInjectable]
     [LogModule]
     [ParameterModule]
-    [AdHocModule(typeof(IFixtureOneTimeSetUp), typeof(FixtureTimeLogger))]
+    [FixtureModule(typeof(IFixtureOneTimeSetUp), typeof(FixtureTimeLogger))]
     internal sealed class Run_OneTimeSetUp_Should : IDisposable
     {
         private readonly Counter counter;

@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
@@ -8,7 +8,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [TestFixtureInjectable]
     [LogModule]
     [ParameterModule]
-    [AdHocModule(typeof(FixtureTimeLogger))]
+    [FixtureModule(typeof(FixtureTimeLogger))]
     internal class Run_Global_Dispose_After_TearDown_Should
     {
         private readonly Counter counter;
