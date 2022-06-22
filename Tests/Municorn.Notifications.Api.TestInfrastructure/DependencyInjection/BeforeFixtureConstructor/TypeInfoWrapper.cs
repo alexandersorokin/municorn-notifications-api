@@ -67,12 +67,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                 .RegisterFixtures(currentTest)
                 .AddSingleton<FixtureOneTimeSetUpRunner>()
                 .AddScoped<FixtureSetUpRunner>()
-                .AddScoped<TestAccessor>();
-
-            foreach (var module in this.GetCustomAttributes<IFixtureModule>(true))
-            {
-                module.ConfigureServices(serviceCollection, new NUnit.Framework.Internal.TypeWrapper(this.originalType));
-            }
+                .AddScoped<TestAccessor>()
+                .RegisterModules(new NUnit.Framework.Internal.TypeWrapper(this.originalType));
 
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);
 

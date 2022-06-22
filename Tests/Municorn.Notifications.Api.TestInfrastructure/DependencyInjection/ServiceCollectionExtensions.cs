@@ -19,5 +19,15 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 
             return serviceCollection;
         }
+
+        internal static IServiceCollection RegisterModules(this IServiceCollection serviceCollection, ITypeInfo typeInfo)
+        {
+            foreach (var module in typeInfo.GetCustomAttributes<IFixtureModule>(true))
+            {
+                module.ConfigureServices(serviceCollection, typeInfo);
+            }
+
+            return serviceCollection;
+        }
     }
 }
