@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal;
@@ -26,7 +27,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 
         internal static IServiceCollection AddFixtureModules(this IServiceCollection serviceCollection, ITypeInfo typeInfo)
         {
-            foreach (var module in typeInfo.GetCustomAttributes<IFixtureModule>(true))
+            var customAttributes = typeInfo
+                .GetCustomAttributes<IFixtureModule>(true)
+                .Concat(typeInfo.Type
+                    .GetInterfaces()
+                    .SelectMany(interfaceType => interfaceType.GetCustomAttributes(typeof(IFixtureModule), true)
+                        .Cast<IFixtureModule>()))
+                .Distinct();
+            foreach (var module in customAttributes)
             {
                 module.ConfigureServices(serviceCollection, typeInfo);
             }
