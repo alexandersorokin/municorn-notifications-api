@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
 using NUnit.Framework.Interfaces;
 
@@ -33,16 +32,16 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         private class ScopedProvider<TService>
         {
-            private readonly IFixtureProvider fixtureProvider;
+            private readonly ITest test;
 
-            public ScopedProvider(IFixtureProvider fixtureProvider)
+            public ScopedProvider(ITest test)
             {
-                this.fixtureProvider = fixtureProvider;
+                this.test = test;
             }
 
             public TService Get()
             {
-                var fixture = (this.fixtureProvider.Fixture as IScoped<TService>)
+                var fixture = (this.test.Fixture as IScoped<TService>)
                               ?? throw new InvalidOperationException($"Fixture do not implement {typeof(IScoped<TService>).FullName}");
                 return fixture.Get();
             }
