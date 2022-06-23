@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor.Fields;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fields;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 

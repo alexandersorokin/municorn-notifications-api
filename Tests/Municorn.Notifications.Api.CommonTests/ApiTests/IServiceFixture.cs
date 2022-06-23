@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor.Fields;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fields;
 
 namespace Municorn.Notifications.Api.Tests.ApiTests
 {

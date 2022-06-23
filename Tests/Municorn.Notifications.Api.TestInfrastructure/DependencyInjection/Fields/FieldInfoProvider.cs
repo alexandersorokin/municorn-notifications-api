@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor.Fields
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fields
 {
     [PrimaryConstructor]
     internal partial class FieldInfoProvider

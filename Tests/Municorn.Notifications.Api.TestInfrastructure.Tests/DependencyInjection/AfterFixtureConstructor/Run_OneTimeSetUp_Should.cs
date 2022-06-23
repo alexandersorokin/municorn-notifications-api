@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor.Fields;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fields;
 using Municorn.Notifications.Api.TestInfrastructure.Logging;
 using NUnit.Framework;
 
