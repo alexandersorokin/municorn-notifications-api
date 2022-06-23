@@ -5,7 +5,7 @@ using Municorn.Notifications.Api.TestInfrastructure.Logging;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.Scoped
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.Modules.Scoped
 {
     [TestFixtureInjectable]
     [ScopedInterfaceModule]

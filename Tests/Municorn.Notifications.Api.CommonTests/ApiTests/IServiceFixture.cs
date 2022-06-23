@@ -4,7 +4,7 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fields;
 
 namespace Municorn.Notifications.Api.Tests.ApiTests
 {
-    [FieldDependencyModule]
+    [FieldDependenciesModule]
     internal interface IServiceFixture : ITestFixture
     {
         void ITestFixture.ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterClientFactory();

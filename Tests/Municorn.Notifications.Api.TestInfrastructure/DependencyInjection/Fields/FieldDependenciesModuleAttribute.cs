@@ -8,7 +8,7 @@ using NUnit.Framework.Interfaces;
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fields
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
-    public sealed class FieldDependencyModuleAttribute : Attribute, IFixtureModule
+    public sealed class FieldDependenciesModuleAttribute : Attribute, IFixtureModule
     {
         public void ConfigureServices(IServiceCollection serviceCollection, ITypeInfo typeInfo)
         {

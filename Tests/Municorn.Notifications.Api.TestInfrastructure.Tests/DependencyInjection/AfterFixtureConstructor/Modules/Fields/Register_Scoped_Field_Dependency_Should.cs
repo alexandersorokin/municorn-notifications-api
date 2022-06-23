@@ -8,7 +8,7 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor.Modules.Fields
 {
     [TestFixture]
-    [FieldDependencyModule]
+    [FieldDependenciesModule]
     internal class Register_Scoped_Field_Dependency_Should : IWithoutConfigureServices
     {
         [FieldDependency]

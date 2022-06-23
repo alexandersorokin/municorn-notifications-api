@@ -3,19 +3,23 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFi
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.Source
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.Constructors.Source
 {
-    [TestFixtureSourceInjectable(typeof(StandardSource))]
+    [TestFixtureSourceInjectable(nameof(FixtureData))]
     [PrimaryConstructor]
-    internal partial class Inject_TypeArgument_As_Dedicated_Argument_Service_Should<T>
+    internal partial class Inject_Argument_Service_Should
     {
+        public static readonly TestFixtureData[] FixtureData =
+        {
+            new("passed"),
+        };
+
         private readonly string argument;
         private readonly AsyncLocalServiceProvider service;
 
         [Test]
         public void Case()
         {
-            typeof(T).Should().Be(typeof(int));
             this.argument.Should().Be("passed");
             this.service.Should().NotBeNull();
         }

@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor.ImplicitInterface
 {
     [TestFixture]
-    [FieldDependencyModule]
+    [FieldDependenciesModule]
     internal class Do_Not_Require_To_Implement_ConfigureServices_Should : IWithNoServices
     {
         [FieldDependency]

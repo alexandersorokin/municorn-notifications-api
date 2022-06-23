@@ -8,7 +8,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixture]
     [FixtureModuleService(typeof(ILog), typeof(SilentLog))]
-    [FieldDependencyModule]
+    [FieldDependenciesModule]
     internal class Inject_Field_Should : IWithoutConfigureServices
     {
         [FieldDependency]
