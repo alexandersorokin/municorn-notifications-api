@@ -8,7 +8,6 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.ApiTests
 {
     [TestFixture]
-    [FieldDependenciesModule]
     internal class GetStatus_Should : IServiceFixture
     {
         public static readonly SendNotificationRequest[] Notifications =
