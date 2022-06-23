@@ -7,13 +7,13 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixtureInjectable]
     [LogModule]
-    [ParameterModule]
+    [RegisterDependencyModule]
     [FixtureModule(typeof(FixtureTimeLogger))]
     internal class Run_Global_Dispose_After_TearDown_Should
     {
         private readonly Counter counter;
 
-        public Run_Global_Dispose_After_TearDown_Should([Register] Counter counter) => this.counter = counter;
+        public Run_Global_Dispose_After_TearDown_Should([RegisterDependency] Counter counter) => this.counter = counter;
 
         [OneTimeSetUp]
         public void OneTimeSetUp(FixtureTimeLogger fixtureTimeLogger)
