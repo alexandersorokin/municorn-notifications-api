@@ -8,7 +8,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [TestFixtureInjectable]
     [LogModule]
     [RegisterConstructorParametersModule]
-    [FixtureModule(typeof(FixtureTimeLogger))]
+    [FixtureModuleRegistration(typeof(FixtureTimeLogger))]
     internal class Run_Global_Dispose_After_TearDown_Should
     {
         private readonly Counter counter;

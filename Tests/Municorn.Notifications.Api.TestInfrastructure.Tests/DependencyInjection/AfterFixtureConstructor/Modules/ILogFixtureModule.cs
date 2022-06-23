@@ -3,7 +3,7 @@ using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor.Modules
 {
-    [FixtureModule(typeof(ILog), typeof(SilentLog))]
+    [FixtureModuleRegistration(typeof(ILog), typeof(SilentLog))]
     internal interface ILogFixtureModule
     {
     }

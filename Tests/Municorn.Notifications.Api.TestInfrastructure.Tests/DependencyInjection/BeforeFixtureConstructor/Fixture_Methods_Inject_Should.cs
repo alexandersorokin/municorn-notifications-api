@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [TestFixtureInjectable]
-    [FixtureModule(typeof(Counter))]
+    [FixtureModuleRegistration(typeof(Counter))]
     internal class Fixture_Methods_Inject_Should
     {
         [OneTimeSetUp]
