@@ -3,20 +3,20 @@ using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods
 {
-    internal sealed class ProviderSaver : IFixtureOneTimeSetUp, IDisposable
+    internal sealed class MapProviderSaver : IFixtureOneTimeSetUp, IDisposable
     {
+        private readonly IServiceProvider serviceProvider;
         private readonly IFixtureProvider fixtureProvider;
-        private readonly ServiceProviderAccessor serviceProviderAccessor;
         private readonly FixtureServiceProviderMap map;
 
-        public ProviderSaver(ITest test, IFixtureProvider fixtureProvider, ServiceProviderAccessor serviceProviderAccessor)
+        public MapProviderSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider, ITest test)
         {
+            this.serviceProvider = serviceProvider;
             this.fixtureProvider = fixtureProvider;
-            this.serviceProviderAccessor = serviceProviderAccessor;
             this.map = test.GetFixtureServiceProviderMap();
         }
 
-        public void Run() => this.map.AddScope(this.fixtureProvider.Fixture, this.serviceProviderAccessor.ServiceProvider);
+        public void Run() => this.map.AddScope(this.fixtureProvider.Fixture, this.serviceProvider);
 
         public void Dispose() => this.map.RemoveScope(this.fixtureProvider.Fixture);
     }

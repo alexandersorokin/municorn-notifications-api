@@ -50,8 +50,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
         internal static IServiceCollection AddFixtureAutoMethods(this IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddSingleton<FixtureOneTimeSetUpRunner>()
-                .AddSingleton<ServiceProviderAccessor>()
-                .AddSingleton<IFixtureOneTimeSetUp, ProviderSaver>();
+                .AddSingleton<IFixtureOneTimeSetUp, MapProviderSaver>();
 
         internal static IServiceCollection AddTestActionManager(this IServiceCollection serviceCollection) =>
             serviceCollection

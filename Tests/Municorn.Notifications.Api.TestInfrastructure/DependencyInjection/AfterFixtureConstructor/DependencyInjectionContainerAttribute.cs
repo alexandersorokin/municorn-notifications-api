@@ -30,31 +30,29 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
             }
             else
             {
-                var sp = this.GetServiceProvider(test);
-                sp.GetRequiredService<TestActionMethodManager>().BeforeTestCase(sp, test);
+                this.GetServiceProvider(test).GetRequiredService<TestActionMethodManager>().BeforeTestCase(test);
             }
         }
 
         public void AfterTest(ITest test)
         {
+            var provider = this.GetServiceProvider(test);
             if (test.IsSuite)
             {
-                this.AfterTestSuite(test);
+                AfterTestSuite(provider);
             }
             else
             {
-                this.GetServiceProvider(test)
-                    .GetRequiredService<TestActionMethodManager>()
-                    .AfterTestCase(test);
+                provider.GetRequiredService<TestActionMethodManager>().AfterTestCase(test);
             }
         }
 
-        private void AfterTestSuite(ITest test)
+        private static void AfterTestSuite(IAsyncDisposable provider)
         {
             // workaround https://github.com/nunit/nunit/issues/2938
             try
             {
-                this.GetServiceProvider(test).DisposeAsync().AsTask().GetAwaiter().GetResult();
+                provider.DisposeAsync().AsTask().GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
@@ -82,10 +80,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
             notNullFixture.ConfigureServices(serviceCollection);
 
             this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
-
-            var serviceProviderAccessor = this.serviceProvider.GetRequiredService<ServiceProviderAccessor>();
-            serviceProviderAccessor.ServiceProvider = this.serviceProvider;
-
             this.serviceProvider.GetRequiredService<FixtureOneTimeSetUpRunner>().Run();
         }
 

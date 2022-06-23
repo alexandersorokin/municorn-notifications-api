@@ -44,8 +44,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
                 private readonly TestCommand command;
 
                 public EnsureNotDisposedCommand(TestCommand command)
-                    : base(command.Test) =>
-                    this.command = command;
+                    : base(command.Test) => this.command = command;
 
                 public override TestResult Execute(TestExecutionContext context)
                 {

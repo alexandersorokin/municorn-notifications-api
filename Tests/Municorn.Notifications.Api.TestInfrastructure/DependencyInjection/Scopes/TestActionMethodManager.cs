@@ -9,17 +9,17 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scop
     internal partial class TestActionMethodManager
     {
         private readonly ConcurrentDictionary<ITest, IAsyncDisposable> scopes = new();
+        private readonly IServiceProvider fixtureServiceProvider;
 
-        internal void BeforeTestCase(ServiceProvider fixtureServiceProvider, ITest test)
+        internal void BeforeTestCase(ITest test)
         {
-            var serviceScope = fixtureServiceProvider.CreateAsyncScope();
+            var serviceScope = this.fixtureServiceProvider.CreateAsyncScope();
             if (!this.scopes.TryAdd(test, serviceScope))
             {
                 throw new InvalidOperationException($"Failed to save original MethodInfo for {test.FullName}");
             }
 
             var serviceProvider = serviceScope.ServiceProvider;
-
             serviceProvider.GetRequiredService<TestAccessor>().Test = test;
             serviceProvider.GetRequiredService<FixtureSetUpRunner>().Run();
         }

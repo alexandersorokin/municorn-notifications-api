@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
@@ -8,8 +9,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
     [PrimaryConstructor]
     internal partial class SingletonFieldInitializer : IFixtureOneTimeSetUp
     {
+        private readonly IServiceProvider serviceProvider;
         private readonly IFixtureProvider fixtureProvider;
-        private readonly ServiceProviderAccessor serviceProviderAccessor;
 
         public void Run()
         {
@@ -21,7 +22,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
 
             foreach (var field in fields)
             {
-                var value = this.serviceProviderAccessor.ServiceProvider.GetRequiredService(field.FieldType);
+                var value = this.serviceProvider.GetRequiredService(field.FieldType);
                 field.SetValue(fixture, value);
             }
         }

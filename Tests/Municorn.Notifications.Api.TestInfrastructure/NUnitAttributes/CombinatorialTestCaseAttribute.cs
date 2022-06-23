@@ -137,10 +137,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes
         private class OriginalChangeableTestCaseParameters : TestCaseParameters
         {
             public OriginalChangeableTestCaseParameters(object?[] args, object?[] originalArgs)
-                : base(args)
-            {
-                this.OriginalArguments = originalArgs;
-            }
+                : base(args) => this.OriginalArguments = originalArgs;
         }
     }
 }
