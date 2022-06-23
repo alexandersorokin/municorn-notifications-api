@@ -14,6 +14,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
+    [FieldDependencyModule]
     internal class AndroidNotificationSender_Should : ITestFixture
     {
         [TestDependency]

@@ -3,7 +3,7 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFix
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor
 {
-    internal interface IWithNoServices : ITestFixture
+    internal interface IWithoutConfigureServices : ITestFixture
     {
         void ITestFixture.ConfigureServices(IServiceCollection serviceCollection)
         {

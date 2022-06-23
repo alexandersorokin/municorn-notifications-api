@@ -2,26 +2,23 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using Kontur.Results;
-using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor.Fields;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.Tests.ApiTests
 {
     [TestFixture]
-    internal class GetStatus_Should : ITestFixture
+    [FieldDependencyModule]
+    internal class GetStatus_Should : IServiceFixture
     {
-        [TestDependency]
-        private readonly ClientFactory clientFactory = default!;
-
-        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterClientFactory();
-
         public static readonly SendNotificationRequest[] Notifications =
         {
             new AndroidSendNotificationRequest("token", "Message", "title"),
             new IosSendNotificationRequest("token", "alert"),
         };
+
+        [TestDependency]
+        private readonly ClientFactory clientFactory = default!;
 
         [Test]
         public async Task Succeed([ValueSource(nameof(Notifications))] SendNotificationRequest notificationRequest)

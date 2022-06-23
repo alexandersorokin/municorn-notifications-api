@@ -11,6 +11,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
+    [FieldDependencyModule]
     internal class Waiter_Should : ITestFixture
     {
         [TestDependency]

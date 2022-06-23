@@ -6,7 +6,8 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor.Modules
 {
     [TestFixture]
-    internal class Inject_Field_From_Interface_Should : IWithNoServices, ILogFixtureModule
+    [FieldDependencyModule]
+    internal class Inject_Field_From_Interface_Should : IWithoutConfigureServices, ILogFixtureModule
     {
         [TestDependency]
         private readonly ILog service = default!;

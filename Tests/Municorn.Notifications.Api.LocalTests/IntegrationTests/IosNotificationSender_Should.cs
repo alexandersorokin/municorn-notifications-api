@@ -15,6 +15,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
+    [FieldDependencyModule]
     internal class IosNotificationSender_Should : ITestFixture
     {
         [TestDependency]

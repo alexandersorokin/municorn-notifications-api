@@ -6,7 +6,8 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor.ImplicitInterface
 {
     [TestFixture]
-    internal class Do_Not_Require_To_Implement_ConfigureServices_Should : IWithDependencyInjection
+    [FieldDependencyModule]
+    internal class Do_Not_Require_To_Implement_ConfigureServices_Should : IWithNoServices
     {
         [TestDependency]
         private readonly AsyncLocalServiceProvider service = default!;

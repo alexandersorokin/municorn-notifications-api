@@ -1,21 +1,14 @@
 ﻿using System.Threading.Tasks;
 using FluentAssertions;
 using Kontur.Results;
-using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor.Fields;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.Tests.ApiTests
 {
     [TestFixture]
-    internal class SendNotification_Should : ITestFixture
+    internal class SendNotification_Should : IServiceFixture
     {
-        [TestDependency]
-        private readonly ClientFactory clientFactory = default!;
-
-        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterClientFactory();
-
         public static readonly SendNotificationRequest[] CorrectNotifications =
         {
             new AndroidSendNotificationRequest("token", "MessageA", "title1"),
@@ -38,6 +31,9 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
                 IsBackground = false,
             },
         };
+
+        [TestDependency]
+        private readonly ClientFactory clientFactory = default!;
 
         [Test]
         public async Task Succeed([ValueSource(nameof(CorrectNotifications))] SendNotificationRequest notificationRequest)
