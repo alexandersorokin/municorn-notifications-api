@@ -14,7 +14,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     [FieldDependencyModule]
     internal class Waiter_Should : ITestFixture
     {
-        [TestDependency]
+        [FieldDependency]
         private readonly Waiter waiter = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterWaiter();

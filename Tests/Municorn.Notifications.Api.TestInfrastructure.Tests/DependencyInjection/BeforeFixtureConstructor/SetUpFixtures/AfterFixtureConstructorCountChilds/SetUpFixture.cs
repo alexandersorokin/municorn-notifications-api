@@ -19,7 +19,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
                 .AddFixtureTimeLogger()
                 .AddScoped<IFixtureSetUp, TestTimeLogger>();
 
-        [field: TestDependency]
+        [field: FieldDependency]
         public Counter Counter { get; } = default!;
 
         public void Dispose()

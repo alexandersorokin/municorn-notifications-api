@@ -17,7 +17,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     [FieldDependencyModule]
     internal class AndroidNotificationSender_Should : ITestFixture
     {
-        [TestDependency]
+        [FieldDependency]
         private readonly AsyncLocalServiceProvider<AndroidNotificationSender> androidNotificationSender = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) =>

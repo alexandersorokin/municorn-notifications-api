@@ -11,7 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [FieldDependencyModule]
     internal class Override_Explicit_ConfigureServices_Should : IWithNoServices
     {
-        [TestDependency]
+        [FieldDependency]
         private readonly ILog service = default!;
 
         void ITestFixture.ConfigureServices(IServiceCollection serviceCollection) => serviceCollection

@@ -18,7 +18,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     [FieldDependencyModule]
     internal class IosNotificationSender_Should : ITestFixture
     {
-        [TestDependency]
+        [FieldDependency]
         private readonly AsyncLocalServiceProvider<IosNotificationSender> iosNotificationSender = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) =>

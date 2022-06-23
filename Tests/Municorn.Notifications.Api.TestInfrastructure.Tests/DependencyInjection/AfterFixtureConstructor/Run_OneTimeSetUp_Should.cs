@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [TestFixture]
     internal sealed class Run_OneTimeSetUp_Should : IWithFields, IDisposable
     {
-        [TestDependency]
+        [FieldDependency]
         private readonly Counter counter = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection

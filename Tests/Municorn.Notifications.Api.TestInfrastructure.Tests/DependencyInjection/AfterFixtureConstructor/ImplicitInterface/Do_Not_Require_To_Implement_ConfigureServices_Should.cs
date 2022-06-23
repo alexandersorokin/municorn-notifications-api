@@ -9,7 +9,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [FieldDependencyModule]
     internal class Do_Not_Require_To_Implement_ConfigureServices_Should : IWithNoServices
     {
-        [TestDependency]
+        [FieldDependency]
         private readonly AsyncLocalServiceProvider service = default!;
 
         [Test]

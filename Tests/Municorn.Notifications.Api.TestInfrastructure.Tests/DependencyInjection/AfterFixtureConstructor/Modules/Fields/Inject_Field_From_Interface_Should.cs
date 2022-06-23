@@ -9,7 +9,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [FieldDependencyModule]
     internal class Inject_Field_From_Interface_Should : IWithoutConfigureServices, ILogFixtureModule
     {
-        [TestDependency]
+        [FieldDependency]
         private readonly ILog service = default!;
 
         [Test]

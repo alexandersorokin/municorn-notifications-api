@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [SetUpFixture]
     internal sealed class SetUpFixture : IWithFields, IDisposable
     {
-        [TestDependency]
+        [FieldDependency]
         private readonly Counter counter = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) =>

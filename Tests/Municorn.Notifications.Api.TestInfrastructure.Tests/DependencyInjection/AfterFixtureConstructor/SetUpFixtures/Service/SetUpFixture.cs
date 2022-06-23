@@ -11,7 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddSingleton<ILog, SilentLog>();
 
-        [field: TestDependency]
+        [field: FieldDependency]
         internal ILog Service { get; } = default!;
     }
 }

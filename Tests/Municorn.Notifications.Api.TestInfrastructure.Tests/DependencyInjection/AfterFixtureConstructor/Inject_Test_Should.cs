@@ -9,7 +9,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [FieldDependencyModule]
     internal class Inject_Test_Should : IWithoutConfigureServices
     {
-        [TestDependency]
+        [FieldDependency]
         private readonly ITest service = default!;
 
         [Test]

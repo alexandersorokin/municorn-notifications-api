@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [FieldDependencyModule]
     internal class Register_Field_Dependency_ImplementationType_Should : IWithoutConfigureServices
     {
-        [TestDependency]
+        [FieldDependency]
         [RegisterDependency(typeof(SilentLog))]
         private readonly ILog service = default!;
 

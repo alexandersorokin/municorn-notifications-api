@@ -14,7 +14,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fiel
 
         public void Run()
         {
-            foreach (var field in this.fieldInfoProvider.Fields.Where(field => field.GetCustomAttribute<TestDependencyAttribute>() != null))
+            foreach (var field in this.fieldInfoProvider.Fields.Where(field => field.GetCustomAttribute<FieldDependencyAttribute>() != null))
             {
                 var value = this.serviceProvider.GetRequiredService(field.FieldType);
                 field.SetValue(this.fixtureProvider.Fixture, value);

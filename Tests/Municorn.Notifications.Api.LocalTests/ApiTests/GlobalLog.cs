@@ -13,7 +13,7 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.AddBoundLog();
 
-        [field: TestDependency]
+        [field: FieldDependency]
         internal ILog BoundLog { get; } = default!;
     }
 }
