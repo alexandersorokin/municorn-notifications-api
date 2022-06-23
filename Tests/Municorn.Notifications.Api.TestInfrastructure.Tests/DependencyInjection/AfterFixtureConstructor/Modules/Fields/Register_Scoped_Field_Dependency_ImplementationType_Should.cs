@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fields;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 
@@ -7,16 +9,17 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixture]
     [FieldDependencyModule]
-    internal class Inject_Field_From_Interface_Should : IWithoutConfigureServices, ILogFixtureModule
+    internal class Register_Scoped_Field_Dependency_ImplementationType_Should : IWithoutConfigureServices
     {
         [FieldDependency]
-        private readonly ILog service = default!;
+        [RegisterDependency(typeof(SilentLog))]
+        private readonly AsyncLocalServiceProvider<ILog> service = default!;
 
         [Test]
         [Repeat(2)]
         public void Case()
         {
-            this.service.Should().NotBeNull();
+            this.service.Value.Should().NotBeNull();
         }
 
         [TestCase(10)]
@@ -24,7 +27,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [Repeat(2)]
         public void Cases(int value)
         {
-            this.service.Should().NotBeNull();
+            this.service.Value.Should().NotBeNull();
         }
     }
 }
