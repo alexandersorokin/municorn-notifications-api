@@ -10,15 +10,15 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scop
     internal class UseContainerMethodInfo : MethodWrapper, IMethodInfo
     {
         private readonly IServiceProvider serviceProvider;
-        private readonly IFixtureProvider fixtureProvider;
+        private readonly ITestFixtureProvider testFixtureProvider;
         private readonly IMethodInfo methodInfo;
 
-        public UseContainerMethodInfo(IMethodInfo methodInfo, IServiceProvider serviceProvider, IFixtureProvider fixtureProvider)
+        public UseContainerMethodInfo(IMethodInfo methodInfo, IServiceProvider serviceProvider, ITestFixtureProvider testFixtureProvider)
             : base(methodInfo.TypeInfo.Type, methodInfo.MethodInfo)
         {
             this.methodInfo = methodInfo;
             this.serviceProvider = serviceProvider;
-            this.fixtureProvider = fixtureProvider;
+            this.testFixtureProvider = testFixtureProvider;
         }
 
         object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
@@ -31,7 +31,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scop
         {
             return
                 from arg in args
-                let serviceType = (arg as IInjectedService)?.GetServiceType(methodFixture, this.fixtureProvider.Fixture)
+                let serviceType = (arg as IInjectedService)?.GetServiceType(methodFixture, this.testFixtureProvider.Fixture)
                 select serviceType is null ? arg : this.serviceProvider.GetRequiredService(serviceType);
         }
     }

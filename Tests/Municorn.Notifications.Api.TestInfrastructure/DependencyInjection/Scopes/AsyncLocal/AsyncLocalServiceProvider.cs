@@ -6,13 +6,13 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scop
 {
     public class AsyncLocalServiceProvider : IServiceProvider
     {
-        private readonly IFixtureProvider fixtureProvider;
+        private readonly ITestFixtureProvider testFixtureProvider;
 
-        internal AsyncLocalServiceProvider(IFixtureProvider fixtureProvider) => this.fixtureProvider = fixtureProvider;
+        internal AsyncLocalServiceProvider(ITestFixtureProvider testFixtureProvider) => this.testFixtureProvider = testFixtureProvider;
 
         public object? GetService(Type serviceType) =>
             TestExecutionContext.CurrentContext.CurrentTest
-                .GetServiceProvider(this.fixtureProvider.Fixture)
+                .GetServiceProvider(this.testFixtureProvider.Fixture)
                 .GetService(serviceType);
     }
 }

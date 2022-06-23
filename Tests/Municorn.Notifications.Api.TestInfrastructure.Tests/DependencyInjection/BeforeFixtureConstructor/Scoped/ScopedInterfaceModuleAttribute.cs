@@ -7,7 +7,7 @@ using NUnit.Framework.Interfaces;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.Scoped
 {
     [AttributeUsage(AttributeTargets.Class)]
-    internal sealed class ScopedInterfaceModuleAttribute : Attribute, IFixtureModule
+    internal sealed class ScopedInterfaceModuleAttribute : Attribute, ITestFixtureModule
     {
         public void ConfigureServices(IServiceCollection serviceCollection, ITypeInfo typeInfo)
         {
