@@ -4,6 +4,7 @@ using FluentAssertions;
 using Kontur.Results;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor.Fields;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.Tests.ApiTests

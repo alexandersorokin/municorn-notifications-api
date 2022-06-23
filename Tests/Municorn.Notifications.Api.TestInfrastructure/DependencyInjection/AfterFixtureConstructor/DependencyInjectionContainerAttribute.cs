@@ -55,7 +55,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
                 .AddAsyncLocal()
                 .AddFixtures(test)
                 .AddFixtureAutoMethods()
-                .AddSingleton<IFixtureOneTimeSetUp, SingletonFieldInitializer>()
                 .AddFixtureModules(test.TypeInfo ?? throw new InvalidOperationException("No typeInfo is found at container configuration"));
             fixture.ConfigureServices(serviceCollection);
 

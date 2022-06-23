@@ -7,7 +7,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixtureInjectable]
     [LogModule]
-    [RegisterDependencyModule]
+    [RegisterConstructorParametersModule]
     [FixtureModule(typeof(FixtureTimeLogger))]
     internal class Run_Global_Dispose_After_TearDown_Should
     {
