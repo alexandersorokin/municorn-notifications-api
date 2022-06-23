@@ -45,21 +45,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
             }
         }
 
-        private static ServiceProvider ConfigureTestFixture(ITest test, ITestFixture fixture)
-        {
-            var serviceCollection = new ServiceCollection()
-                .AddSingleton<IFixtureProvider>(new FixtureProvider(fixture))
-                .AddSingleton(test)
-                .AddFixtures(test)
-                .AddFixtureAutoMethods()
-                .AddFixtureModules(test.TypeInfo ?? throw new InvalidOperationException("No typeInfo is found at container configuration"));
-            fixture.ConfigureServices(serviceCollection);
-
-            var sp = serviceCollection.BuildServiceProvider(Options);
-            sp.GetRequiredService<FixtureOneTimeSetUpRunner>().Run();
-            return sp;
-        }
-
         private static void AfterTestSuite(IAsyncDisposable provider)
         {
             // workaround https://github.com/nunit/nunit/issues/2938
@@ -81,7 +66,16 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
                 throw new InvalidOperationException($"Test {test.FullName} with fixture {fixture} do not implement {nameof(ITestFixture)}");
             }
 
-            this.serviceProvider = ConfigureTestFixture(test, testFixture);
+            var serviceCollection = new ServiceCollection()
+                .AddSingleton<IFixtureProvider>(new FixtureProvider(testFixture))
+                .AddSingleton(test)
+                .AddFixtures(test)
+                .AddFixtureAutoMethods()
+                .AddFixtureModules(test.TypeInfo ?? throw new InvalidOperationException("No typeInfo is found at container configuration"));
+            testFixture.ConfigureServices(serviceCollection);
+
+            this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
+            this.serviceProvider.GetRequiredService<FixtureOneTimeSetUpRunner>().Run();
         }
 
         [MemberNotNull(nameof(serviceProvider))]
