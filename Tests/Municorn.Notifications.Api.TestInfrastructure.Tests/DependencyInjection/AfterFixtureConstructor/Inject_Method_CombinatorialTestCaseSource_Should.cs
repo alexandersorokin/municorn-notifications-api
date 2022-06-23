@@ -16,7 +16,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [CombinatorialTestCaseSource(nameof(CaseValues))]
         [Repeat(2)]
-        public void Cases(int value, [Inject] ILog service)
+        public void Cases(int value, [InjectDependency] ILog service)
         {
             service.Should().NotBeNull();
         }

@@ -7,13 +7,13 @@ using NUnit.Framework.Interfaces;
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
-    public sealed class InjectAttribute : NUnitAttribute, IParameterDataSource
+    public sealed class InjectDependencyAttribute : NUnitAttribute, IParameterDataSource
     {
         private readonly Type? type;
 
-        public InjectAttribute(Type type) => this.type = type;
+        public InjectDependencyAttribute(Type type) => this.type = type;
 
-        public InjectAttribute()
+        public InjectDependencyAttribute()
         {
         }
 

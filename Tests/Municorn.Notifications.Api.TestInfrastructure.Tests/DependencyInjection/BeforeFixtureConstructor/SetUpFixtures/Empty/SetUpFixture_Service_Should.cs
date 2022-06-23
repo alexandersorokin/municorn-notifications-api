@@ -12,14 +12,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     {
         [Test]
         [Repeat(2)]
-        public void Inject_Case([Inject] ILog service)
+        public void Inject_Case([InjectDependency] ILog service)
         {
             service.Should().NotBeNull();
         }
 
         [Test]
         [Repeat(2)]
-        public void SetUpFixture_Case([Inject] SetUpFixture setUpFixture)
+        public void SetUpFixture_Case([InjectDependency] SetUpFixture setUpFixture)
         {
             setUpFixture.Should().NotBeNull();
         }

@@ -15,7 +15,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(2)]
-        public void Inject_Service([Inject] ILog service)
+        public void Inject_Service([InjectDependency] ILog service)
         {
             service.Should().NotBeNull();
         }

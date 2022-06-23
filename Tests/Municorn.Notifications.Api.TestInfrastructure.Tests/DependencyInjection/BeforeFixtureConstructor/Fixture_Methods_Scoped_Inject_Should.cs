@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [TestFixtureInjectable]
-    [TestTimeLoggerModule]
+    [TimeLoggerModule]
     internal class Fixture_Methods_Scoped_Inject_Should
     {
         [SetUp]

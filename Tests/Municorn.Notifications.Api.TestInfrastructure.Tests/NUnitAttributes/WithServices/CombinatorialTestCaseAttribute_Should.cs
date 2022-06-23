@@ -17,15 +17,15 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes.Wi
         [CombinatorialTestCase(10, 1.1f, 100, "provided")]
         [CombinatorialTestCase(11, 1.2d, null)]
         public void Integration<T1, T2>(
-            [Inject(typeof(NUnitTextWriterProvider))] object injectFirst,
+            [InjectDependency(typeof(NUnitTextWriterProvider))] object injectFirst,
             [Values] bool automaticData,
             int testCaseData,
-            [Inject] NUnitTextWriterProvider injectSecond,
+            [InjectDependency] NUnitTextWriterProvider injectSecond,
             [Values("string", 777)] T1 automaticInfer,
             T2 testCaseInfer,
             int? testCaseDataConversion,
             [Values(true, null)] bool? valuesConversion,
-            [Inject] SetUpFixture setupFixture,
+            [InjectDependency] SetUpFixture setupFixture,
             string optional = "default")
         {
             injectSecond.Should().NotBeNull();
@@ -45,7 +45,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes.Wi
 
         [CombinatorialTestCase("provided")]
         [CombinatorialTestCase]
-        public void Process_Optional_With_Container([Inject] NUnitTextWriterProvider service, string optional = "default")
+        public void Process_Optional_With_Container([InjectDependency] NUnitTextWriterProvider service, string optional = "default")
         {
             optional.Should().NotBeNull();
         }
@@ -73,14 +73,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes.Wi
 
         [CombinatorialTestCase(10)]
         [CombinatorialTestCase(11)]
-        public void Inject_From_Container_And_Case([Inject] NUnitTextWriterProvider service, int value)
+        public void Inject_From_Container_And_Case([InjectDependency] NUnitTextWriterProvider service, int value)
         {
             service.Should().NotBeNull();
             value.Should().BePositive();
         }
 
         [CombinatorialTestCase]
-        public void Inject_From_Container([Inject] NUnitTextWriterProvider service)
+        public void Inject_From_Container([InjectDependency] NUnitTextWriterProvider service)
         {
             service.Should().NotBeNull();
         }

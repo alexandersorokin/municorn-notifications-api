@@ -28,11 +28,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
         internal static IServiceCollection AddFixtureModules(this IServiceCollection serviceCollection, ITypeInfo typeInfo)
         {
             var customAttributes = typeInfo
-                .GetCustomAttributes<ITestFixtureModule>(true)
+                .GetCustomAttributes<IFixtureModule>(true)
                 .Concat(typeInfo.Type
                     .GetInterfaces()
-                    .SelectMany(interfaceType => interfaceType.GetCustomAttributes(typeof(ITestFixtureModule), true)
-                        .Cast<ITestFixtureModule>()))
+                    .SelectMany(interfaceType => interfaceType.GetCustomAttributes(typeof(IFixtureModule), true)
+                        .Cast<IFixtureModule>()))
                 .Distinct();
             foreach (var module in customAttributes)
             {
@@ -44,7 +44,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 
         internal static IServiceCollection AddAsyncLocal(this IServiceCollection serviceCollection) =>
             serviceCollection
-                .AddSingleton(sp => new AsyncLocalServiceProvider(sp.GetRequiredService<ITestFixtureProvider>()))
+                .AddSingleton(sp => new AsyncLocalServiceProvider(sp.GetRequiredService<IFixtureProvider>()))
                 .AddSingleton(typeof(AsyncLocalServiceProvider<>));
 
         internal static IServiceCollection AddFixtureAutoMethods(this IServiceCollection serviceCollection) =>

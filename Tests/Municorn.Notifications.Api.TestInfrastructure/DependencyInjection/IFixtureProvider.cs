@@ -1,6 +1,6 @@
 ﻿namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
-    internal interface ITestFixtureProvider
+    internal interface IFixtureProvider
     {
         object Fixture { get; }
     }

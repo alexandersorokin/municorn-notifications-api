@@ -7,7 +7,7 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor.Modules.Fields
 {
     [TestFixture]
-    [FixtureModuleRegistration(typeof(ILog), typeof(SilentLog))]
+    [FixtureModuleService(typeof(ILog), typeof(SilentLog))]
     [FieldDependencyModule]
     internal class Inject_Field_Should : IWithoutConfigureServices
     {

@@ -7,9 +7,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scop
     internal partial class UseContainerMethodInfoFactory
     {
         private readonly IServiceProvider serviceProvider;
-        private readonly ITestFixtureProvider testFixtureProvider;
+        private readonly IFixtureProvider fixtureProvider;
 
         public UseContainerMethodInfo Create(IMethodInfo methodInfo) =>
-            new(methodInfo, this.serviceProvider, this.testFixtureProvider);
+            new(methodInfo, this.serviceProvider, this.fixtureProvider);
     }
 }

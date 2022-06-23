@@ -16,7 +16,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(2)]
-        public void Case([Inject] TestAccessor testAccessor)
+        public void Case([InjectDependency] TestAccessor testAccessor)
         {
             testAccessor.Test.Should().Be(TestExecutionContext.CurrentContext.CurrentTest);
         }

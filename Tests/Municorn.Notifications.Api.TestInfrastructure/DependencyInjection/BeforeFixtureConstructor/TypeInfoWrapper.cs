@@ -57,11 +57,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
         object ITypeInfo.Construct(object?[]? args)
         {
-            TestFixtureAccessor testFixtureAccessor = new();
+            FixtureAccessor fixtureAccessor = new();
 
             var currentTest = TestExecutionContext.CurrentContext.CurrentTest;
             var serviceCollection = new ServiceCollection()
-                .AddSingleton<ITestFixtureProvider>(testFixtureAccessor)
+                .AddSingleton<IFixtureProvider>(fixtureAccessor)
                 .AddSingleton<ITest>(currentTest)
                 .AddTestActionManager()
                 .AddAsyncLocal()
@@ -73,7 +73,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);
 
             var fixture = this.CreateFixture(args, serviceProvider);
-            testFixtureAccessor.Fixture = fixture;
+            fixtureAccessor.Fixture = fixture;
 
             ServiceProvidersDisposers.Add(fixture, serviceProvider);
             serviceProvider.GetRequiredService<FixtureOneTimeSetUpRunner>().Run();
@@ -176,10 +176,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             private readonly object fixture;
 
             [UsedImplicitly]
-            public FixtureSaver(IServiceProvider serviceProvider, ITestFixtureProvider testFixtureProvider)
+            public FixtureSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider)
             {
                 this.serviceProvider = serviceProvider;
-                this.fixture = testFixtureProvider.Fixture;
+                this.fixture = fixtureProvider.Fixture;
             }
 
             public void Run() => ServiceProviders.Add(this.fixture, this.serviceProvider);
@@ -233,7 +233,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             }
         }
 
-        private class TestFixtureAccessor : ITestFixtureProvider
+        private class FixtureAccessor : IFixtureProvider
         {
             private object? fixture;
 

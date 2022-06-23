@@ -14,7 +14,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(2)]
-        public void Case([Inject] Service_Fixture_Should fixture)
+        public void Case([InjectDependency] Service_Fixture_Should fixture)
         {
             fixture.Should().Be(this);
         }

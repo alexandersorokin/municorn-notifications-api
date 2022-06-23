@@ -54,7 +54,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         }
 
         [Test]
-        public async Task Save_Status_To_Repository([Inject] NotificationStatusRepository notificationStatusRepository)
+        public async Task Save_Status_To_Repository([InjectDependency] NotificationStatusRepository notificationStatusRepository)
         {
             var result = await this.androidNotificationSender.Value
                 .Send(new("token", "message", "title"))
@@ -66,7 +66,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         }
 
         [Test]
-        public async Task Write_Message_To_Log([Inject] LogMessageContainer logMessageContainer)
+        public async Task Write_Message_To_Log([InjectDependency] LogMessageContainer logMessageContainer)
         {
             var token = Guid.NewGuid().ToString();
             var message = Guid.NewGuid().ToString();
@@ -93,7 +93,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         }
 
         [Test]
-        public async Task Write_Sender_Name_To_Log([Inject] LogMessageContainer logMessageContainer)
+        public async Task Write_Sender_Name_To_Log([InjectDependency] LogMessageContainer logMessageContainer)
         {
             await this.androidNotificationSender.Value
                 .Send(new("token", "message", "title"))

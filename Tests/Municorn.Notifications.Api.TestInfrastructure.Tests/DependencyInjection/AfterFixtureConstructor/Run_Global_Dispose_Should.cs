@@ -22,7 +22,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(2)]
-        public void Case([Inject] FixtureTimeLogger fixtureTimeLogger)
+        public void Case([InjectDependency] FixtureTimeLogger fixtureTimeLogger)
         {
             fixtureTimeLogger.Run();
             true.Should().BeTrue();
@@ -31,7 +31,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [CombinatorialTestCase(10)]
         [CombinatorialTestCase(11)]
         [Repeat(2)]
-        public void Cases(int value, [Inject] FixtureTimeLogger fixtureTimeLogger)
+        public void Cases(int value, [InjectDependency] FixtureTimeLogger fixtureTimeLogger)
         {
             fixtureTimeLogger.Run();
             value.Should().BePositive();

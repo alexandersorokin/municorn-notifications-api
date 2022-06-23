@@ -7,12 +7,12 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [TestFixtureInjectable]
-    [TestTimeLoggerModule]
+    [TimeLoggerModule]
     internal class Test_Methods_Inject_Method_Should
     {
         [Test]
         [Repeat(2)]
-        public void Case([Inject] IFixtureSetUp service)
+        public void Case([InjectDependency] IFixtureSetUp service)
         {
             service.Should().NotBeNull();
         }
@@ -20,14 +20,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [TestCase(10)]
         [TestCase(11)]
         [Repeat(2)]
-        public void Cases([Inject] IFixtureSetUp service, int value)
+        public void Cases([InjectDependency] IFixtureSetUp service, int value)
         {
             service.Should().NotBeNull();
         }
 
         [TestCaseSource(nameof(CaseValues))]
         [Repeat(2)]
-        public void CaseSource([Inject] IFixtureSetUp service, int value)
+        public void CaseSource([InjectDependency] IFixtureSetUp service, int value)
         {
             service.Should().NotBeNull();
         }

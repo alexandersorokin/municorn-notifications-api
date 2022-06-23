@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [TestFixtureInjectable]
-    [TestTimeLoggerModule]
+    [TimeLoggerModule]
     [PrimaryConstructor]
     internal partial class Inject_AsyncLocal_Should
     {

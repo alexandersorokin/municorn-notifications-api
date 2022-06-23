@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [TestFixtureInjectable]
-    [TestTimeLoggerModule]
+    [TimeLoggerModule]
     [PrimaryConstructor]
     internal sealed partial class Run_SetUp_Should : IDisposable
     {

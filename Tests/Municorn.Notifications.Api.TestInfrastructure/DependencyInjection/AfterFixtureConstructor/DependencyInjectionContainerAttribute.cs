@@ -49,7 +49,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
         private static ServiceProvider ConfigureTestFixture(ITest test, ITestFixture fixture)
         {
             var serviceCollection = new ServiceCollection()
-                .AddSingleton<ITestFixtureProvider>(new TestTestFixtureProvider(fixture))
+                .AddSingleton<IFixtureProvider>(new FixtureProvider(fixture))
                 .AddSingleton(test)
                 .AddTestActionManager()
                 .AddAsyncLocal()

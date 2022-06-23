@@ -12,13 +12,13 @@ using NUnit.Framework.Internal.Commands;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [TestFixtureInjectable]
-    [TestTimeLoggerScopedCounterModule]
+    [TimeLoggerScopedCounterModule]
     internal class Dispose_Scope_After_Wraps_Should
     {
         [Test]
         [Repeat(2)]
         [EnsureNotDisposed]
-        public void Case([Inject] Counter service)
+        public void Case([InjectDependency] Counter service)
         {
             service.Increment();
             service.Should().NotBeNull();
@@ -28,7 +28,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [TestCase(11)]
         [EnsureNotDisposed]
         [Repeat(2)]
-        public void Cases(int value, [Inject] Counter service)
+        public void Cases(int value, [InjectDependency] Counter service)
         {
             service.Increment();
             service.Should().NotBeNull();

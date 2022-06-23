@@ -5,13 +5,13 @@ using NUnit.Framework.Interfaces;
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = true)]
-    public sealed class FixtureModuleRegistrationAttribute : Attribute, ITestFixtureModule
+    public sealed class FixtureModuleServiceAttribute : Attribute, IFixtureModule
     {
         private readonly Type serviceType;
 
         private readonly Type? implementationType;
 
-        public FixtureModuleRegistrationAttribute(Type serviceType, Type? implementationType = null)
+        public FixtureModuleServiceAttribute(Type serviceType, Type? implementationType = null)
         {
             this.serviceType = serviceType;
             this.implementationType = implementationType;
