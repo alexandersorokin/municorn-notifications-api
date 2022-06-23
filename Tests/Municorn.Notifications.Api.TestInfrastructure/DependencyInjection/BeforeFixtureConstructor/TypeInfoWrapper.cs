@@ -221,13 +221,16 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             IParameterInfo[] IMethodInfo.GetParameters() => Array.Empty<IParameterInfo>();
 
-            object IMethodInfo.Invoke(object? fixture, params object?[]? args) =>
-                ServiceProvidersDisposers
-                    .GetValue(
-                        fixture ?? throw new InvalidOperationException("Fixture is not passed to container dispose method"),
-                        _ => throw new InvalidOperationException($"Service provider for {fixture} fixture is not found"))
-                    .DisposeAsync()
-                    .AsTask();
+            object IMethodInfo.Invoke(object? fixture, params object?[]? args)
+            {
+                var testFixture = fixture ?? throw new InvalidOperationException("Fixture is not passed to container dispose method");
+                var serviceProvider = ServiceProvidersDisposers.GetValue(
+                        testFixture,
+                        _ => throw new InvalidOperationException($"Service provider for {fixture} fixture is not found"));
+
+                ServiceProvidersDisposers.Remove(testFixture);
+                return serviceProvider.DisposeAsync().AsTask();
+            }
         }
 
         private class FixtureAccessor : IFixtureProvider
