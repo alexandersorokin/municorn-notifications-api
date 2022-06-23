@@ -57,7 +57,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
                 .AddSingleton<TestActionMethodManager>()
                 .AddScoped<TestAccessor>()
                 .AddScoped<FixtureSetUpRunner>()
-                .AddScoped<IFixtureSetUp, MethodPatcher>()
+                .AddScoped<UseContainerMethodInfoFactory>()
+                .AddScoped<IFixtureSetUp, UseContainerMethodInfoPatcher>()
                 .AddScoped<IFixtureSetUp, ScopeSaver>();
     }
 }

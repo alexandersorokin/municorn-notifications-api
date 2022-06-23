@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
@@ -174,6 +175,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             private readonly IServiceProvider serviceProvider;
             private readonly object fixture;
 
+            [UsedImplicitly]
             public FixtureSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider)
             {
                 this.serviceProvider = serviceProvider;

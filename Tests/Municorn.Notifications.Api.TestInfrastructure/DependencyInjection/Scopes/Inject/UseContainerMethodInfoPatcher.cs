@@ -4,23 +4,22 @@ using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.Inject
 {
-    internal sealed class MethodPatcher : IFixtureSetUp, IDisposable
+    internal sealed class UseContainerMethodInfoPatcher : IFixtureSetUp, IDisposable
     {
-        private readonly IServiceProvider serviceProvider;
-        private readonly IFixtureProvider fixtureProvider;
+        private readonly UseContainerMethodInfoFactory useContainerMethodInfoFactory;
         private readonly TestMethod testMethod;
         private readonly IMethodInfo originalMethodInfo;
 
-        public MethodPatcher(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider, TestAccessor testAccessor)
+        public UseContainerMethodInfoPatcher(UseContainerMethodInfoFactory useContainerMethodInfoFactory, TestAccessor testAccessor)
         {
-            this.serviceProvider = serviceProvider;
-            this.fixtureProvider = fixtureProvider;
+            this.useContainerMethodInfoFactory = useContainerMethodInfoFactory;
+
             this.testMethod = testAccessor.Test as TestMethod ??
                               throw new InvalidOperationException($"TestCase test should be {nameof(TestMethod)}");
             this.originalMethodInfo = this.testMethod.Method;
         }
 
-        public void Run() => this.testMethod.Method = new UseContainerMethodInfo(this.originalMethodInfo, this.serviceProvider, this.fixtureProvider);
+        public void Run() => this.testMethod.Method = this.useContainerMethodInfoFactory.Create(this.originalMethodInfo);
 
         public void Dispose() => this.testMethod.Method = this.originalMethodInfo;
     }
