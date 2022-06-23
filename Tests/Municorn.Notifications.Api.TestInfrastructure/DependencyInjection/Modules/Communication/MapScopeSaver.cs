@@ -1,7 +1,6 @@
 ﻿using System;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication
 {
     internal sealed class MapScopeSaver : IFixtureSetUp, IDisposable
     {

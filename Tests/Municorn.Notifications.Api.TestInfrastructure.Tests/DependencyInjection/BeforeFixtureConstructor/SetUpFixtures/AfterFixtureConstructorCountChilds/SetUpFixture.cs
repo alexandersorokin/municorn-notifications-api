@@ -1,10 +1,10 @@
 ﻿using System;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communicat1ion;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fields;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Fields;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using Municorn.Notifications.Api.TestInfrastructure.Logging;
 using NUnit.Framework;
 

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication.AsyncLocal;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fields
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Fields
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
     public sealed class FieldDependenciesModuleAttribute : Attribute, IFixtureModule
@@ -31,7 +32,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fiel
             foreach (var (serviceType, implementationType) in serviceTypes)
             {
                 if (serviceType.IsConstructedGenericType &&
-                    serviceType.GetGenericTypeDefinition() == typeof(Communication.AsyncLocal.AsyncLocalServiceProvider<>))
+                    serviceType.GetGenericTypeDefinition() == typeof(AsyncLocalServiceProvider<>))
                 {
                     var genericArgument = serviceType.GenericTypeArguments.Single();
                     serviceCollection.AddScoped(genericArgument, implementationType ?? genericArgument);

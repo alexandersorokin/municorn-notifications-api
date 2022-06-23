@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication.AsyncLocal;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication.AsyncLocal;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.Communication

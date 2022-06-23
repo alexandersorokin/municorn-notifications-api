@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
 using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection

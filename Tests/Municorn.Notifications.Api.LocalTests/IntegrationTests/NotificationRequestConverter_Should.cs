@@ -10,7 +10,7 @@ using Municorn.Notifications.Api.NotificationFeature.Data;
 using Municorn.Notifications.Api.NotificationFeature.View;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communicat1ion;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 

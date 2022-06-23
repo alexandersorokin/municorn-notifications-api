@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.Inject
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection
 {
     [PrimaryConstructor]
     internal partial class UseContainerMethodInfoFactory

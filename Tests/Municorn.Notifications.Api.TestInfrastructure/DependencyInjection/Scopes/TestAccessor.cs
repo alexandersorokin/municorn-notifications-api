@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
     public class TestAccessor
     {

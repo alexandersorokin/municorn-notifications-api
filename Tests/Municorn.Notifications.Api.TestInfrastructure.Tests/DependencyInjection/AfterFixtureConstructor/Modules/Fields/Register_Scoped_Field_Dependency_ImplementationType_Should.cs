@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication.AsyncLocal;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fields;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication.AsyncLocal;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Fields;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 

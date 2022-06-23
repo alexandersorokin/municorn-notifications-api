@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using Vostok.Logging.Abstractions;

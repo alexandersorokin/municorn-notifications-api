@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.Inject;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 

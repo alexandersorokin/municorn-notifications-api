@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection

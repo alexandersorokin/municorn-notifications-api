@@ -1,10 +1,8 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.Inject;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communicat1ion
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
     public sealed class TestMethodInjectionModuleAttribute : Attribute, IFixtureModule

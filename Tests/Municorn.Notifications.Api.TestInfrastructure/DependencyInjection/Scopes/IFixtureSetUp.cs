@@ -1,4 +1,4 @@
-﻿namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes
+﻿namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
     public interface IFixtureSetUp
     {

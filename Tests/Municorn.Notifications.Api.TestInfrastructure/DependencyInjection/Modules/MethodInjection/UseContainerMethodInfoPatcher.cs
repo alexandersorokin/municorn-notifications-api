@@ -2,7 +2,7 @@
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.Inject
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection
 {
     internal sealed class UseContainerMethodInfoPatcher : IFixtureSetUp, IDisposable
     {
