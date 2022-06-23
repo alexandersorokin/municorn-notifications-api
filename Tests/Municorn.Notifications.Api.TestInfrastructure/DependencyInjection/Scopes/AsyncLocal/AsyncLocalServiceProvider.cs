@@ -1,4 +1,5 @@
 ﻿using System;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication;
 using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal

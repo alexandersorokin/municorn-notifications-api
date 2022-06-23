@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AutoMethods;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.Inject;
