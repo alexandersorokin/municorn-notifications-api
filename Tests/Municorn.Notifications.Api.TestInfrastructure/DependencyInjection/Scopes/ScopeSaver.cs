@@ -4,18 +4,18 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scop
 {
     internal sealed class ScopeSaver : IFixtureSetUp, IDisposable
     {
+        private readonly IServiceProvider serviceProvider;
         private readonly IFixtureProvider fixtureProvider;
-        private readonly TestAccessor testAccessor;
         private readonly FixtureServiceProviderMap map;
 
-        public ScopeSaver(IFixtureProvider fixtureProvider, TestAccessor testAccessor)
+        public ScopeSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider, TestAccessor testAccessor)
         {
+            this.serviceProvider = serviceProvider;
             this.fixtureProvider = fixtureProvider;
-            this.testAccessor = testAccessor;
-            this.map = this.testAccessor.Test.GetFixtureServiceProviderMap();
+            this.map = testAccessor.Test.GetFixtureServiceProviderMap();
         }
 
-        public void Run() => this.map.AddScope(this.fixtureProvider.Fixture, this.testAccessor.ServiceProvider);
+        public void Run() => this.map.AddScope(this.fixtureProvider.Fixture, this.serviceProvider);
 
         public void Dispose() => this.map.RemoveScope(this.fixtureProvider.Fixture);
     }

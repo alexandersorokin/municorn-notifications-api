@@ -18,13 +18,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scop
                 throw new InvalidOperationException($"Failed to save original MethodInfo for {test.FullName}");
             }
 
-            var scopeServiceProvider = serviceScope.ServiceProvider;
+            var serviceProvider = serviceScope.ServiceProvider;
 
-            var testAccessor = scopeServiceProvider.GetRequiredService<TestAccessor>();
-            testAccessor.Test = test;
-            testAccessor.ServiceProvider = scopeServiceProvider;
-
-            scopeServiceProvider.GetRequiredService<FixtureSetUpRunner>().Run();
+            serviceProvider.GetRequiredService<TestAccessor>().Test = test;
+            serviceProvider.GetRequiredService<FixtureSetUpRunner>().Run();
         }
 
         internal void AfterTestCase(ITest test)
