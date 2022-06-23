@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.Inject;
 using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
@@ -41,14 +40,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
         }
 
         internal static IServiceCollection AddFixtureAutoMethods(this IServiceCollection serviceCollection) =>
-            serviceCollection.AddSingleton<FixtureOneTimeSetUpRunner>();
-
-        internal static IServiceCollection AddTestActionManager(this IServiceCollection serviceCollection) =>
             serviceCollection
+                .AddSingleton<FixtureOneTimeSetUpRunner>()
                 .AddSingleton<TestActionMethodManager>()
                 .AddScoped<TestAccessor>()
-                .AddScoped<FixtureSetUpRunner>()
-                .AddScoped<UseContainerMethodInfoFactory>()
-                .AddScoped<IFixtureSetUp, UseContainerMethodInfoPatcher>();
+                .AddScoped<FixtureSetUpRunner>();
     }
 }

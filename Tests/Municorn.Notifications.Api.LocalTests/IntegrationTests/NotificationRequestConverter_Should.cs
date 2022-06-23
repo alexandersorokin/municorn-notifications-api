@@ -10,12 +10,14 @@ using Municorn.Notifications.Api.NotificationFeature.Data;
 using Municorn.Notifications.Api.NotificationFeature.View;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communicat1ion;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
+    [TestMethodInjectionModule]
     internal class NotificationRequestConverter_Should : ITestFixture
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communicat1ion;
 using Municorn.Notifications.Api.TestInfrastructure.Logging;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
@@ -9,6 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixtureInjectable]
     [ScopedInterfaceModule]
+    [TestMethodInjectionModule]
     internal class Use_Scoped_Interface_Should : IScoped<ILog>
     {
         public ILog Get() => new TextWriterLog(new NUnitTextWriterProvider());

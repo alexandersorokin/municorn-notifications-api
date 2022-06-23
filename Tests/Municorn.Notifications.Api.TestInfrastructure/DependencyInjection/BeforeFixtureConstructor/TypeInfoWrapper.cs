@@ -64,12 +64,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<IFixtureProvider>(fixtureAccessor)
                 .AddSingleton<ITest>(currentTest)
-                .AddTestActionManager()
                 .AddFixtures(currentTest)
                 .AddFixtureAutoMethods()
-                .AddFixtureModules(new NUnit.Framework.Internal.TypeWrapper(this.originalType))
                 .AddSingleton<IFixtureOneTimeSetUp, FixtureSaver>()
-                .AddScoped<IFixtureSetUp, ScopeSaver>();
+                .AddScoped<IFixtureSetUp, ScopeSaver>()
+                .AddFixtureModules(new NUnit.Framework.Internal.TypeWrapper(this.originalType));
 
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);
 

@@ -3,6 +3,7 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communicat1ion;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -12,6 +13,7 @@ using NUnit.Framework.Internal.Commands;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [TestFixtureInjectable]
+    [TestMethodInjectionModule]
     [TestCommunicationModule]
     [TimeLoggerScopedCounterModule]
     internal class Dispose_Scope_After_Wraps_Should

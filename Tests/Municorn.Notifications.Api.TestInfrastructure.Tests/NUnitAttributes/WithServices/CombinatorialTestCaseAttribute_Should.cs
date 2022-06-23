@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communicat1ion;
 using Municorn.Notifications.Api.TestInfrastructure.Logging;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
@@ -9,6 +10,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes.WithServices
 {
     [TestFixture]
+    [TestMethodInjectionModule]
     internal class CombinatorialTestCaseAttribute_Should : ITestFixture
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>

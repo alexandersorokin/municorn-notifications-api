@@ -3,6 +3,7 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communicat1ion;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
 using NUnit.Framework;
@@ -12,6 +13,7 @@ using NUnit.Framework.Internal;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [TestFixtureInjectable]
+    [TestMethodInjectionModule]
     [TestCommunicationModule]
     [TimeLoggerModule]
     internal class Create_Scope_Before_Apply_To_Context_Should

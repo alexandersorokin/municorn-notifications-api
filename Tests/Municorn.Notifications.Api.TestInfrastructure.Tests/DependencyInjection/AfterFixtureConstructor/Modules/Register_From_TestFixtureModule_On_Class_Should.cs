@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communicat1ion;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 
@@ -7,6 +8,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixture]
     [FixtureModuleService(typeof(ILog), typeof(SilentLog))]
+    [TestMethodInjectionModule]
     internal class Register_From_TestFixtureModule_On_Class_Should : IWithoutConfigureServices
     {
         [Test]
