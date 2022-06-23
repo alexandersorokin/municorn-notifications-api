@@ -1,8 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.Inject;
 using NUnit.Framework.Interfaces;
 
@@ -42,15 +40,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
             return serviceCollection;
         }
 
-        internal static IServiceCollection AddAsyncLocal(this IServiceCollection serviceCollection) =>
-            serviceCollection
-                .AddSingleton(sp => new AsyncLocalServiceProvider(sp.GetRequiredService<IFixtureProvider>()))
-                .AddSingleton(typeof(AsyncLocalServiceProvider<>));
-
         internal static IServiceCollection AddFixtureAutoMethods(this IServiceCollection serviceCollection) =>
-            serviceCollection
-                .AddSingleton<FixtureOneTimeSetUpRunner>()
-                .AddSingleton<IFixtureOneTimeSetUp, MapProviderSaver>();
+            serviceCollection.AddSingleton<FixtureOneTimeSetUpRunner>();
 
         internal static IServiceCollection AddTestActionManager(this IServiceCollection serviceCollection) =>
             serviceCollection
@@ -58,7 +49,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
                 .AddScoped<TestAccessor>()
                 .AddScoped<FixtureSetUpRunner>()
                 .AddScoped<UseContainerMethodInfoFactory>()
-                .AddScoped<IFixtureSetUp, UseContainerMethodInfoPatcher>()
-                .AddScoped<IFixtureSetUp, ScopeSaver>();
+                .AddScoped<IFixtureSetUp, UseContainerMethodInfoPatcher>();
     }
 }

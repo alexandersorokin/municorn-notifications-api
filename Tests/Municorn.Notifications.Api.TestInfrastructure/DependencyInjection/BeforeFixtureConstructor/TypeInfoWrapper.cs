@@ -22,6 +22,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
     {
         private static readonly ConditionalWeakTable<object, IServiceProvider> ServiceProviders = new();
         private static readonly ConditionalWeakTable<object, IAsyncDisposable> ServiceProvidersDisposers = new();
+        private static readonly ConditionalWeakTable<ITest, FixtureServiceProviderMap> FixtureServiceProviderMaps = new();
 
         private static readonly ServiceProviderOptions Options = new()
         {
@@ -64,11 +65,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                 .AddSingleton<IFixtureProvider>(fixtureAccessor)
                 .AddSingleton<ITest>(currentTest)
                 .AddTestActionManager()
-                .AddAsyncLocal()
                 .AddFixtures(currentTest)
-                .AddSingleton<IFixtureOneTimeSetUp, FixtureSaver>()
                 .AddFixtureAutoMethods()
-                .AddFixtureModules(new NUnit.Framework.Internal.TypeWrapper(this.originalType));
+                .AddFixtureModules(new NUnit.Framework.Internal.TypeWrapper(this.originalType))
+                .AddSingleton<IFixtureOneTimeSetUp, FixtureSaver>()
+                .AddScoped<IFixtureSetUp, ScopeSaver>();
 
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);
 
@@ -195,6 +196,27 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             }
         }
 
+        private sealed class ScopeSaver : IFixtureSetUp, IDisposable
+        {
+            private readonly IServiceProvider serviceProvider;
+            private readonly IFixtureProvider fixtureProvider;
+            private readonly FixtureServiceProviderMap map;
+
+            public ScopeSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider, TestAccessor testAccessor)
+            {
+                this.serviceProvider = serviceProvider;
+                this.fixtureProvider = fixtureProvider;
+                this.map = FixtureServiceProviderMaps.GetOrCreateValue(testAccessor.Test);
+            }
+
+            public void Run()
+            {
+                this.map.AddScope(this.fixtureProvider.Fixture, this.serviceProvider);
+            }
+
+            public void Dispose() => this.map.RemoveScope(this.fixtureProvider.Fixture);
+        }
+
         private class FixtureActionMethodInfo : MethodWrapper, IMethodInfo
         {
             public FixtureActionMethodInfo(Type type, MethodInfo methodInfo)
@@ -206,8 +228,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
-                var serviceProvider = TestExecutionContext.CurrentContext.CurrentTest
-                    .GetServiceProvider(fixture ?? throw new InvalidOperationException("Fixture is found for fixture method"));
+                var map = FixtureServiceProviderMaps.GetOrCreateValue(TestExecutionContext.CurrentContext.CurrentTest);
+                var serviceProvider = map.GetScope(fixture ?? throw new InvalidOperationException("Fixture is found for fixture method"));
                 return this.Invoke(fixture, ResolveArguments(serviceProvider, this.MethodInfo.GetParameters()));
             }
         }

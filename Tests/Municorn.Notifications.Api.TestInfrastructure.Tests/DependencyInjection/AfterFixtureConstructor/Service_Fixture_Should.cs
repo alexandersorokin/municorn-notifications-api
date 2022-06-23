@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal;
+using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor
@@ -19,12 +19,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
             fixture.Should().Be(this);
         }
 
-        [TestCase(10)]
-        [TestCase(11)]
+        [CombinatorialTestCase(10)]
+        [CombinatorialTestCase(11)]
         [Repeat(2)]
-        public void Cases(int value)
+        public void Cases(int value, [InjectDependency] Service_Fixture_Should fixture)
         {
-            this.GetRequiredService<Service_Fixture_Should>().Should().Be(this);
+            fixture.Should().Be(this);
         }
     }
 }

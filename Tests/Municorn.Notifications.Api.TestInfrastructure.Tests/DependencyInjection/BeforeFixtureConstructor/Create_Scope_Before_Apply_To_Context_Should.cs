@@ -12,6 +12,7 @@ using NUnit.Framework.Internal;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [TestFixtureInjectable]
+    [TestCommunicationModule]
     [TimeLoggerModule]
     internal class Create_Scope_Before_Apply_To_Context_Should
     {

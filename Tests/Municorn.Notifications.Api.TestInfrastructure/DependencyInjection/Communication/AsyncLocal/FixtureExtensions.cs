@@ -1,6 +1,6 @@
 ﻿using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication.AsyncLocal
 {
     public static class FixtureExtensions
     {

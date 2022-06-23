@@ -1,12 +1,14 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor.Communication
 {
     [TestFixture]
+    [TestCommunicationModule]
     [TestActionLoggerTest]
     [TestActionLoggerSuite]
     internal class Pass_Container_To_Attribute_Should : ITestFixture

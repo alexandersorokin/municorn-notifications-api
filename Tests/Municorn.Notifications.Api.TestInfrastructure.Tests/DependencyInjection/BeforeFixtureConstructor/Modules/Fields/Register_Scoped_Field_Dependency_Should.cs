@@ -1,8 +1,9 @@
 ﻿using FluentAssertions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication.AsyncLocal;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fields;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 
@@ -10,6 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixtureInjectable]
     [FieldDependenciesModule]
+    [TestCommunicationModule]
     [PrimaryConstructor]
     internal partial class Register_Scoped_Field_Dependency_Should
     {

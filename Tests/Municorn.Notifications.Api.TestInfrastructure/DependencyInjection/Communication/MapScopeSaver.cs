@@ -3,13 +3,13 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication
 {
-    internal sealed class ScopeSaver : IFixtureSetUp, IDisposable
+    internal sealed class MapScopeSaver : IFixtureSetUp, IDisposable
     {
         private readonly IServiceProvider serviceProvider;
         private readonly IFixtureProvider fixtureProvider;
         private readonly FixtureServiceProviderMap map;
 
-        public ScopeSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider, TestAccessor testAccessor)
+        public MapScopeSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider, TestAccessor testAccessor)
         {
             this.serviceProvider = serviceProvider;
             this.fixtureProvider = fixtureProvider;

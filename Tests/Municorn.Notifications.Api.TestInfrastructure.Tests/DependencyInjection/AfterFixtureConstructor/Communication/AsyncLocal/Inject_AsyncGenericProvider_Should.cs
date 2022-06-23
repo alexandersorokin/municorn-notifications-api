@@ -1,17 +1,19 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication.AsyncLocal;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fields;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor.Communication.AsyncLocal
 {
     [TestFixture]
-    internal class Inject_AsyncLocalProvider_Should : IWithFields
+    [TestCommunicationModule]
+    internal class Inject_AsyncGenericProvider_Should : IWithFields
     {
         [FieldDependency]
-        private readonly AsyncLocalServiceProvider provider = default!;
+        private readonly AsyncLocalServiceProvider<ILog> service = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddScoped<ILog, SilentLog>();
@@ -19,20 +21,20 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [SetUp]
         public void SetUp()
         {
-            this.provider.GetRequiredService<ILog>().Should().NotBeNull();
+            this.service.Value.Should().NotBeNull();
         }
 
         [TearDown]
         public void TearDown()
         {
-            this.provider.GetRequiredService<ILog>().Should().NotBeNull();
+            this.service.Value.Should().NotBeNull();
         }
 
         [Test]
         [Repeat(2)]
         public void Case()
         {
-            this.provider.GetRequiredService<ILog>().Should().NotBeNull();
+            this.service.Value.Should().NotBeNull();
         }
 
         [TestCase(10)]
@@ -40,7 +42,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [Repeat(2)]
         public void Cases(int value)
         {
-            this.provider.GetRequiredService<ILog>().Should().NotBeNull();
+            this.service.Value.Should().NotBeNull();
         }
     }
 }

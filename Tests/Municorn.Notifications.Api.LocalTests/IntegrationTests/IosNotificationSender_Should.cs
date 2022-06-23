@@ -8,14 +8,16 @@ using Municorn.Notifications.Api.NotificationFeature.App;
 using Municorn.Notifications.Api.NotificationFeature.Data;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication.AsyncLocal;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fields;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
     [FieldDependenciesModule]
+    [TestCommunicationModule]
     internal class IosNotificationSender_Should : ITestFixture
     {
         [FieldDependency]

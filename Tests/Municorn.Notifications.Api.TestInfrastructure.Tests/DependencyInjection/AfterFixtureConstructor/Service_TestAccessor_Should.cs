@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal;
+using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 
@@ -21,12 +21,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
             testAccessor.Test.Should().Be(TestExecutionContext.CurrentContext.CurrentTest);
         }
 
-        [TestCase(10)]
-        [TestCase(11)]
+        [CombinatorialTestCase(10)]
+        [CombinatorialTestCase(11)]
         [Repeat(2)]
-        public void Cases(int value)
+        public void Cases([InjectDependency] TestAccessor testAccessor, int value)
         {
-            this.GetRequiredService<TestAccessor>().Test.Should().Be(TestExecutionContext.CurrentContext.CurrentTest);
+            testAccessor.Test.Should().Be(TestExecutionContext.CurrentContext.CurrentTest);
         }
     }
 }

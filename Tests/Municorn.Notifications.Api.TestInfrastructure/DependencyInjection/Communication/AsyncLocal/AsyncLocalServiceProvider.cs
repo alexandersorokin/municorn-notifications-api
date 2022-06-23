@@ -1,8 +1,7 @@
 ﻿using System;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication.AsyncLocal
 {
     public class AsyncLocalServiceProvider : IServiceProvider
     {

@@ -1,10 +1,12 @@
 ﻿using FluentAssertions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.Communication
 {
     [TestFixtureInjectable]
+    [TestCommunicationModule]
     [LogModule]
     [TestActionLoggerSuite]
     [TestActionLoggerTest]

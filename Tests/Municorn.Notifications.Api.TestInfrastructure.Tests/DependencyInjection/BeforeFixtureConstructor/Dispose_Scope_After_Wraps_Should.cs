@@ -12,6 +12,7 @@ using NUnit.Framework.Internal.Commands;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [TestFixtureInjectable]
+    [TestCommunicationModule]
     [TimeLoggerScopedCounterModule]
     internal class Dispose_Scope_After_Wraps_Should
     {

@@ -1,12 +1,14 @@
 ﻿using FluentAssertions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Communication.AsyncLocal;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.Communication
 {
     [TestFixtureInjectable]
+    [TestCommunicationModule]
     [TimeLoggerModule]
     [PrimaryConstructor]
     internal partial class Inject_AsyncLocal_Should

@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Scopes.AsyncLocal;
 using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fields
@@ -21,7 +21,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fiel
                 .AddSingleton<IFixtureOneTimeSetUp, SingletonFieldInitializer>();
         }
 
-        private static void RegisterServices(IServiceCollection serviceCollection, FieldInfo[] fields)
+        private static void RegisterServices(IServiceCollection serviceCollection, IEnumerable<FieldInfo> fields)
         {
             var serviceTypes =
                 from field in fields
@@ -31,7 +31,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fiel
             foreach (var (serviceType, implementationType) in serviceTypes)
             {
                 if (serviceType.IsConstructedGenericType &&
-                    serviceType.GetGenericTypeDefinition() == typeof(AsyncLocalServiceProvider<>))
+                    serviceType.GetGenericTypeDefinition() == typeof(Communication.AsyncLocal.AsyncLocalServiceProvider<>))
                 {
                     var genericArgument = serviceType.GenericTypeArguments.Single();
                     serviceCollection.AddScoped(genericArgument, implementationType ?? genericArgument);
