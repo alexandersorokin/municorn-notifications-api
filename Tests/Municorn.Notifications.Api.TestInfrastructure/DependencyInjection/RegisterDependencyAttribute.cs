@@ -2,7 +2,7 @@
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
-    [AttributeUsage(AttributeTargets.Parameter)]
+    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field)]
     public sealed class RegisterDependencyAttribute : Attribute
     {
         public RegisterDependencyAttribute(Type implementationType) => this.ImplementationType = implementationType;
