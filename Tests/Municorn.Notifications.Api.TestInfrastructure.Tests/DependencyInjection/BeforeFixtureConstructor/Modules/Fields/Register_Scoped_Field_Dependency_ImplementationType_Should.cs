@@ -16,7 +16,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal partial class Register_Scoped_Field_Dependency_ImplementationType_Should
     {
         [RegisterDependency(typeof(SilentLog))]
-        private readonly AsyncLocalServiceProvider<ILog> service;
+        private readonly IAsyncLocalServiceProvider<ILog> service;
 
         [Test]
         [Repeat(2)]

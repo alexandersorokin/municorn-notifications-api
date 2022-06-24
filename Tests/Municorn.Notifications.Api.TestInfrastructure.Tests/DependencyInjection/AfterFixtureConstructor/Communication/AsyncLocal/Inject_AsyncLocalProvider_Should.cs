@@ -13,7 +13,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal class Inject_AsyncLocalProvider_Should : IWithFields
     {
         [FieldDependency]
-        private readonly AsyncLocalServiceProvider provider = default!;
+        private readonly IAsyncLocalServiceProvider provider = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddScoped<ILog, SilentLog>();

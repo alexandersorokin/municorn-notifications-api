@@ -32,7 +32,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
             foreach (var (serviceType, implementationType) in serviceTypes)
             {
                 if (serviceType.IsConstructedGenericType &&
-                    serviceType.GetGenericTypeDefinition() == typeof(AsyncLocalServiceProvider<>))
+                    serviceType.GetGenericTypeDefinition() == typeof(IAsyncLocalServiceProvider<>))
                 {
                     var genericArgument = serviceType.GenericTypeArguments.Single();
                     serviceCollection.AddScoped(genericArgument, implementationType ?? genericArgument);

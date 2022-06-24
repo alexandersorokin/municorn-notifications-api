@@ -15,7 +15,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     {
         [FieldDependency]
         [RegisterDependency(typeof(SilentLog))]
-        private readonly AsyncLocalServiceProvider<ILog> service = default!;
+        private readonly IAsyncLocalServiceProvider<ILog> service = default!;
 
         [Test]
         [Repeat(2)]
