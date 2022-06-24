@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
@@ -11,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixture]
     [TestMethodInjectionModule]
-    internal class Inject_Method_CombinatorialTestCaseSource_Should : ITestFixture
+    internal class Inject_Method_CombinatorialTestCaseSource_Should : IFixtureServiceProvider
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddScoped<ILog, SilentLog>();

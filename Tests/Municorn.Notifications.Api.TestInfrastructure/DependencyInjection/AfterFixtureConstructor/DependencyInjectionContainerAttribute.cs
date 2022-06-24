@@ -61,9 +61,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
         private void BeforeTestSuite(ITest test)
         {
             var fixture = test.Fixture;
-            if (fixture is not ITestFixture testFixture)
+            if (fixture is not IFixtureServiceProvider testFixture)
             {
-                throw new InvalidOperationException($"Test {test.FullName} with fixture {fixture} do not implement {nameof(ITestFixture)}");
+                throw new InvalidOperationException($"Test {test.FullName} with fixture {fixture} do not implement {nameof(IFixtureServiceProvider)}");
             }
 
             var serviceCollection = new ServiceCollection()

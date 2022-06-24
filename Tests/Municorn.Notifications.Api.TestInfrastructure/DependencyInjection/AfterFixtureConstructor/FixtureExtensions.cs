@@ -4,7 +4,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
 {
     public static class FixtureExtensions
     {
-        public static TService GetRequiredService<TService>(this ITestFixture fixture)
+        public static TService GetRequiredService<TService>(this IFixtureServiceProvider fixture)
             where TService : notnull =>
             new AsyncLocalServiceProvider<TService>(new AsyncLocalServiceProvider(new FixtureProvider(fixture))).Value;
     }

@@ -6,7 +6,7 @@ using NUnit.Framework.Interfaces;
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
-    public sealed class TestCommunicationModuleAttribute : Attribute, IFixtureModule
+    public sealed class TestCommunicationModuleAttribute : Attribute, IFixtureServiceCollectionModule
     {
         public void ConfigureServices(IServiceCollection serviceCollection, ITypeInfo typeInfo) =>
             serviceCollection

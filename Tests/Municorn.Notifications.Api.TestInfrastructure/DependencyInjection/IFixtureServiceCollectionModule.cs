@@ -3,7 +3,7 @@ using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
-    public interface IFixtureModule
+    public interface IFixtureServiceCollectionModule
     {
         void ConfigureServices(IServiceCollection serviceCollection, ITypeInfo typeInfo);
     }

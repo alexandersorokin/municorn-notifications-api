@@ -11,7 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [TestCommunicationModule]
     [TestActionLoggerTest]
     [TestActionLoggerSuite]
-    internal class Pass_Container_To_Attribute_Should : ITestFixture
+    internal class Pass_Container_To_Attribute_Should : IFixtureServiceProvider
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddScoped<ILog, SilentLog>();

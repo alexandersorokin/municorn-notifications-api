@@ -6,7 +6,6 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.NotificationFeature.App;
 using Municorn.Notifications.Api.NotificationFeature.Data;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication.AsyncLocal;
@@ -20,7 +19,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     [FieldDependenciesModule]
     [TestCommunicationModule]
     [TestMethodInjectionModule]
-    internal class IosNotificationSender_Should : ITestFixture
+    internal class IosNotificationSender_Should : IFixtureServiceProvider
     {
         [FieldDependency]
         private readonly IAsyncLocalServiceProvider<IosNotificationSender> iosNotificationSender = default!;

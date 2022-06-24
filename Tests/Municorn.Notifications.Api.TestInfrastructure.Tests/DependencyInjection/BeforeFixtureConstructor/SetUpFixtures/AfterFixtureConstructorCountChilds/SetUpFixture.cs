@@ -13,7 +13,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [SetUpFixture]
     [TestMethodInjectionModule]
     [FieldDependenciesModule]
-    internal sealed class SetUpFixture : ITestFixture, IDisposable
+    internal sealed class SetUpFixture : IFixtureServiceProvider, IDisposable
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection

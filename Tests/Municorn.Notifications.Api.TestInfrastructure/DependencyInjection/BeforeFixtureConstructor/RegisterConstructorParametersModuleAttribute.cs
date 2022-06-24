@@ -7,7 +7,7 @@ using NUnit.Framework.Interfaces;
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public sealed class RegisterConstructorParametersModuleAttribute : Attribute, IFixtureModule
+    public sealed class RegisterConstructorParametersModuleAttribute : Attribute, IFixtureServiceCollectionModule
     {
         public void ConfigureServices(IServiceCollection serviceCollection, ITypeInfo typeInfo)
         {

@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using Municorn.Notifications.Api.TestInfrastructure.Logging;
@@ -11,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes.Wi
 {
     [TestFixture]
     [TestMethodInjectionModule]
-    internal class CombinatorialTestCaseAttribute_Should : ITestFixture
+    internal class CombinatorialTestCaseAttribute_Should : IFixtureServiceProvider
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection.AddSingleton<NUnitTextWriterProvider>();

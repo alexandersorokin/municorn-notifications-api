@@ -6,7 +6,7 @@ using NUnit.Framework.Interfaces;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [AttributeUsage(AttributeTargets.Class)]
-    internal sealed class TimeLoggerScopedCounterModuleAttribute : Attribute, IFixtureModule
+    internal sealed class TimeLoggerScopedCounterModuleAttribute : Attribute, IFixtureServiceCollectionModule
     {
         public void ConfigureServices(IServiceCollection serviceCollection, ITypeInfo typeInfo)
         {

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection
 {
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
     public sealed class InjectDependencyAttribute : NUnitAttribute, IParameterDataSource

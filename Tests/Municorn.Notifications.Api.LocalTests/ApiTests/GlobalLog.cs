@@ -9,7 +9,7 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
 {
     [SetUpFixture]
     [FieldDependenciesModule]
-    internal class GlobalLog : ITestFixture
+    internal class GlobalLog : IFixtureServiceProvider
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.AddBoundLog();
 

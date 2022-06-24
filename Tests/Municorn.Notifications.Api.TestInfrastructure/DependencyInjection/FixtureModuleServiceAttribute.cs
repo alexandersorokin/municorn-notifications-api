@@ -5,7 +5,7 @@ using NUnit.Framework.Interfaces;
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = true)]
-    public sealed class FixtureModuleServiceAttribute : Attribute, IFixtureModule
+    public sealed class FixtureModuleServiceAttribute : Attribute, IFixtureServiceCollectionModule
     {
         private readonly Type serviceType;
 

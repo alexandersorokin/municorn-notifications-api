@@ -1,7 +1,6 @@
 ﻿using System;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using Municorn.Notifications.Api.TestInfrastructure.Logging;
@@ -12,7 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixture]
     [TestMethodInjectionModule]
-    internal sealed class Run_Global_Dispose_Should : ITestFixture, IDisposable
+    internal sealed class Run_Global_Dispose_Should : IFixtureServiceProvider, IDisposable
     {
         private readonly Counter counter = new();
 

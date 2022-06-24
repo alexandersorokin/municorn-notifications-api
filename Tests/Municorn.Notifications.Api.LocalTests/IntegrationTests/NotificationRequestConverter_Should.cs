@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.NotificationFeature.App;
 using Municorn.Notifications.Api.NotificationFeature.Data;
 using Municorn.Notifications.Api.NotificationFeature.View;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
@@ -18,7 +17,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
     [TestMethodInjectionModule]
-    internal class NotificationRequestConverter_Should : ITestFixture
+    internal class NotificationRequestConverter_Should : IFixtureServiceProvider
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
