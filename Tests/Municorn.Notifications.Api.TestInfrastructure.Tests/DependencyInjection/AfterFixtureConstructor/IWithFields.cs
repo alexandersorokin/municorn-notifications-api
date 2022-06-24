@@ -4,7 +4,7 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor
 {
     [FieldInjectionModule]
-    internal interface IWithFields : IFixtureServiceProvider
+    internal interface IWithFields : IFixtureServiceProviderFramework
     {
     }
 }

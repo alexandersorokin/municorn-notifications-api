@@ -5,7 +5,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddFieldInjection(this IServiceCollection serviceCollection, IFixtureServiceProvider fixture) =>
+        public static IServiceCollection AddFieldInjection(this IServiceCollection serviceCollection, IFixtureServiceProviderFramework fixture) =>
             serviceCollection.AddFieldInjection(fixture.GetType());
     }
 }

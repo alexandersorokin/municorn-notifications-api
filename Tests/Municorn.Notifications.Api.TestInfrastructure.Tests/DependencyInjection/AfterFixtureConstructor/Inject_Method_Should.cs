@@ -9,7 +9,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixture]
     [TestMethodInjectionModule]
-    internal class Inject_Method_Should : IFixtureServiceProvider
+    internal class Inject_Method_Should : IFixtureServiceProviderFramework
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddScoped<ILog, SilentLog>();

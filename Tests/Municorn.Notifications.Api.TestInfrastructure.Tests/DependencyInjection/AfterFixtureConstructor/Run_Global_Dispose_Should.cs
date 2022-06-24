@@ -11,7 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixture]
     [TestMethodInjectionModule]
-    internal sealed class Run_Global_Dispose_Should : IFixtureServiceProvider, IDisposable
+    internal sealed class Run_Global_Dispose_Should : IFixtureServiceProviderFramework, IDisposable
     {
         private readonly Counter counter = new();
 

@@ -11,7 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixture]
     [TestMethodInjectionModule]
-    internal class Service_TestAccessor_Should : IFixtureServiceProvider
+    internal class Service_TestAccessor_Should : IFixtureServiceProviderFramework
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.AddSingleton<object>();
 

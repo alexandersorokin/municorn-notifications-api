@@ -9,7 +9,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixture]
     [TestMethodInjectionModule]
-    internal class Register_From_TestFixtureModule_On_Class_Should : IFixtureServiceProvider
+    internal class Register_From_TestFixtureModule_On_Class_Should : IFixtureServiceProviderFramework
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection.AddSingleton<ILog, SilentLog>();

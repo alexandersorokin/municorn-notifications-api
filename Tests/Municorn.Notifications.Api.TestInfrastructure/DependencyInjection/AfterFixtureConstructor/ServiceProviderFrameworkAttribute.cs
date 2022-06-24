@@ -8,7 +8,7 @@ using NUnit.Framework.Internal;
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor
 {
     [AttributeUsage(AttributeTargets.Interface)]
-    internal sealed class ServiceProviderAttribute : NUnitAttribute, ITestAction
+    internal sealed class ServiceProviderFrameworkAttribute : NUnitAttribute, ITestAction
     {
         private static readonly ServiceProviderOptions Options = new()
         {
@@ -61,9 +61,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
         private void BeforeTestSuite(ITest test)
         {
             var fixture = test.Fixture;
-            if (fixture is not IFixtureServiceProvider testFixture)
+            if (fixture is not IFixtureServiceProviderFramework testFixture)
             {
-                throw new InvalidOperationException($"Test {test.FullName} with fixture {fixture} do not implement {nameof(IFixtureServiceProvider)}");
+                throw new InvalidOperationException($"Test {test.FullName} with fixture {fixture} do not implement {nameof(IFixtureServiceProviderFramework)}");
             }
 
             var serviceCollection = new ServiceCollection()

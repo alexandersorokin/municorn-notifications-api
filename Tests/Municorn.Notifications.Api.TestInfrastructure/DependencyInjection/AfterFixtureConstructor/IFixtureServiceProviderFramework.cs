@@ -2,8 +2,8 @@
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor
 {
-    [ServiceProvider]
-    public interface IFixtureServiceProvider
+    [ServiceProviderFramework]
+    public interface IFixtureServiceProviderFramework
     {
         void ConfigureServices(IServiceCollection serviceCollection);
     }

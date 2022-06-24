@@ -5,8 +5,8 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.
 namespace Municorn.Notifications.Api.Tests.ApiTests
 {
     [FieldInjectionModule]
-    internal interface IServiceFixture : IFixtureServiceProvider
+    internal interface IServiceFixture : IFixtureServiceProviderFramework
     {
-        void IFixtureServiceProvider.ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.AddClientFactory();
+        void IFixtureServiceProviderFramework.ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.AddClientFactory();
     }
 }

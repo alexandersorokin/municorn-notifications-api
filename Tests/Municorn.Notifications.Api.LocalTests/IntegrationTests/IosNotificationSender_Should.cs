@@ -19,7 +19,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     [FieldInjectionModule]
     [TestCommunicationModule]
     [TestMethodInjectionModule]
-    internal class IosNotificationSender_Should : IFixtureServiceProvider
+    internal class IosNotificationSender_Should : IFixtureServiceProviderFramework
     {
         [FieldDependency]
         private readonly IAsyncLocalServiceProvider<IosNotificationSender> iosNotificationSender = default!;

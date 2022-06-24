@@ -14,7 +14,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [FieldDependency]
         private readonly ILog service = default!;
 
-        void IFixtureServiceProvider.ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
+        void IFixtureServiceProviderFramework.ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddSingleton<ILog, SilentLog>();
 
         [Test]

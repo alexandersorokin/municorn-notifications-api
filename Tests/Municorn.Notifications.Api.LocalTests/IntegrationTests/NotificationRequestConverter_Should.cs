@@ -17,7 +17,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
     [TestMethodInjectionModule]
-    internal class NotificationRequestConverter_Should : IFixtureServiceProvider
+    internal class NotificationRequestConverter_Should : IFixtureServiceProviderFramework
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
