@@ -5,10 +5,10 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
 {
     internal static class ServiceCollectionClientFactoryExtensions
     {
-        internal static IServiceCollection RegisterClientFactory(this IServiceCollection serviceCollection) =>
+        internal static IServiceCollection AddClientFactory(this IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddContextualLog()
-                .RegisterClientTopologyFactory()
+                .AddClientTopologyFactory()
                 .AddSingleton<ClientFactory>();
     }
 }

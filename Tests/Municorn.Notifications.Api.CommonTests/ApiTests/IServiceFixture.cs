@@ -7,6 +7,6 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
     [FieldDependenciesModule]
     internal interface IServiceFixture : ITestFixture
     {
-        void ITestFixture.ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterClientFactory();
+        void ITestFixture.ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.AddClientFactory();
     }
 }

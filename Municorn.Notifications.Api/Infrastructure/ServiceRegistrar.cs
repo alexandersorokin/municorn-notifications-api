@@ -11,9 +11,9 @@ namespace Municorn.Notifications.Api.Infrastructure
     {
         internal static void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
-                .RegisterWaiter()
-                .RegisterRequestConverter()
-                .RegisterSwagger()
+                .AddWaiter()
+                .AddRequestConverter()
+                .AddSwagger()
 
                 .AddControllers()
                 .AddJsonOptions(options =>

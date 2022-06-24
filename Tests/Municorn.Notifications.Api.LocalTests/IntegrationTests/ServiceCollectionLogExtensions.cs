@@ -8,13 +8,13 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     internal static class ServiceCollectionLogExtensions
     {
-        internal static IServiceCollection RegisterMicrosoftLogger(this IServiceCollection serviceCollection) =>
+        internal static IServiceCollection AddMicrosoftLogger(this IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddScoped<ILoggerProvider, VostokLoggerProvider>()
                 .AddScoped<ILoggerFactory, LoggerFactory>()
                 .AddScoped(typeof(ILogger<>), typeof(Logger<>));
 
-        internal static IServiceCollection RegisterLogSniffer(this IServiceCollection serviceCollection) =>
+        internal static IServiceCollection AddLogSniffer(this IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddSingleton<ITextWriterProvider, NUnitTextWriterProvider>()
                 .AddSingleton<TextWriterLog>()

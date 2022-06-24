@@ -15,14 +15,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
         {
             var fields = typeInfo.Type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
 
-            RegisterServices(serviceCollection, fields);
+            AddServices(serviceCollection, fields);
 
             serviceCollection
                 .AddSingleton(new FieldInfoProvider(fields))
                 .AddSingleton<IFixtureOneTimeSetUp, SingletonFieldInitializer>();
         }
 
-        private static void RegisterServices(IServiceCollection serviceCollection, IEnumerable<FieldInfo> fields)
+        private static void AddServices(IServiceCollection serviceCollection, IEnumerable<FieldInfo> fields)
         {
             var serviceTypes =
                 from field in fields

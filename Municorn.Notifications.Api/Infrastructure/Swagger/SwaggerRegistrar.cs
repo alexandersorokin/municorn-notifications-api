@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.Infrastructure.Swagger
 {
     internal static class SwaggerRegistrar
     {
-        internal static IServiceCollection RegisterSwagger(this IServiceCollection serviceCollection) =>
+        internal static IServiceCollection AddSwagger(this IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddSingleton<IPropertiesProvider, CachedPropertiesProvider>()
                 .AddSingleton<IPrimaryConstructorProvider, PrimaryConstructorProvider>()

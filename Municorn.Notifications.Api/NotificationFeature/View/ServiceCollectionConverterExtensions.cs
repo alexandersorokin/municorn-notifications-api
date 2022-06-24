@@ -6,7 +6,7 @@ namespace Municorn.Notifications.Api.NotificationFeature.View
 {
     public static class ServiceCollectionConverterExtensions
     {
-        public static IServiceCollection RegisterRequestConverter(this IServiceCollection serviceCollection) =>
+        public static IServiceCollection AddRequestConverter(this IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddSingleton<NotificationStatusRepository>()
                 .AddSingleton<INotificationSender<AndroidNotificationData>, AndroidNotificationSender>()

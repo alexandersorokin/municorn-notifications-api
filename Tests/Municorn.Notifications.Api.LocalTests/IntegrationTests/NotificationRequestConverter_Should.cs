@@ -22,10 +22,10 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
-                .RegisterWaiter()
+                .AddWaiter()
                 .AddSingleton<NotificationStatusRepository>()
-                .RegisterLogSniffer()
-                .RegisterMicrosoftLogger()
+                .AddLogSniffer()
+                .AddMicrosoftLogger()
                 .AddScoped<INotificationSender<AndroidNotificationData>, AndroidNotificationSender>()
                 .AddScoped<INotificationSender<IosNotificationData>, IosNotificationSender>()
                 .AddScoped<NotificationRequestConverter>();

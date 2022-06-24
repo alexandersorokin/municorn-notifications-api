@@ -17,7 +17,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         [FieldDependency]
         private readonly Waiter waiter = default!;
 
-        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.RegisterWaiter();
+        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.AddWaiter();
 
         [TestCase(10)]
         [TestCase(11)]
