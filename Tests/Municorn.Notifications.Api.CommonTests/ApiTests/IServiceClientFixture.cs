@@ -2,19 +2,16 @@
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using Municorn.Notifications.Api.TestInfrastructure.Logging;
-using NUnit.Framework;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.Tests.ApiTests
 {
-    [SetUpFixture]
-    internal class GlobalLog : IFixtureServiceProviderFramework
+    [FieldInjectionModule]
+    internal interface IServiceClientFixture : IFixtureServiceProviderFramework
     {
-        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
+        void IFixtureServiceProviderFramework.ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddFieldInjection(this)
-            .AddBoundLog();
-
-        [field: FieldDependency]
-        internal ILog BoundLog { get; } = default!;
+            .AddContextualLog()
+            .AddClientTopologyFactory()
+            .AddSingleton<ClientFactory>();
     }
 }

@@ -11,13 +11,14 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
-    [FieldInjectionModule]
     internal class Waiter_Should : IFixtureServiceProviderFramework
     {
         [FieldDependency]
         private readonly Waiter waiter = default!;
 
-        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.AddWaiter();
+        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
+            .AddFieldInjection(this)
+            .AddWaiter();
 
         [TestCase(10)]
         [TestCase(11)]

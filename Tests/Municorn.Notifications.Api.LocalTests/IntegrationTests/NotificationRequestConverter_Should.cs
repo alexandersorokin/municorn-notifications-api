@@ -16,11 +16,11 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
-    [TestMethodInjectionModule]
     internal class NotificationRequestConverter_Should : IFixtureServiceProviderFramework
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
+                .AddTestMethodInjection()
                 .AddWaiter()
                 .AddSingleton<NotificationStatusRepository>()
                 .AddLogSniffer()
