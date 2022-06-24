@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules
 {
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field)]
     public sealed class RegisterDependencyAttribute : Attribute
