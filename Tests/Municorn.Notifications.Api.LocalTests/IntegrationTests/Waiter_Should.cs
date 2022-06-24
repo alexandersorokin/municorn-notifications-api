@@ -5,13 +5,13 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.NotificationFeature.App;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Fields;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
-    [FieldDependenciesModule]
+    [FieldInjectionModule]
     internal class Waiter_Should : IFixtureServiceProvider
     {
         [FieldDependency]

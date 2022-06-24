@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Fields
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection
 {
     [PrimaryConstructor]
     internal partial class SingletonFieldInitializer : IFixtureOneTimeSetUp

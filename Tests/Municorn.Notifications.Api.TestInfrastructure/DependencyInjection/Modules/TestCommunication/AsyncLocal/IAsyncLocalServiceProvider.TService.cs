@@ -1,4 +1,4 @@
-﻿namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication.AsyncLocal
+﻿namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication.AsyncLocal
 {
     public interface IAsyncLocalServiceProvider<out TService>
         where TService : notnull

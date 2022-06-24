@@ -6,16 +6,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.NotificationFeature.App;
 using Municorn.Notifications.Api.NotificationFeature.Data;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication.AsyncLocal;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Fields;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication.AsyncLocal;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
-    [FieldDependenciesModule]
+    [FieldInjectionModule]
     [TestCommunicationModule]
     [TestMethodInjectionModule]
     internal class AndroidNotificationSender_Should : IFixtureServiceProvider

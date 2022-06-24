@@ -3,7 +3,7 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Fields;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using Municorn.Notifications.Api.TestInfrastructure.Logging;
 using NUnit.Framework;
@@ -12,7 +12,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [SetUpFixture]
     [TestMethodInjectionModule]
-    [FieldDependenciesModule]
+    [FieldInjectionModule]
     internal sealed class SetUpFixture : IFixtureServiceProvider, IDisposable
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>

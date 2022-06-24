@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication
 {
     public static class TestServiceProviderExtensions
     {

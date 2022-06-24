@@ -1,19 +1,18 @@
 ﻿using System;
-using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication
 {
-    internal sealed class MapProviderSaver : IFixtureOneTimeSetUp, IDisposable
+    internal sealed class MapScopeSaver : IFixtureSetUp, IDisposable
     {
         private readonly IServiceProvider serviceProvider;
         private readonly IFixtureProvider fixtureProvider;
         private readonly FixtureServiceProviderMap map;
 
-        public MapProviderSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider, ITest test)
+        public MapScopeSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider, TestAccessor testAccessor)
         {
             this.serviceProvider = serviceProvider;
             this.fixtureProvider = fixtureProvider;
-            this.map = test.GetFixtureServiceProviderMap();
+            this.map = testAccessor.Test.GetFixtureServiceProviderMap();
         }
 
         public void Run() => this.map.AddScope(this.fixtureProvider.Fixture, this.serviceProvider);

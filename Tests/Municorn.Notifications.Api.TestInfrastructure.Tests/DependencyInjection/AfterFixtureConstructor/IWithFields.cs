@@ -1,9 +1,9 @@
 ﻿using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Fields;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor
 {
-    [FieldDependenciesModule]
+    [FieldInjectionModule]
     internal interface IWithFields : IFixtureServiceProvider
     {
     }

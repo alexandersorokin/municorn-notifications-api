@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication.AsyncLocal
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication.AsyncLocal
 {
     [PrimaryConstructor]
     internal partial class AsyncLocalServiceProvider<TService> : IAsyncLocalServiceProvider<TService>

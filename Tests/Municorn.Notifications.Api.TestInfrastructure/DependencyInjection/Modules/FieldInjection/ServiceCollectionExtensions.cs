@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication.AsyncLocal;
-using NUnit.Framework.Interfaces;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication.AsyncLocal;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Fields
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
-    public sealed class FieldDependenciesModuleAttribute : Attribute, IFixtureServiceCollectionModule
+    public static class ServiceCollectionExtensions
     {
-        public void ConfigureServices(IServiceCollection serviceCollection, ITypeInfo typeInfo)
+        public static IServiceCollection AddFieldInjection(this IServiceCollection serviceCollection, IFixtureServiceProvider fixture) =>
+            serviceCollection.AddFieldInjection(fixture.GetType());
+
+        internal static IServiceCollection AddFieldInjection(this IServiceCollection serviceCollection, Type fixtureType)
         {
-            var fields = typeInfo.Type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+            var fields = fixtureType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
 
             AddServices(serviceCollection, fields);
 
-            serviceCollection
+            return serviceCollection
                 .AddSingleton(new FieldInfoProvider(fields))
                 .AddSingleton<IFixtureOneTimeSetUp, SingletonFieldInitializer>();
         }

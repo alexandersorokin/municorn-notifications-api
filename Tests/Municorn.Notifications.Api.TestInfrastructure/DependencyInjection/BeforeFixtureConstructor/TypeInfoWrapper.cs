@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;

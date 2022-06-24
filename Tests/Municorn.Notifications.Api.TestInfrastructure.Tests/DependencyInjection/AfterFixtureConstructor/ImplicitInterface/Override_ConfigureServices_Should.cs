@@ -1,13 +1,13 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Fields;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor.ImplicitInterface
 {
     [TestFixture]
-    [FieldDependenciesModule]
+    [FieldInjectionModule]
     internal class Override_ConfigureServices_Should : IWithNoServices
     {
         [FieldDependency]

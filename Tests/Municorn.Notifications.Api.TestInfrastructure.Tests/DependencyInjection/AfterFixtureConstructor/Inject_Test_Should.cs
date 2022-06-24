@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Fields;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor
 {
     [TestFixture]
-    [FieldDependenciesModule]
+    [FieldInjectionModule]
     internal class Inject_Test_Should : IWithoutConfigureServices
     {
         [FieldDependency]

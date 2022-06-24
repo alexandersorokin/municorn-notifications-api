@@ -1,14 +1,14 @@
 ﻿using FluentAssertions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Fields;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.Modules.Fields
 {
     [TestFixtureInjectable]
-    [FieldDependenciesModule]
+    [FieldInjectionModule]
     internal class Inject_Field_Should
     {
         [FieldDependency]

@@ -23,12 +23,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 
         internal static IServiceCollection AddFixtureModules(this IServiceCollection serviceCollection, ITypeInfo typeInfo)
         {
-            var customAttributes = typeInfo
-                .GetCustomAttributes<IFixtureServiceCollectionModule>(true)
-                .Concat(typeInfo.Type
-                    .GetInterfaces()
-                    .SelectMany(interfaceType => interfaceType.GetCustomAttributes(typeof(IFixtureServiceCollectionModule), false)
-                        .Cast<IFixtureServiceCollectionModule>()));
+            var customAttributes = typeInfo.Type
+                .GetInterfaces()
+                .SelectMany(interfaceType => interfaceType
+                    .GetCustomAttributes(typeof(IFixtureServiceCollectionModule), false)
+                    .Cast<IFixtureServiceCollectionModule>())
+                .Concat(typeInfo.GetCustomAttributes<IFixtureServiceCollectionModule>(true));
             foreach (var module in customAttributes)
             {
                 module.ConfigureServices(serviceCollection, typeInfo);

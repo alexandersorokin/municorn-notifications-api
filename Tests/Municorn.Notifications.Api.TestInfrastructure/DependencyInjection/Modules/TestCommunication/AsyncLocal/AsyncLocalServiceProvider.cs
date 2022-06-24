@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Communication.AsyncLocal
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication.AsyncLocal
 {
     [PrimaryConstructor]
     internal partial class AsyncLocalServiceProvider : IAsyncLocalServiceProvider
