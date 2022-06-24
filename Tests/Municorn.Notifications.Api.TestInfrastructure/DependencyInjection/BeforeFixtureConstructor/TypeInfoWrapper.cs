@@ -71,7 +71,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);
 
-            var fixture = this.CreateFixture(args, serviceProvider);
+            var parameters = args ?? Array.Empty<object>();
+            var fixture = ActivatorUtilities.CreateInstance(serviceProvider, this.originalType, parameters!);
             fixtureAccessor.Fixture = fixture;
 
             ServiceProvidersDisposers.Add(fixture, serviceProvider);
@@ -140,18 +141,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                 .Select(p => p.ParameterType)
                 .Select(type => serviceProvider.GetRequiredService(type))
                 .ToArray();
-
-        private object CreateFixture(object?[]? args, IServiceProvider serviceProvider)
-        {
-            var originalArgs = args ?? Array.Empty<object?>();
-            var constructorInfo = this.originalType
-                .GetConstructors()
-                .First(constructor => constructor.GetParameters().Length >= originalArgs.Length);
-            var parameterInfos = constructorInfo.GetParameters().Skip(originalArgs.Length);
-            var ctorArgs = ResolveArguments(serviceProvider, parameterInfos);
-
-            return this.Construct(originalArgs.Concat(ctorArgs).ToArray());
-        }
 
         private class FixtureOneTimeActionMethodInfo : MethodWrapper, IMethodInfo
         {
