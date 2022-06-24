@@ -16,7 +16,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
             var serviceScope = this.fixtureServiceProvider.CreateAsyncScope();
             if (!this.scopes.TryAdd(test, serviceScope))
             {
-                throw new InvalidOperationException($"Failed to save original MethodInfo for {test.FullName}");
+                throw new InvalidOperationException($"Failed to store service scope for {test.FullName}");
             }
 
             var serviceProvider = serviceScope.ServiceProvider;
@@ -28,7 +28,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
         {
             if (!this.scopes.TryRemove(test, out var scope))
             {
-                throw new InvalidOperationException($"Failed to get saved scope for {test.FullName}");
+                throw new InvalidOperationException($"Failed to receive stored scope for {test.FullName}");
             }
 
             scope.DisposeAsync().AsTask().GetAwaiter().GetResult();

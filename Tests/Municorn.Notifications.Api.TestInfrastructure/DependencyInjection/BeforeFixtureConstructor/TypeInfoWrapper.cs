@@ -126,9 +126,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
         public Task TearDownMethodExample() => Task.CompletedTask;
 
-        private static IServiceProvider GetServiceProvider(object? fixture, string reason) =>
-            GetServiceProvider(fixture ?? throw new InvalidOperationException(reason));
-
         private static IServiceProvider GetServiceProvider(object fixture) =>
             ServiceProviders.GetValue(
                 fixture,
@@ -151,7 +148,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
-                var serviceProvider = GetServiceProvider(fixture, $"Fixture is not passed to {this.MethodInfo.Name} method call");
+                var serviceProvider = GetServiceProvider(fixture ?? throw new InvalidOperationException($"Fixture is not passed to {this.MethodInfo.Name} method call"));
                 return this.Invoke(fixture, ResolveArguments(serviceProvider, this.MethodInfo.GetParameters()));
             }
         }

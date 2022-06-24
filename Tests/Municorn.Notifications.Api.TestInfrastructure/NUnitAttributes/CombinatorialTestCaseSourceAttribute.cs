@@ -70,7 +70,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes
         {
             var method = GetTestCasesForImplementation ?? throw new InvalidOperationException("Reflection method is not found");
             var testCases = method.Invoke(this.implementation, new object[] { methodInfo }) as IEnumerable<ITestCaseData>;
-            return testCases ?? throw new InvalidOperationException("Reflection call returns nothing");
+            return testCases ?? throw new InvalidOperationException("Reflection call returned nothing");
         }
     }
 }

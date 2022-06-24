@@ -34,23 +34,22 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
 
         public void AfterTest(ITest test)
         {
-            var provider = this.GetServiceProvider(test);
             if (test.IsSuite)
             {
-                AfterTestSuite(provider);
+                this.AfterTestSuite();
             }
             else
             {
-                provider.GetRequiredService<TestActionMethodManager>().AfterTestCase(test);
+                this.GetServiceProvider(test).GetRequiredService<TestActionMethodManager>().AfterTestCase(test);
             }
         }
 
-        private static void AfterTestSuite(IAsyncDisposable provider)
+        private void AfterTestSuite()
         {
             // workaround https://github.com/nunit/nunit/issues/2938
             try
             {
-                provider.DisposeAsync().AsTask().GetAwaiter().GetResult();
+                this.serviceProvider?.DisposeAsync().AsTask().GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
@@ -71,7 +70,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
                 .AddSingleton(test)
                 .AddFixtures(test)
                 .AddFixtureAutoMethods()
-                .AddFixtureModules(test.TypeInfo ?? throw new InvalidOperationException("No typeInfo is found at container configuration"));
+                .AddFixtureModules(test.TypeInfo ?? throw new InvalidOperationException("No typeInfo is found at service collection configuration"));
             testFixture.ConfigureServices(serviceCollection);
 
             this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
