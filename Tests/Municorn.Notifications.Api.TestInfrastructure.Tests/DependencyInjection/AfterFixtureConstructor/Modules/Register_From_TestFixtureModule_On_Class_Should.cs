@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using NUnit.Framework;
 using Vostok.Logging.Abstractions;
@@ -7,10 +8,12 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor.Modules
 {
     [TestFixture]
-    [FixtureModuleService(typeof(ILog), typeof(SilentLog))]
     [TestMethodInjectionModule]
-    internal class Register_From_TestFixtureModule_On_Class_Should : IWithoutConfigureServices
+    internal class Register_From_TestFixtureModule_On_Class_Should : IFixtureServiceProvider
     {
+        public void ConfigureServices(IServiceCollection serviceCollection) =>
+            serviceCollection.AddSingleton<ILog, SilentLog>();
+
         [Test]
         [Repeat(2)]
         public void Case([InjectDependency] ILog service)

@@ -1,8 +1,9 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = true)]
     public sealed class FixtureModuleServiceAttribute : Attribute, IFixtureServiceCollectionModule

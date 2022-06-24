@@ -2,7 +2,7 @@
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor
 {
     [TestFixture]
     internal class CombinatorialTestCaseSourceAttribute_Inject_Should
