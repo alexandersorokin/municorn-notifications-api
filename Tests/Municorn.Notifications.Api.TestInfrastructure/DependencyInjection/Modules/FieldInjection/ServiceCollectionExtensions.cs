@@ -16,7 +16,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
 
             return serviceCollection
                 .AddSingleton(new FieldInfoProvider(fields))
-                .AddSingleton<IFixtureOneTimeSetUp, SingletonFieldInitializer>();
+                .AddSingleton<IFixtureOneTimeSetUpService, SingletonFieldInitializer>();
         }
 
         private static void AddServices(IServiceCollection serviceCollection, IEnumerable<FieldInfo> fields)

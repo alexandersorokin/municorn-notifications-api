@@ -20,7 +20,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [Test]
         [Repeat(2)]
         [ApplyToContext]
-        public void Case([InjectDependency] IFixtureSetUp service)
+        public void Case([InjectDependency] IFixtureSetUpService service)
         {
             service.Should().NotBeNull();
         }
@@ -29,7 +29,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [TestCase(11)]
         [ApplyToContext]
         [Repeat(2)]
-        public void Cases(int value, [InjectDependency] IFixtureSetUp service)
+        public void Cases(int value, [InjectDependency] IFixtureSetUpService service)
         {
             service.Should().NotBeNull();
         }
@@ -44,7 +44,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
                 {
                     test
                         .GetServiceProvider(context.TestObject)
-                        .GetRequiredService<IFixtureSetUp>()
+                        .GetRequiredService<IFixtureSetUpService>()
                         .Should()
                         .NotBeNull();
                 }

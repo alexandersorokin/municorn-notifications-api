@@ -3,7 +3,7 @@ using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication
 {
-    internal sealed class MapProviderSaver : IFixtureOneTimeSetUp, IDisposable
+    internal sealed class MapProviderSaver : IFixtureOneTimeSetUpService, IDisposable
     {
         private readonly IServiceProvider serviceProvider;
         private readonly IFixtureProvider fixtureProvider;

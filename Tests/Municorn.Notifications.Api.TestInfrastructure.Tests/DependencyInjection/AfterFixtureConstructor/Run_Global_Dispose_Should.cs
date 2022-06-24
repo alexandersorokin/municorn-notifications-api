@@ -19,22 +19,22 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
             serviceCollection
                 .AddContextualLog()
                 .AddSingleton(this.counter)
-                .AddSingleton<FixtureTimeLogger>();
+                .AddSingleton<FixtureOneTimeTimeLogger>();
 
         [Test]
         [Repeat(2)]
-        public void Case([InjectDependency] FixtureTimeLogger fixtureTimeLogger)
+        public void Case([InjectDependency] FixtureOneTimeTimeLogger fixtureOneTimeTimeLogger)
         {
-            fixtureTimeLogger.Run();
+            fixtureOneTimeTimeLogger.Run();
             true.Should().BeTrue();
         }
 
         [CombinatorialTestCase(10)]
         [CombinatorialTestCase(11)]
         [Repeat(2)]
-        public void Cases(int value, [InjectDependency] FixtureTimeLogger fixtureTimeLogger)
+        public void Cases(int value, [InjectDependency] FixtureOneTimeTimeLogger fixtureOneTimeTimeLogger)
         {
-            fixtureTimeLogger.Run();
+            fixtureOneTimeTimeLogger.Run();
             value.Should().BePositive();
         }
 

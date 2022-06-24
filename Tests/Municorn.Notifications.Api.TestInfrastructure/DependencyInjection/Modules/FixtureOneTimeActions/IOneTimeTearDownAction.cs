@@ -1,6 +1,6 @@
 ﻿namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FixtureOneTimeActions
 {
-    public interface IOneTimeTearDown
+    public interface IOneTimeTearDownAction
     {
         void OneTimeTearDown();
     }

@@ -4,19 +4,19 @@ using System.Threading.Tasks;
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FixtureOneTimeActions
 {
     [PrimaryConstructor]
-    internal partial class FixtureOneTimeActionRunner : IFixtureOneTimeSetUp, IAsyncDisposable
+    internal partial class FixtureOneTimeActionRunner : IFixtureOneTimeSetUpService, IAsyncDisposable
     {
         private readonly IFixtureProvider fixtureProvider;
 
         public void Run()
         {
             var fixture = this.fixtureProvider.Fixture;
-            if (fixture is IOneTimeSetUp oneTimeSetUp)
+            if (fixture is IOneTimeSetUpAction oneTimeSetUp)
             {
                 oneTimeSetUp.OneTimeSetUp();
             }
 
-            if (fixture is IOneTimeSetUpAsync oneTimeSetUpAsync)
+            if (fixture is IOneTimeSetUpAsyncAction oneTimeSetUpAsync)
             {
                 oneTimeSetUpAsync.OneTimeSetUpAsync().GetAwaiter().GetResult();
             }
@@ -25,12 +25,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
         public async ValueTask DisposeAsync()
         {
             var fixture = this.fixtureProvider.Fixture;
-            if (fixture is IOneTimeTearDownAsync oneTimeTearDownAsync)
+            if (fixture is IOneTimeTearDownAsyncAction oneTimeTearDownAsync)
             {
                 await oneTimeTearDownAsync.IOneTimeTearDownAsync().ConfigureAwait(false);
             }
 
-            if (fixture is IOneTimeTearDown oneTimeTearDown)
+            if (fixture is IOneTimeTearDownAction oneTimeTearDown)
             {
                 oneTimeTearDown.OneTimeTearDown();
             }

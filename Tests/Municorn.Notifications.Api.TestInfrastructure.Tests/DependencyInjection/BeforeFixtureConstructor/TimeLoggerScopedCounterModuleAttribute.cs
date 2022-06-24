@@ -12,7 +12,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         {
             serviceCollection
                 .AddScoped<Counter>()
-                .AddScoped<IFixtureSetUp, TestTimeLogger>();
+                .AddScoped<IFixtureSetUpService, TestTimeLogger>();
             new LogModuleAttribute().ConfigureServices(serviceCollection, typeInfo);
         }
     }

@@ -63,8 +63,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                 .AddSingleton<ITest>(currentTest)
                 .AddFixtures(currentTest)
                 .AddFixtureAutoMethods()
-                .AddSingleton<IFixtureOneTimeSetUp, FixtureSaver>()
-                .AddScoped<IFixtureSetUp, ScopeSaver>()
+                .AddSingleton<IFixtureOneTimeSetUpService, FixtureOneTimeSaver>()
+                .AddScoped<IFixtureSetUpService, ScopeSaver>()
                 .AddFixtureModules(new NUnit.Framework.Internal.TypeWrapper(this.originalType));
 
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);
@@ -156,13 +156,13 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             }
         }
 
-        private sealed class FixtureSaver : IFixtureOneTimeSetUp, IDisposable
+        private sealed class FixtureOneTimeSaver : IFixtureOneTimeSetUpService, IDisposable
         {
             private readonly IServiceProvider serviceProvider;
             private readonly object fixture;
 
             [UsedImplicitly]
-            public FixtureSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider)
+            public FixtureOneTimeSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider)
             {
                 this.serviceProvider = serviceProvider;
                 this.fixture = fixtureProvider.Fixture;
@@ -181,7 +181,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             }
         }
 
-        private sealed class ScopeSaver : IFixtureSetUp, IDisposable
+        private sealed class ScopeSaver : IFixtureSetUpService, IDisposable
         {
             private readonly IServiceProvider serviceProvider;
             private readonly IFixtureProvider fixtureProvider;

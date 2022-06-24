@@ -1,6 +1,6 @@
 ﻿namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
-    public interface IFixtureSetUp
+    public interface IFixtureOneTimeSetUpService
     {
         void Run();
     }

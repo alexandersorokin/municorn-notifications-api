@@ -10,13 +10,13 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal class Fixture_Methods_Scoped_Inject_Should
     {
         [SetUp]
-        public void SetUp(IFixtureSetUp service)
+        public void SetUp(IFixtureSetUpService service)
         {
             service.Should().NotBeNull();
         }
 
         [TearDown]
-        public void TearDown(IFixtureSetUp service)
+        public void TearDown(IFixtureSetUpService service)
         {
             service.Should().NotBeNull();
         }

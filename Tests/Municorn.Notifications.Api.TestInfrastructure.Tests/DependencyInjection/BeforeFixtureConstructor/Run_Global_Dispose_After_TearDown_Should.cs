@@ -8,7 +8,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [TestFixtureInjectable]
     [LogModule]
     [RegisterConstructorParametersModule]
-    [FixtureModuleService(typeof(FixtureTimeLogger))]
+    [FixtureModuleService(typeof(FixtureOneTimeTimeLogger))]
     internal class Run_Global_Dispose_After_TearDown_Should
     {
         private readonly Counter counter;
@@ -16,9 +16,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         public Run_Global_Dispose_After_TearDown_Should([RegisterDependency] Counter counter) => this.counter = counter;
 
         [OneTimeSetUp]
-        public void OneTimeSetUp(FixtureTimeLogger fixtureTimeLogger)
+        public void OneTimeSetUp(FixtureOneTimeTimeLogger fixtureOneTimeTimeLogger)
         {
-            fixtureTimeLogger.Run();
+            fixtureOneTimeTimeLogger.Run();
         }
 
         [Test]

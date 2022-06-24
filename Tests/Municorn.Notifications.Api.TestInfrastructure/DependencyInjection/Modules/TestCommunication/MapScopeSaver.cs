@@ -2,7 +2,7 @@
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication
 {
-    internal sealed class MapScopeSaver : IFixtureSetUp, IDisposable
+    internal sealed class MapScopeSaver : IFixtureSetUpService, IDisposable
     {
         private readonly IServiceProvider serviceProvider;
         private readonly IFixtureProvider fixtureProvider;

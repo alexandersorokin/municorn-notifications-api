@@ -2,7 +2,7 @@
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FixtureOneTimeActions
 {
-    public interface IOneTimeSetUpAsync
+    public interface IOneTimeSetUpAsyncAction
     {
         Task OneTimeSetUpAsync();
     }

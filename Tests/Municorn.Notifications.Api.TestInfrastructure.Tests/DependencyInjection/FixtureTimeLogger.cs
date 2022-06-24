@@ -6,7 +6,7 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection
 {
     [PrimaryConstructor]
-    internal sealed partial class FixtureTimeLogger : IFixtureOneTimeSetUp, IDisposable
+    internal sealed partial class FixtureOneTimeTimeLogger : IFixtureOneTimeSetUpService, IDisposable
     {
         private readonly Counter counter;
         private readonly ILog log;

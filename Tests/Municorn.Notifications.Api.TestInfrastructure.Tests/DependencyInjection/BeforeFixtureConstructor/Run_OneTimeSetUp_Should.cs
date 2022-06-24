@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [TestFixtureInjectable]
     [LogModule]
     [RegisterConstructorParametersModule]
-    [FixtureModuleService(typeof(IFixtureOneTimeSetUp), typeof(FixtureTimeLogger))]
+    [FixtureModuleService(typeof(IFixtureOneTimeSetUpService), typeof(FixtureOneTimeTimeLogger))]
     internal sealed class Run_OneTimeSetUp_Should : IDisposable
     {
         private readonly Counter counter;

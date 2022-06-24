@@ -8,11 +8,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         internal static IServiceCollection AddFixtureTimeLogger(this IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddSingleton<Counter>()
-                .AddSingleton<IFixtureOneTimeSetUp, FixtureTimeLogger>();
+                .AddSingleton<IFixtureOneTimeSetUpService, FixtureOneTimeTimeLogger>();
 
         internal static IServiceCollection AddTestTimeLogger(this IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddSingleton<Counter>()
-                .AddScoped<IFixtureSetUp, TestTimeLogger>();
+                .AddScoped<IFixtureSetUpService, TestTimeLogger>();
     }
 }

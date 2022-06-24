@@ -4,7 +4,7 @@ using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection
 {
-    internal sealed class UseContainerMethodInfoPatcher : IFixtureSetUp, IDisposable
+    internal sealed class UseContainerMethodInfoPatcher : IFixtureSetUpService, IDisposable
     {
         private readonly UseContainerMethodInfoFactory useContainerMethodInfoFactory;
         private readonly TestMethod testMethod;

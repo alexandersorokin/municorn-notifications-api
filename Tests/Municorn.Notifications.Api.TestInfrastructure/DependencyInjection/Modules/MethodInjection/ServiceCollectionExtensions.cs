@@ -7,6 +7,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
         public static IServiceCollection AddTestMethodInjection(this IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddScoped<UseContainerMethodInfoFactory>()
-                .AddScoped<IFixtureSetUp, UseContainerMethodInfoPatcher>();
+                .AddScoped<IFixtureSetUpService, UseContainerMethodInfoPatcher>();
     }
 }

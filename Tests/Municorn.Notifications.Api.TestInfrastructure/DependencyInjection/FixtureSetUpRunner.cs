@@ -5,7 +5,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
     [PrimaryConstructor]
     internal partial class FixtureSetUpRunner
     {
-        private readonly IEnumerable<IFixtureSetUp> services;
+        private readonly IEnumerable<IFixtureSetUpService> services;
 
         public void Run()
         {
