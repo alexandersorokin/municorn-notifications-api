@@ -8,9 +8,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         internal int Value => this.value;
 
-        internal void Increment()
-        {
-            Interlocked.Increment(ref this.value);
-        }
+        internal void Increment() => Interlocked.Increment(ref this.value);
     }
 }
