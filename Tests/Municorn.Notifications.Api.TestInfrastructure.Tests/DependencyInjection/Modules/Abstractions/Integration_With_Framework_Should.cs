@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
@@ -11,22 +10,17 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixture]
     [RegisterSelfTypeModule]
-    internal class Integration_With_Framework_Should
+    internal class Integration_With_Framework_Should : FrameworkServiceProviderFixtureBase
     {
-        private readonly FixtureServiceProviderFramework framework;
-
-        public Integration_With_Framework_Should() => this.framework = new(serviceCollection => serviceCollection
-            .AddFixtureServiceCollectionModuleAttributes(new TypeWrapper(this.GetType()))
-            .AddSingleton<IFixtureOneTimeSetUpService, OneTimeIncrement>());
-
-        [OneTimeSetUp]
-        public async Task OneTimeSetUp() => await this.framework.RunOneTimeSetUp().ConfigureAwait(false);
-
-        [OneTimeTearDown]
-        public async Task OneTimeTearDown() => await this.framework.DisposeAsync().ConfigureAwait(false);
+        public Integration_With_Framework_Should()
+            : base(serviceCollection => serviceCollection
+                .AddFixtureServiceCollectionModuleAttributes(new TypeWrapper(typeof(Integration_With_Framework_Should)))
+                .AddSingleton<IFixtureOneTimeSetUpService, OneTimeIncrement>())
+        {
+        }
 
         [Test]
-        public void Test() => this.framework.Should().NotBeNull();
+        public void Test() => true.Should().BeTrue();
 
         private class OneTimeIncrement : IFixtureOneTimeSetUpService
         {
