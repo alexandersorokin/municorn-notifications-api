@@ -12,8 +12,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal sealed class Integration_All_Should : IDisposable
     {
         private const int RepeatCount = 3;
-        private const int OneTimeIncrementCount = 2;
-        private const int PerTestIncrementCount = 2;
 
         private readonly Counter counter = new();
         private readonly FixtureServiceProviderFramework framework;
@@ -39,18 +37,21 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(RepeatCount)]
-        public void Test1()
-        {
-            this.counter.Value.Should().BePositive();
-        }
+        public void Test1() => this.counter.Value.Should().BePositive();
 
         [Test]
-        public void Test2()
-        {
-            this.counter.Value.Should().BePositive();
-        }
+        public void Test2() => this.counter.Value.Should().BePositive();
 
-        public void Dispose() => this.counter.Value.Should().Be(OneTimeIncrementCount + (PerTestIncrementCount * (1 + (1 * RepeatCount))));
+        public void Dispose()
+        {
+            const int oneTimeIncrementCount = 2;
+            const int perTestIncrementCount = 2;
+
+            const int notRepeatedTests = 1;
+            const int repeatedTests = 1;
+            const int repeatedTestRuns = repeatedTests * RepeatCount;
+            this.counter.Value.Should().Be(oneTimeIncrementCount + (perTestIncrementCount * (notRepeatedTests + repeatedTestRuns)));
+        }
 
         private sealed class Increment : IFixtureSetUpService, IDisposable
         {

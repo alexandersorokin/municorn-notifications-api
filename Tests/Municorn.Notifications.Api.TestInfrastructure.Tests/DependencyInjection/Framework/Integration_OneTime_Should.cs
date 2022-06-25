@@ -10,8 +10,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [TestFixture]
     internal sealed class Integration_OneTime_Should : IDisposable
     {
-        private const int OneTimeIncrementCount = 2;
-
         private readonly Counter counter = new();
         private readonly FixtureServiceProviderFramework framework;
 
@@ -27,18 +25,16 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(2)]
-        public void Test1()
-        {
-            this.counter.Value.Should().BePositive();
-        }
+        public void Test1() => this.counter.Value.Should().BePositive();
 
         [Test]
-        public void Test2()
-        {
-            this.counter.Value.Should().BePositive();
-        }
+        public void Test2() => this.counter.Value.Should().BePositive();
 
-        public void Dispose() => this.counter.Value.Should().Be(OneTimeIncrementCount);
+        public void Dispose()
+        {
+            const int oneTimeIncrementCount = 2;
+            this.counter.Value.Should().Be(oneTimeIncrementCount);
+        }
 
         private class OneTimeIncrement : IFixtureOneTimeSetUpService, IAsyncDisposable
         {

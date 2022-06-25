@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,16 +10,16 @@ using NUnit.Framework.Internal;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Framework
 {
     [TestFixture]
-    internal sealed class Integration_PerTest_Should : IDisposable
+    internal sealed class Integration_Create_Scope_For_Test_With_Different_Service_Instances_Should : IDisposable
     {
         private const int RepeatCount = 3;
 
-        private readonly Counter counter = new();
+        private readonly ConcurrentDictionary<AutoResolveService, bool> storage = new();
         private readonly FixtureServiceProviderFramework framework;
 
-        public Integration_PerTest_Should() => this.framework = new(serviceCollection => serviceCollection
-            .AddSingleton(this.counter)
-            .AddScoped<IFixtureSetUpService, Increment>());
+        public Integration_Create_Scope_For_Test_With_Different_Service_Instances_Should() => this.framework = new(serviceCollection => serviceCollection
+            .AddSingleton(this.storage)
+            .AddScoped<IFixtureSetUpService, AutoResolveService>());
 
         private static Test CurrentTest => TestExecutionContext.CurrentContext.CurrentTest;
 
@@ -30,33 +31,26 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(RepeatCount)]
-        public void Test1() => this.counter.Value.Should().BePositive();
+        public void Test1() => this.storage.Should().HaveCountGreaterThan(1);
 
         [Test]
-        public void Test2() => this.counter.Value.Should().BePositive();
+        public void Test2() => this.storage.Should().HaveCountGreaterThan(1);
 
         public void Dispose()
         {
-            const int perTestIncrementCount = 2;
-
             const int notRepeatedTests = 1;
             const int repeatedTests = 1;
             const int repeatedTestRuns = repeatedTests * RepeatCount;
-            this.counter.Value.Should().Be(perTestIncrementCount * (notRepeatedTests + repeatedTestRuns));
+            this.storage.Should().HaveCount(notRepeatedTests + repeatedTestRuns);
         }
 
-        private class Increment : IFixtureSetUpService, IAsyncDisposable
+        private sealed class AutoResolveService : IFixtureSetUpService
         {
-            private readonly Counter counter;
+            public AutoResolveService(ConcurrentDictionary<AutoResolveService, bool> storage) => storage.TryAdd(this, true);
 
-            public Increment(Counter counter) => this.counter = counter;
-
-            public void Run() => this.counter.Increment();
-
-            public ValueTask DisposeAsync()
+            public void Run()
             {
-                this.counter.Increment();
-                return ValueTask.CompletedTask;
+                // Marker for resolving
             }
         }
     }
