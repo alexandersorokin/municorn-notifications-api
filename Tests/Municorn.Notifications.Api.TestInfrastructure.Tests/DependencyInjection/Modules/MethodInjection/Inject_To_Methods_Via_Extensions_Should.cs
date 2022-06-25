@@ -42,15 +42,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         public void Case_With_Provider([InjectDependency] SilentLog service, [Values] bool value) =>
             service.Should().NotBeNull();
 
-        [TestCaseSource(nameof(CaseValues))]
-        [Repeat(2)]
-        public void Cases_With_Marker_Created_Manually(int value, ILog service) => service.Should().NotBeNull();
-
         private static readonly TestCaseData[] CaseValues =
         {
             CreateMarkerCase(10),
             CreateMarkerCase(11),
         };
+
+        [TestCaseSource(nameof(CaseValues))]
+        public void Cases_With_Marker_Created_Manually(int value, ILog service) => service.Should().NotBeNull();
 
         [CombinatorialTestCase]
         public void CombinatorialTestCase_Inject([InjectDependency] SilentLog service) => service.Should().NotBeNull();
@@ -61,6 +60,18 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         {
             service.Should().NotBeNull();
             value.Should().BePositive();
+        }
+
+        private static readonly TestCaseData[] CombinatorialCaseSourceValues =
+        {
+            new(10),
+            new(11),
+        };
+
+        [CombinatorialTestCaseSource(nameof(CombinatorialCaseSourceValues))]
+        public void Cases(int value, [InjectDependency] SilentLog service)
+        {
+            service.Should().NotBeNull();
         }
 
         private static TestCaseData CreateMarkerCase(int value) => new(value, new InjectedService<SilentLog>());
