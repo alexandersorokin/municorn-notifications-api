@@ -9,11 +9,12 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes.WithServices
 {
     [TestFixture]
-    [TestMethodInjectionModule]
     internal class CombinatorialTestCaseAttribute_Should : IFixtureWithServiceProviderFramework
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
-            serviceCollection.AddSingleton<NUnitAsyncLocalTextWriterProvider>();
+            serviceCollection
+                .AddTestMethodInjection()
+                .AddSingleton<NUnitAsyncLocalTextWriterProvider>();
 
         [CombinatorialTestCase(10, 1.1f, 100, "provided")]
         [CombinatorialTestCase(11, 1.2d, null)]

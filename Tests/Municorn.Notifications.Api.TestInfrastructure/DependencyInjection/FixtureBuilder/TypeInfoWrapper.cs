@@ -55,7 +55,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
 
             var currentTest = TestExecutionContext.CurrentContext.CurrentTest;
 
-#pragma warning disable CA2000 // Dispose objects before losing scope
             FixtureServiceProviderFramework framework = new(serviceCollection => serviceCollection
                 .AddSingleton(fixtureAccessor)
                 .AddSingleton(new FixtureFactoryArgs(this.originalType, args ?? Array.Empty<object>()))
@@ -66,7 +65,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                 .AddSingleton<IFixtureOneTimeSetUpService, FixtureServiceProviderSaver>()
                 .AddScoped<IFixtureSetUpService, ScopeServiceProviderSaver>()
                 .AddFixtureServiceCollectionModuleAttributes(new NUnit.Framework.Internal.TypeWrapper(this.originalType)));
-#pragma warning restore CA2000 // Dispose objects before losing scope
 
             try
             {
