@@ -8,17 +8,15 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.Modules
 {
     [TestFixture]
-    [TestMethodInjectionModule]
     internal class Register_From_TestFixtureModule_On_Interface_Should : IFixtureWithServiceProviderFramework
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
-            serviceCollection.AddSingleton<ILog, SilentLog>();
+            serviceCollection
+                .AddTestMethodInjection()
+                .AddSingleton<ILog, SilentLog>();
 
         [Test]
         [Repeat(2)]
-        public void Case([InjectDependency] ILog service)
-        {
-            service.Should().NotBeNull();
-        }
+        public void Case([InjectDependency] ILog service) => service.Should().NotBeNull();
     }
 }

@@ -7,10 +7,10 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.SetUpFixtures.Service
 {
     [SetUpFixture]
-    [TestMethodInjectionModule]
     internal class SetUpFixture : IWithFields
     {
         public void SetUpServices(IServiceCollection serviceCollection) => serviceCollection
+            .AddTestMethodInjection()
             .AddSingleton<ILog, SilentLog>();
 
         [field: FieldDependency]

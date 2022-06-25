@@ -17,24 +17,15 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [CombinatorialTestCase]
         [Repeat(2)]
-        public void NoParams()
-        {
-            true.Should().BeTrue();
-        }
+        public void NoParams() => true.Should().BeTrue();
 
         [CombinatorialTestCase]
         [Repeat(2)]
-        public void Case([InjectDependency] ILog service)
-        {
-            service.Should().NotBeNull();
-        }
+        public void Case([InjectDependency] ILog service) => service.Should().NotBeNull();
 
         [CombinatorialTestCase(10)]
         [CombinatorialTestCase(11)]
         [Repeat(2)]
-        public void Cases(int value, [InjectDependency] ILog service)
-        {
-            service.Should().NotBeNull();
-        }
+        public void Cases(int value, [InjectDependency] ILog service) => service.Should().NotBeNull();
     }
 }

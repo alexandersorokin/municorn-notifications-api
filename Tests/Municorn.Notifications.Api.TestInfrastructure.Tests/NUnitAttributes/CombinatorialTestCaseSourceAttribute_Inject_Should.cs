@@ -25,27 +25,15 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes
         public int Return_Value(int value) => value;
 
         [CombinatorialTestCaseSource(nameof(ValueData))]
-        public void Deduce_Generic<T>(T value)
-        {
-            value.Should().NotBeNull();
-        }
+        public void Deduce_Generic<T>(T value) => value.Should().NotBeNull();
 
         [CombinatorialTestCaseSource(nameof(ValueData))]
-        public void Process_Optional(int value, string optional = "default")
-        {
-            optional.Should().NotBeNull();
-        }
+        public void Process_Optional(int value, string optional = "default") => optional.Should().NotBeNull();
 
         [CombinatorialTestCaseSource(nameof(ValueData))]
-        public void Inject_From_Provider([Values] bool provided, int value)
-        {
-            value.Should().BePositive();
-        }
+        public void Inject_From_Provider([Values] bool provided, int value) => value.Should().BePositive();
 
         [CombinatorialTestCaseSource(nameof(ValueData))]
-        public void Inject(int value)
-        {
-            value.Should().BePositive();
-        }
+        public void Inject(int value) => value.Should().BePositive();
     }
 }

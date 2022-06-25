@@ -17,9 +17,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
                 .AddBoundLog()
                 .AddFixtureTimeLogger();
 
-        public void Dispose()
-        {
-            this.counter.Value.Should().Be(1);
-        }
+        public void Dispose() => this.counter.Value.Should().Be(1);
     }
 }

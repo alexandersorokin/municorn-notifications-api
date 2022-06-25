@@ -8,24 +8,18 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.SetUpFixtures.Empty
 {
     [TestFixture]
-    [TestMethodInjectionModule]
     internal class SetUpFixture_Inject_Should : IFixtureWithServiceProviderFramework
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
+            .AddTestMethodInjection()
             .AddScoped<ILog, SilentLog>();
 
         [Test]
         [Repeat(2)]
-        public void Inject_Service([InjectDependency] ILog service)
-        {
-            service.Should().NotBeNull();
-        }
+        public void Inject_Service([InjectDependency] ILog service) => service.Should().NotBeNull();
 
         [Test]
         [Repeat(2)]
-        public void Inject_Fixture([InjectDependency] SetUpFixture fixtureService)
-        {
-            fixtureService.Should().NotBeNull();
-        }
+        public void Inject_Fixture([InjectDependency] SetUpFixture fixtureService) => fixtureService.Should().NotBeNull();
     }
 }

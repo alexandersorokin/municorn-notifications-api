@@ -18,22 +18,13 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(2)]
-        public void Case()
-        {
-            true.Should().BeTrue();
-        }
+        public void Case() => true.Should().BeTrue();
 
         [TestCase(10)]
         [TestCase(11)]
         [Repeat(2)]
-        public void Cases(int value)
-        {
-            value.Should().BePositive();
-        }
+        public void Cases(int value) => value.Should().BePositive();
 
-        public void Dispose()
-        {
-            this.counter.Value.Should().Be(1);
-        }
+        public void Dispose() => this.counter.Value.Should().Be(1);
     }
 }

@@ -18,17 +18,13 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(2)]
-        public void Case([InjectDependency] TestAccessor testAccessor)
-        {
+        public void Case([InjectDependency] TestAccessor testAccessor) =>
             testAccessor.Test.Should().Be(TestExecutionContext.CurrentContext.CurrentTest);
-        }
 
         [CombinatorialTestCase(10)]
         [CombinatorialTestCase(11)]
         [Repeat(2)]
-        public void Cases([InjectDependency] TestAccessor testAccessor, int value)
-        {
+        public void Cases([InjectDependency] TestAccessor testAccessor, int value) =>
             testAccessor.Test.Should().Be(TestExecutionContext.CurrentContext.CurrentTest);
-        }
     }
 }

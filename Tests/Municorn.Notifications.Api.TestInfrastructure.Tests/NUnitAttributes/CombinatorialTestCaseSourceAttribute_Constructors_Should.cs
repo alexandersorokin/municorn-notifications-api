@@ -18,10 +18,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes
         [CombinatorialTestCaseSource(typeof(Cases))]
         [CombinatorialTestCaseSource(typeof(CaseMethod), nameof(CaseMethod.ClassValueData))]
         [CombinatorialTestCaseSource(typeof(CaseMethod), nameof(CaseMethod.GetClassValueData), new object[] { 1 })]
-        public void Consume_Value(int value)
-        {
-            value.Should().Be(1);
-        }
+        public void Consume_Value(int value) => value.Should().Be(1);
 
         private static class CaseMethod
         {

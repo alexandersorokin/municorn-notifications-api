@@ -16,38 +16,26 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(2)]
-        public void Case([InjectDependency] ILog service)
-        {
-            service.Should().NotBeNull();
-        }
+        public void Case([InjectDependency] ILog service) => service.Should().NotBeNull();
 
         [Test]
         [Repeat(2)]
-        public void Select_Service([InjectDependency(typeof(ILog))] object service)
-        {
+        public void Select_Service([InjectDependency(typeof(ILog))] object service) =>
             service.Should().NotBeNull();
-        }
 
         [Test]
         [Repeat(2)]
-        public void Select_Two_Services([InjectDependency(typeof(ILog)), InjectDependency(typeof(Inject_Method_Should))] object service)
-        {
+        public void Select_Two_Services(
+            [InjectDependency(typeof(ILog)), InjectDependency(typeof(Inject_Method_Should))] object service) =>
             service.Should().NotBeNull();
-        }
 
         [Test]
         [Repeat(2)]
-        public void Case_With_Provider([InjectDependency] ILog service, [Values] bool value)
-        {
-            service.Should().NotBeNull();
-        }
+        public void Case_With_Provider([InjectDependency] ILog service, [Values] bool value) => service.Should().NotBeNull();
 
         [TestCaseSource(nameof(CaseValues))]
         [Repeat(2)]
-        public void Cases(int value, ILog service)
-        {
-            service.Should().NotBeNull();
-        }
+        public void Cases(int value, ILog service) => service.Should().NotBeNull();
 
         private static readonly TestCaseData[] CaseValues =
         {

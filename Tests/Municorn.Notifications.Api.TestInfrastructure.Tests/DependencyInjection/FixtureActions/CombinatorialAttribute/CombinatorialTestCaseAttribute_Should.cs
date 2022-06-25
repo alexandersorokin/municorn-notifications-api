@@ -28,50 +28,33 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
             int? testCaseDataConversion,
             [Values(true, null)] bool? valuesConversion,
             [InjectDependency] SetUpFixture setupFixture,
-            string optional = "default")
-        {
+            string optional = "default") =>
             injectSecond.Should().NotBeNull();
-        }
 
         [CombinatorialTestCase(10)]
-        public void Deduce_Generic_From_Case<T>(T value)
-        {
-            value.Should().NotBeNull();
-        }
+        public void Deduce_Generic_From_Case<T>(T value) => value.Should().NotBeNull();
 
         [CombinatorialTestCase]
-        public void Deduce_Generic_From_Provider<T>([Values("string", 777)] T value)
-        {
-            value.Should().NotBeNull();
-        }
+        public void Deduce_Generic_From_Provider<T>([Values("string", 777)] T value) => value.Should().NotBeNull();
 
         [CombinatorialTestCase("provided")]
         [CombinatorialTestCase]
-        public void Process_Optional_With_Container([InjectDependency] NUnitAsyncLocalTextWriterProvider service, string optional = "default")
-        {
+        public void Process_Optional_With_Container(
+            [InjectDependency] NUnitAsyncLocalTextWriterProvider service,
+            string optional = "default") =>
             optional.Should().NotBeNull();
-        }
 
         [CombinatorialTestCase("provided")]
         [CombinatorialTestCase]
-        public void Process_Optional_With_Provider([Values] bool value, string optional = "default")
-        {
-            optional.Should().NotBeNull();
-        }
+        public void Process_Optional_With_Provider([Values] bool value, string optional = "default") => optional.Should().NotBeNull();
 
         [CombinatorialTestCase(10, "provided")]
         [CombinatorialTestCase(11)]
-        public void Process_Optional_With_Case(int value, string optional = "default")
-        {
-            optional.Should().NotBeNull();
-        }
+        public void Process_Optional_With_Case(int value, string optional = "default") => optional.Should().NotBeNull();
 
         [CombinatorialTestCase("provided")]
         [CombinatorialTestCase]
-        public void Process_Optional(string optional = "default")
-        {
-            optional.Should().NotBeNull();
-        }
+        public void Process_Optional(string optional = "default") => optional.Should().NotBeNull();
 
         [CombinatorialTestCase(10)]
         [CombinatorialTestCase(11)]
@@ -82,28 +65,16 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         }
 
         [CombinatorialTestCase]
-        public void Inject_From_Container([InjectDependency] NUnitAsyncLocalTextWriterProvider service)
-        {
-            service.Should().NotBeNull();
-        }
+        public void Inject_From_Container([InjectDependency] NUnitAsyncLocalTextWriterProvider service) => service.Should().NotBeNull();
 
         [CombinatorialTestCase]
-        public void Inject_From_Provider([Values(1, 2)] int value)
-        {
-            value.Should().BePositive();
-        }
+        public void Inject_From_Provider([Values(1, 2)] int value) => value.Should().BePositive();
 
         [CombinatorialTestCase(1)]
         [CombinatorialTestCase(2)]
-        public void Inject_From_Case(int value)
-        {
-            value.Should().BePositive();
-        }
+        public void Inject_From_Case(int value) => value.Should().BePositive();
 
         [CombinatorialTestCase]
-        public void Work_Without_Arguments()
-        {
-            true.Should().BeTrue();
-        }
+        public void Work_Without_Arguments() => true.Should().BeTrue();
     }
 }

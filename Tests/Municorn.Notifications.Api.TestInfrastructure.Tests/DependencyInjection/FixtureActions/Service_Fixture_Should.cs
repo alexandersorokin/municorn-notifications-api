@@ -16,17 +16,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(2)]
-        public void Case([InjectDependency] Service_Fixture_Should fixture)
-        {
-            fixture.Should().Be(this);
-        }
+        public void Case([InjectDependency] Service_Fixture_Should fixture) => fixture.Should().Be(this);
 
         [CombinatorialTestCase(10)]
         [CombinatorialTestCase(11)]
         [Repeat(2)]
-        public void Cases(int value, [InjectDependency] Service_Fixture_Should fixture)
-        {
-            fixture.Should().Be(this);
-        }
+        public void Cases(int value, [InjectDependency] Service_Fixture_Should fixture) => fixture.Should().Be(this);
     }
 }

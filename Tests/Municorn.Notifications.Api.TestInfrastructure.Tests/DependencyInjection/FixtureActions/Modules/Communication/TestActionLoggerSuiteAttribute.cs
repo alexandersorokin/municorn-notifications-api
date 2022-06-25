@@ -5,7 +5,7 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.Communication
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.Modules.Communication
 {
     [AttributeUsage(AttributeTargets.Class)]
     internal sealed class TestActionLoggerSuiteAttribute : NUnitAttribute, ITestAction
@@ -20,17 +20,13 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
             this.EnsureHaveContainer(test);
         }
 
-        public void AfterTest(ITest test)
-        {
-            this.EnsureHaveContainer(test);
-        }
+        public void AfterTest(ITest test) => this.EnsureHaveContainer(test);
 
-        private void EnsureHaveContainer(ITest test)
-        {
-            var service = test
+        private void EnsureHaveContainer(ITest test) =>
+            test
                 .GetServiceProvider(this.testFixture ?? throw new InvalidOperationException("Fixture is not found"))
-                .GetRequiredService<Pass_Container_To_Attribute_Should>();
-            service.Should().NotBeNull();
-        }
+                .GetRequiredService<Pass_Container_To_Attribute_Should>()
+                .Should()
+                .NotBeNull();
     }
 }

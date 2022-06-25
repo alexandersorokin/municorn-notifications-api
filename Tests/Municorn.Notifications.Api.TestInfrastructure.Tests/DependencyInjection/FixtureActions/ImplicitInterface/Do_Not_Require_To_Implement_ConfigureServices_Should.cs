@@ -14,9 +14,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(2)]
-        public void Case()
-        {
-            this.service.Should().NotBeNull();
-        }
+        public void Case() => this.service.Should().NotBeNull();
     }
 }
