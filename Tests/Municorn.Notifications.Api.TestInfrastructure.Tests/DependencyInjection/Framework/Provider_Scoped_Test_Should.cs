@@ -12,11 +12,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal class Provider_Scoped_Test_Should
     {
         [Test]
-        public async Task Run()
+        public async Task Provider_Test()
         {
             var currentTest = TestExecutionContext.CurrentContext.CurrentTest;
 
-            TestAccessor testAccessor = new();
+            TestAccessor testAccessor = null!;
             FixtureServiceProviderFramework framework = new(serviceCollection => serviceCollection
                 .AddScoped(sp =>
                 {

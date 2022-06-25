@@ -17,7 +17,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
             await CreateAndDisposeFramework(service).ConfigureAwait(false);
 
-            (service as IDisposable)!.Received().Dispose();
+            ((IDisposable)service).Received().Dispose();
         }
 
         [Test]
@@ -27,7 +27,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
             await CreateAndDisposeFramework(service).ConfigureAwait(false);
 
-            await (service as IAsyncDisposable)!.Received().DisposeAsync().ConfigureAwait(false);
+            await ((IAsyncDisposable)service).Received().DisposeAsync().ConfigureAwait(false);
         }
 
         [Test]
@@ -37,8 +37,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
             await CreateAndDisposeFramework(service).ConfigureAwait(false);
 
-            await (service as IAsyncDisposable)!.Received().DisposeAsync().ConfigureAwait(false);
-            (service as IDisposable)!.DidNotReceive().Dispose();
+            await ((IAsyncDisposable)service).Received().DisposeAsync().ConfigureAwait(false);
+            ((IDisposable)service).DidNotReceive().Dispose();
         }
 
         private static async Task CreateAndDisposeFramework(IFixtureOneTimeSetUpService service)
