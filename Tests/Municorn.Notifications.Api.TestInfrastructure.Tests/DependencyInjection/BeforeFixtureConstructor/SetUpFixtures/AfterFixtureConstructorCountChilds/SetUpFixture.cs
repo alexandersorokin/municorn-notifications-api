@@ -5,7 +5,6 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFix
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
-using Municorn.Notifications.Api.TestInfrastructure.Logging;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.BeforeFixtureConstructor.SetUpFixtures.AfterFixtureConstructorCountChilds

@@ -13,15 +13,15 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes.Wi
     internal class CombinatorialTestCaseAttribute_Should : IFixtureServiceProviderFramework
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
-            serviceCollection.AddSingleton<NUnitTextWriterProvider>();
+            serviceCollection.AddSingleton<NUnitAsyncLocalTextWriterProvider>();
 
         [CombinatorialTestCase(10, 1.1f, 100, "provided")]
         [CombinatorialTestCase(11, 1.2d, null)]
         public void Integration<T1, T2>(
-            [InjectDependency(typeof(NUnitTextWriterProvider))] object injectFirst,
+            [InjectDependency(typeof(NUnitAsyncLocalTextWriterProvider))] object injectFirst,
             [Values] bool automaticData,
             int testCaseData,
-            [InjectDependency] NUnitTextWriterProvider injectSecond,
+            [InjectDependency] NUnitAsyncLocalTextWriterProvider injectSecond,
             [Values("string", 777)] T1 automaticInfer,
             T2 testCaseInfer,
             int? testCaseDataConversion,
@@ -46,7 +46,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes.Wi
 
         [CombinatorialTestCase("provided")]
         [CombinatorialTestCase]
-        public void Process_Optional_With_Container([InjectDependency] NUnitTextWriterProvider service, string optional = "default")
+        public void Process_Optional_With_Container([InjectDependency] NUnitAsyncLocalTextWriterProvider service, string optional = "default")
         {
             optional.Should().NotBeNull();
         }
@@ -74,14 +74,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes.Wi
 
         [CombinatorialTestCase(10)]
         [CombinatorialTestCase(11)]
-        public void Inject_From_Container_And_Case([InjectDependency] NUnitTextWriterProvider service, int value)
+        public void Inject_From_Container_And_Case([InjectDependency] NUnitAsyncLocalTextWriterProvider service, int value)
         {
             service.Should().NotBeNull();
             value.Should().BePositive();
         }
 
         [CombinatorialTestCase]
-        public void Inject_From_Container([InjectDependency] NUnitTextWriterProvider service)
+        public void Inject_From_Container([InjectDependency] NUnitAsyncLocalTextWriterProvider service)
         {
             service.Should().NotBeNull();
         }

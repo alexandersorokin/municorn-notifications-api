@@ -16,7 +16,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
 
         internal static IServiceCollection AddLogSniffer(this IServiceCollection serviceCollection) =>
             serviceCollection
-                .AddSingleton<ITextWriterProvider, NUnitTextWriterProvider>()
+                .AddSingleton<ITextWriterProvider, NUnitAsyncLocalTextWriterProvider>()
                 .AddSingleton<TextWriterLog>()
                 .AddScoped<LogMessageContainer>()
                 .AddScoped<SniffLog>()

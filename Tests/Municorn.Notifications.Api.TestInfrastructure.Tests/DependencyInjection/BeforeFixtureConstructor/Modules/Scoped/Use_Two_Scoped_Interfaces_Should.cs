@@ -12,7 +12,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [ScopedInterfaceModule]
     internal class Use_Two_Scoped_Interfaces_Should : IScoped<ILog>, IScoped<Counter>
     {
-        ILog IScoped<ILog>.Get() => new TextWriterLog(new NUnitTextWriterProvider());
+        ILog IScoped<ILog>.Get() => new TextWriterLog(new NUnitAsyncLocalTextWriterProvider());
 
         Counter IScoped<Counter>.Get() => new();
 

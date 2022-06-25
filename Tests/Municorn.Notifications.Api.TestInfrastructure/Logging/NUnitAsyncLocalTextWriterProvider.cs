@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Logging
 {
-    public class NUnitTextWriterProvider : ITextWriterProvider
+    public class NUnitAsyncLocalTextWriterProvider : ITextWriterProvider
     {
         public TextWriter GetWriter() => TestContext.Progress;
     }

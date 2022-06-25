@@ -3,7 +3,7 @@
 namespace Municorn.Notifications.Api.TestInfrastructure.Logging
 {
     [PrimaryConstructor]
-    internal partial class AdHocTextWriterProvider : ITextWriterProvider
+    public partial class AdHocTextWriterProvider : ITextWriterProvider
     {
         private readonly TextWriter textWriter;
 

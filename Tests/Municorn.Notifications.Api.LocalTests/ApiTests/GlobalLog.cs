@@ -12,7 +12,9 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddFieldInjection(this)
-            .AddBoundLog();
+            .AddSingleton(TestContext.Out)
+            .AddSingleton<ITextWriterProvider, AdHocTextWriterProvider>()
+            .AddSingleton<ILog, TextWriterLog>();
 
         [field: FieldDependency]
         internal ILog BoundLog { get; } = default!;
