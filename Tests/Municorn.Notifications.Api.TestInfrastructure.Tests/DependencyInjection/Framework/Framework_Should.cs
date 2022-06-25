@@ -9,9 +9,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal class Framework_Should
     {
         [Test]
-        public async Task Create()
+        public async Task Instantiate()
         {
-            var framework = new FixtureServiceProviderFramework(_ => { });
+            FixtureServiceProviderFramework framework = new(_ => { });
             await using (framework.ConfigureAwait(false))
             {
                 framework.Should().NotBeNull();
