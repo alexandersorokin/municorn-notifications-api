@@ -6,7 +6,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
 {
     internal static class ServiceCollectionExtensions
     {
-        internal static IServiceCollection AddFixtureModules(this IServiceCollection serviceCollection, ITypeInfo typeInfo)
+        internal static IServiceCollection AddFixtureServiceCollectionModuleAttributes(this IServiceCollection serviceCollection, ITypeInfo typeInfo)
         {
             var customAttributes = typeInfo.Type
                 .GetInterfaces()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FixtureOneTimeActions
 {

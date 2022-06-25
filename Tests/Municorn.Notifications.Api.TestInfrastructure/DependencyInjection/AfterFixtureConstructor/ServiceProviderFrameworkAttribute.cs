@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -71,7 +72,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
                 .AddSingleton(test)
                 .AddFixtures(test)
                 .AddFixtureAutoMethods()
-                .AddFixtureModules(test.TypeInfo ?? throw new InvalidOperationException("No typeInfo is found at service collection configuration"));
+                .AddFixtureServiceCollectionModuleAttributes(test.TypeInfo ?? throw new InvalidOperationException("No typeInfo is found at service collection configuration"));
             testFixture.ConfigureServices(serviceCollection);
 
             this.serviceProvider = serviceCollection.BuildServiceProvider(Options);

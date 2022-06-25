@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
@@ -66,7 +67,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                 .AddFixtureAutoMethods()
                 .AddSingleton<IFixtureOneTimeSetUpService, FixtureOneTimeSaver>()
                 .AddScoped<IFixtureSetUpService, ScopeSaver>()
-                .AddFixtureModules(new NUnit.Framework.Internal.TypeWrapper(this.originalType));
+                .AddFixtureServiceCollectionModuleAttributes(new NUnit.Framework.Internal.TypeWrapper(this.originalType));
 
             var serviceProvider = serviceCollection.BuildServiceProvider(Options);
 
@@ -75,7 +76,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             fixtureAccessor.Fixture = fixture;
 
             ServiceProvidersDisposers.Add(fixture, serviceProvider);
-            serviceProvider.GetRequiredService<FixtureOneTimeSetUpRunner>().Run();
+            serviceProvider.GetRequiredService<Framework.FixtureOneTimeSetUpRunner>().Run();
 
             return fixture;
         }
@@ -291,7 +292,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                     var test = context.CurrentTest;
                     if (!test.IsSuite)
                     {
-                        GetServiceProvider(context.TestObject).GetRequiredService<TestActionMethodManager>().BeforeTestCase(test);
+                        GetServiceProvider(context.TestObject).GetRequiredService<Framework.TestActionMethodManager>().BeforeTestCase(test);
                     }
                 }
             }
@@ -316,7 +317,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                         finally
                         {
                             GetServiceProvider(context.TestObject)
-                                .GetRequiredService<TestActionMethodManager>()
+                                .GetRequiredService<Framework.TestActionMethodManager>()
                                 .AfterTestCase(context.CurrentTest);
                         }
                     }

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework
 {
     [PrimaryConstructor]
-    internal partial class FixtureOneTimeSetUpRunner
+    internal partial class FixtureSetUpRunner
     {
-        private readonly IEnumerable<IFixtureOneTimeSetUpService> services;
+        private readonly IEnumerable<IFixtureSetUpService> services;
 
         public void Run()
         {

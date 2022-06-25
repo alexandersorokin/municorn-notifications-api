@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework
 {
     [PrimaryConstructor]
     internal partial class TestActionMethodManager

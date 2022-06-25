@@ -1,4 +1,5 @@
 ﻿using System;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
 using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication
