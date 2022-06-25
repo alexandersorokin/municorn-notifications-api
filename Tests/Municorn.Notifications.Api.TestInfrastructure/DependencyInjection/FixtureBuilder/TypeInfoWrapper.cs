@@ -68,12 +68,19 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                 .AddFixtureServiceCollectionModuleAttributes(new NUnit.Framework.Internal.TypeWrapper(this.originalType)));
 #pragma warning restore CA2000 // Dispose objects before losing scope
 
-            framework.BeforeTestSuite().GetAwaiter().GetResult();
+            try
+            {
+                framework.BeforeTestSuite().GetAwaiter().GetResult();
 
-            var fixture = fixtureAccessor.Fixture;
-            Frameworks.Add(fixture, framework);
-
-            return fixture;
+                var fixture = fixtureAccessor.Fixture;
+                Frameworks.Add(fixture, framework);
+                return fixture;
+            }
+            catch (Exception)
+            {
+                framework.DisposeAsync().AsTask().GetAwaiter().GetResult();
+                throw;
+            }
         }
 
         ITypeInfo ITypeInfo.MakeGenericType(Type[] typeArgs) =>
