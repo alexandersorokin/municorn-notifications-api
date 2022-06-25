@@ -5,7 +5,7 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framewor
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FixtureOneTimeActions
 {
     [PrimaryConstructor]
-    internal partial class FixtureOneTimeActionRunner : IFixtureOneTimeSetUpAsyncService, IAsyncDisposable
+    internal sealed partial class FixtureOneTimeActionRunner : IFixtureOneTimeSetUpAsyncService, IAsyncDisposable
     {
         private readonly IFixtureProvider fixtureProvider;
 

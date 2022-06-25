@@ -40,8 +40,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         private class InjectLogFromSetUpFixture : IInjectedService
         {
-            public Type? GetServiceType(object? methodFixture, object containerFixture) =>
-                methodFixture == containerFixture
+            public Type? GetServiceType(object? methodCallTargetFixture, object containerFixture) =>
+                methodCallTargetFixture == containerFixture
                     ? null
                     : typeof(Counter);
         }

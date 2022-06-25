@@ -7,7 +7,7 @@ using NUnit.Framework.Interfaces;
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework
 {
     [PrimaryConstructor]
-    internal partial class ScopesManager
+    internal sealed partial class ScopesManager
     {
         private readonly ConcurrentDictionary<ITest, IAsyncDisposable> scopes = new();
         private readonly IServiceProvider serviceProvider;

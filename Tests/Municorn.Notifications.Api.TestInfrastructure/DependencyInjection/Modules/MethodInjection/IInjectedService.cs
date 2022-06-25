@@ -4,6 +4,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
 {
     public interface IInjectedService
     {
-        Type? GetServiceType(object? methodFixture, object containerFixture);
+        Type? GetServiceType(object? methodCallTargetFixture, object containerFixture);
     }
 }

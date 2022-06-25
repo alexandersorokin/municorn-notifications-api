@@ -3,7 +3,7 @@ using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework
 {
-    public class TestAccessor
+    public sealed class TestAccessor
     {
         private ITest? test;
 

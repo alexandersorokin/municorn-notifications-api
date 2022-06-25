@@ -7,7 +7,7 @@ using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection
 {
-    internal class UseContainerMethodInfo : MethodWrapper, IMethodInfo
+    internal sealed class UseContainerMethodInfo : MethodWrapper, IMethodInfo
     {
         private readonly IServiceProvider serviceProvider;
         private readonly IFixtureProvider fixtureProvider;

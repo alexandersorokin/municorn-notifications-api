@@ -5,7 +5,7 @@ using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework
 {
-    internal sealed class FixtureServiceProviderFramework : IAsyncDisposable
+    public sealed class FixtureServiceProviderFramework : IAsyncDisposable
     {
         private static readonly ServiceProviderOptions Options = new()
         {

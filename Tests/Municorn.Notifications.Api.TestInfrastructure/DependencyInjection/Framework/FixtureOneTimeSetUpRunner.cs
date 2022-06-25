@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework
 {
     [PrimaryConstructor]
-    internal partial class FixtureOneTimeSetUpRunner
+    internal sealed partial class FixtureOneTimeSetUpRunner
     {
         private readonly IEnumerable<IFixtureOneTimeSetUpService> services;
         private readonly IEnumerable<IFixtureOneTimeSetUpAsyncService> asyncServices;
