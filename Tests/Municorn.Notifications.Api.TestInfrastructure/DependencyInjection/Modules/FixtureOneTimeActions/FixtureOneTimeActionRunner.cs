@@ -29,7 +29,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
             var fixture = this.fixtureProvider.Fixture;
             if (fixture is IOneTimeTearDownAsyncAction oneTimeTearDownAsync)
             {
-                await oneTimeTearDownAsync.IOneTimeTearDownAsync().ConfigureAwait(false);
+                await oneTimeTearDownAsync.OneTimeTearDownAsync().ConfigureAwait(false);
             }
 
             if (fixture is IOneTimeTearDownAction oneTimeTearDown)

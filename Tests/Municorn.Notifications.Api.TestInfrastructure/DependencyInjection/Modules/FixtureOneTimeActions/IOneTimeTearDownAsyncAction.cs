@@ -4,6 +4,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
 {
     public interface IOneTimeTearDownAsyncAction
     {
-        Task IOneTimeTearDownAsync();
+        Task OneTimeTearDownAsync();
     }
 }

@@ -1,24 +1,19 @@
-﻿using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FixtureOneTimeActions;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.FixtureOneTimeActions
 {
-    internal class OneTimeSetUpAsync_Should : FrameworkServiceProviderFixtureBase, IOneTimeSetUpAsyncAction
+    internal class OneTimeSetUp_Should : FrameworkServiceProviderFixtureBase, IOneTimeSetUpAction
     {
         private readonly Counter counter = new();
 
-        public OneTimeSetUpAsync_Should()
+        public OneTimeSetUp_Should()
             : base(serviceCollection => serviceCollection.AddFixtureOneTimeActions())
         {
         }
 
-        public Task OneTimeSetUpAsync()
-        {
-            this.counter.Increment();
-            return Task.CompletedTask;
-        }
+        public void OneTimeSetUp() => this.counter.Increment();
 
         [Test]
         public void Plain_Test() => this.counter.Value.Should().Be(1);
