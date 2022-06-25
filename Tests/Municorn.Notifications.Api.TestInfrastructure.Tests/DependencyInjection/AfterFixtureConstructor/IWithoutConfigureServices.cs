@@ -3,9 +3,9 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFix
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor
 {
-    internal interface IWithoutConfigureServices : IFixtureServiceProviderFramework
+    internal interface IWithoutConfigureServices : IFixtureWithServiceProviderFramework
     {
-        void IFixtureServiceProviderFramework.ConfigureServices(IServiceCollection serviceCollection)
+        void IFixtureWithServiceProviderFramework.ConfigureServices(IServiceCollection serviceCollection)
         {
             // Nothing by default
         }

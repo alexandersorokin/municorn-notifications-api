@@ -7,9 +7,9 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.Tests.ApiTests
 {
     [FieldInjectionModule]
-    internal interface IServiceClientFixture : IFixtureServiceProviderFramework
+    internal interface IServiceClientFixture : IFixtureWithServiceProviderFramework
     {
-        void IFixtureServiceProviderFramework.ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
+        void IFixtureWithServiceProviderFramework.ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddFieldInjection(this)
             .AddSingleton<ITextWriterProvider, NUnitAsyncLocalTextWriterProvider>()
             .AddSingleton<ILog, TextWriterLog>()

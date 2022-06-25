@@ -16,7 +16,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
-    internal class NotificationRequestConverter_Should : IFixtureServiceProviderFramework
+    internal class NotificationRequestConverter_Should : IFixtureWithServiceProviderFramework
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection

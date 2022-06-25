@@ -11,21 +11,15 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public sealed class TestFixtureSourceInjectableAttribute : NUnitAttribute, IFixtureBuilder2
     {
-        public TestFixtureSourceInjectableAttribute(string sourceName)
-        {
-            this.SourceName = sourceName;
-        }
-
         public TestFixtureSourceInjectableAttribute(Type sourceType, string sourceName)
         {
             this.SourceType = sourceType;
             this.SourceName = sourceName;
         }
 
-        public TestFixtureSourceInjectableAttribute(Type sourceType)
-        {
-            this.SourceType = sourceType;
-        }
+        public TestFixtureSourceInjectableAttribute(string sourceName) => this.SourceName = sourceName;
+
+        public TestFixtureSourceInjectableAttribute(Type sourceType) => this.SourceType = sourceType;
 
         public string? SourceName { get; }
 

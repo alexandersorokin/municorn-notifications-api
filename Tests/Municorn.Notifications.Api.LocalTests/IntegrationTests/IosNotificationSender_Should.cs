@@ -15,7 +15,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
-    internal class IosNotificationSender_Should : IFixtureServiceProviderFramework
+    internal class IosNotificationSender_Should : IFixtureWithServiceProviderFramework
     {
         [FieldDependency]
         private readonly IAsyncLocalServiceProvider<IosNotificationSender> iosNotificationSender = default!;

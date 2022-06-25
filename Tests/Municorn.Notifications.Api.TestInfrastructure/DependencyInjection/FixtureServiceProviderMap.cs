@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
 {
-    internal class FixtureServiceProviderMap
+    internal sealed class FixtureServiceProviderMap
     {
         private readonly ConditionalWeakTable<object, IServiceProvider> serviceScopes = new();
 

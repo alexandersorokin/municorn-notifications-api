@@ -14,7 +14,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
-    internal class AndroidNotificationSender_Should : IFixtureServiceProviderFramework
+    internal class AndroidNotificationSender_Should : IFixtureWithServiceProviderFramework
     {
         [FieldDependency]
         private readonly IAsyncLocalServiceProvider<AndroidNotificationSender> androidNotificationSender = default!;

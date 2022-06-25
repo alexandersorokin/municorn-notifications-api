@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes.Wi
 {
     [TestFixture]
     [TestMethodInjectionModule]
-    internal class CombinatorialTestCaseAttribute_Should : IFixtureServiceProviderFramework
+    internal class CombinatorialTestCaseAttribute_Should : IFixtureWithServiceProviderFramework
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection.AddSingleton<NUnitAsyncLocalTextWriterProvider>();

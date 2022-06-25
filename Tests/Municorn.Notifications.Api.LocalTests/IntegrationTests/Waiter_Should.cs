@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.Tests.IntegrationTests
 {
     [TestFixture]
-    internal class Waiter_Should : IFixtureServiceProviderFramework
+    internal class Waiter_Should : IFixtureWithServiceProviderFramework
     {
         [FieldDependency]
         private readonly Waiter waiter = default!;

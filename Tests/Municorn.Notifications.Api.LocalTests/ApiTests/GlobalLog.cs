@@ -8,7 +8,7 @@ using Vostok.Logging.Abstractions;
 namespace Municorn.Notifications.Api.Tests.ApiTests
 {
     [SetUpFixture]
-    internal class GlobalLog : IFixtureServiceProviderFramework
+    internal class GlobalLog : IFixtureWithServiceProviderFramework
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddFieldInjection(this)
