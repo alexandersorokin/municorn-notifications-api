@@ -12,7 +12,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
     [AttributeUsage(AttributeTargets.Interface)]
     internal sealed class ServiceProviderFrameworkAttribute : NUnitAttribute, ITestAction
     {
-        private ServiceProviderFramework? framework;
+        private FixtureServiceProviderFramework? framework;
 
         public ActionTargets Targets => ActionTargets.Suite | ActionTargets.Test;
 
@@ -75,6 +75,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
         }
 
         [MemberNotNull(nameof(framework))]
-        private ServiceProviderFramework GetFramework(ITest test) => this.framework ?? throw new InvalidOperationException($"Service provider framework is not initialized for {test.FullName}");
+        private FixtureServiceProviderFramework GetFramework(ITest test) => this.framework ?? throw new InvalidOperationException($"Service provider framework is not initialized for {test.FullName}");
     }
 }

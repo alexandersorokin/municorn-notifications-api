@@ -21,7 +21,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
     {
         private static readonly FixtureServiceProviderMap GlobalServiceProviders = new();
         private static readonly ConditionalWeakTable<ITest, FixtureServiceProviderMap> ScopedServiceProviders = new();
-        private static readonly ConditionalWeakTable<object, ServiceProviderFramework> Frameworks = new();
+        private static readonly ConditionalWeakTable<object, FixtureServiceProviderFramework> Frameworks = new();
 
         private readonly Type originalType;
         private readonly Type wrappedType;
@@ -56,7 +56,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             var currentTest = TestExecutionContext.CurrentContext.CurrentTest;
 
 #pragma warning disable CA2000 // Dispose objects before losing scope
-            ServiceProviderFramework framework = new(serviceCollection => serviceCollection
+            FixtureServiceProviderFramework framework = new(serviceCollection => serviceCollection
                 .AddSingleton(fixtureAccessor)
                 .AddSingleton(new FixtureFactoryArgs(this.originalType, args ?? Array.Empty<object>()))
                 .AddSingleton<IFixtureOneTimeSetUpService, FixtureFactory>()
@@ -123,12 +123,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
         public Task TearDownMethodExample() => Task.CompletedTask;
 
-        private static ServiceProviderFramework GetFramework(object fixture) =>
+        private static FixtureServiceProviderFramework GetFramework(object fixture) =>
             Frameworks.GetValue(
                 fixture,
                 _ => throw new InvalidOperationException($"Service provider framework for {fixture} fixture is not found"));
 
-        private static object[] ResolveArguments(IServiceProvider serviceProvider, IEnumerable<ParameterInfo> methodInfo) =>
+        private static object[] GetServiceArray(IServiceProvider serviceProvider, IEnumerable<ParameterInfo> methodInfo) =>
             methodInfo
                 .Select(p => p.ParameterType)
                 .Select(type => serviceProvider.GetRequiredService(type))
@@ -146,7 +146,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
                 var serviceProvider = GlobalServiceProviders.Get(fixture ?? throw new InvalidOperationException("Fixture is not passed to OneTime action method"));
-                return this.Invoke(fixture, ResolveArguments(serviceProvider, this.MethodInfo.GetParameters()));
+                return this.Invoke(fixture, GetServiceArray(serviceProvider, this.MethodInfo.GetParameters()));
             }
         }
 
@@ -228,7 +228,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             {
                 var map = ScopedServiceProviders.GetOrCreateValue(TestExecutionContext.CurrentContext.CurrentTest);
                 var serviceProvider = map.Get(fixture ?? throw new InvalidOperationException("Fixture is found for fixture method"));
-                return this.Invoke(fixture, ResolveArguments(serviceProvider, this.MethodInfo.GetParameters()));
+                return this.Invoke(fixture, GetServiceArray(serviceProvider, this.MethodInfo.GetParameters()));
             }
         }
 

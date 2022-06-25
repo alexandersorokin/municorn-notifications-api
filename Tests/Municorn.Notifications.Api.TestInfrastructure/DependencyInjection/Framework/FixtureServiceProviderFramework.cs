@@ -5,7 +5,7 @@ using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework
 {
-    internal sealed class ServiceProviderFramework : IAsyncDisposable
+    internal sealed class FixtureServiceProviderFramework : IAsyncDisposable
     {
         private static readonly ServiceProviderOptions Options = new()
         {
@@ -15,7 +15,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fram
 
         private readonly ServiceProvider serviceProvider;
 
-        public ServiceProviderFramework(Action<IServiceCollection> configureServices)
+        public FixtureServiceProviderFramework(Action<IServiceCollection> configureServices)
         {
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<ScopesManager>()
@@ -30,21 +30,22 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fram
         public async ValueTask DisposeAsync() => await this.serviceProvider.DisposeAsync().ConfigureAwait(false);
 
         internal async Task BeforeTestSuite() =>
-            await this.serviceProvider
-                .GetRequiredService<FixtureOneTimeSetUpRunner>()
-                .RunAsync().ConfigureAwait(false);
+            await this.GetRequiredService<FixtureOneTimeSetUpRunner>().RunAsync().ConfigureAwait(false);
 
         internal async Task BeforeTestCase(ITest test)
         {
-            var scopedServiceProvider = this.serviceProvider.GetRequiredService<ScopesManager>().CreateScope(test);
+            var scopedServiceProvider = this.GetScopesManager().CreateScope(test);
             scopedServiceProvider.GetRequiredService<TestAccessor>().Test = test;
             await scopedServiceProvider.GetRequiredService<FixtureSetUpRunner>().RunAsync().ConfigureAwait(false);
         }
 
         internal async Task AfterTestCase(ITest test) =>
-            await this.serviceProvider
-                .GetRequiredService<ScopesManager>()
-                .DisposeScope(test)
-                .ConfigureAwait(false);
+            await this.GetScopesManager().DisposeScope(test).ConfigureAwait(false);
+
+        private ScopesManager GetScopesManager() => this.GetRequiredService<ScopesManager>();
+
+        private TService GetRequiredService<TService>()
+            where TService : notnull =>
+            this.serviceProvider.GetRequiredService<TService>();
     }
 }
