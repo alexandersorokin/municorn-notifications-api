@@ -58,7 +58,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
             var fixture = test.Fixture;
             if (fixture is not IFixtureServiceProviderFramework testFixture)
             {
-                throw new InvalidOperationException($"Test {test.FullName} with fixture {fixture} do not implement {nameof(IFixtureServiceProviderFramework)}");
+                throw new InvalidOperationException($"Test {test.FullName} with fixture {fixture} does not implement {nameof(IFixtureServiceProviderFramework)}");
             }
 
             this.framework = new(serviceCollection =>
@@ -67,7 +67,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
                     .AddSingleton<IFixtureProvider>(new FixtureProvider(testFixture))
                     .AddSingleton(test)
                     .AddFixtures(test)
-                    .AddFixtureServiceCollectionModuleAttributes(test.TypeInfo ?? throw new InvalidOperationException("No typeInfo is found at service collection configuration"));
+                    .AddFixtureServiceCollectionModuleAttributes(test.TypeInfo ?? throw new InvalidOperationException("No TypeInfo is found at service collection configuration"));
                 testFixture.ConfigureServices(serviceCollection);
             });
 
