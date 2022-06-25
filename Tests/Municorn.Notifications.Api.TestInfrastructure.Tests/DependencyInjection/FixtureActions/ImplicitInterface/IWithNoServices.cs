@@ -5,9 +5,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     internal interface IWithNoServices : IFixtureWithServiceProviderFramework
     {
-        void IFixtureWithServiceProviderFramework.ConfigureServices(IServiceCollection serviceCollection)
-        {
-            // Nothing by default
-        }
+        void IFixtureWithServiceProviderFramework.ConfigureServices(IServiceCollection serviceCollection) =>
+            serviceCollection.AddFieldInjection(this);
     }
 }
