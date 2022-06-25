@@ -23,15 +23,15 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         private static Test CurrentTest => TestExecutionContext.CurrentContext.CurrentTest;
 
         [OneTimeSetUp]
-        protected async Task OneTimeSetUp() => await this.framework.RunOneTimeSetUp().ConfigureAwait(false);
+        protected async Task RunFrameworkOneTimeSetUp() => await this.framework.RunOneTimeSetUp().ConfigureAwait(false);
 
         [SetUp]
-        protected async Task SetUp() => await this.framework.RunSetUp(CurrentTest).ConfigureAwait(false);
+        protected async Task RunFrameworkSetUp() => await this.framework.RunSetUp(CurrentTest).ConfigureAwait(false);
 
         [TearDown]
-        protected async Task TearDown() => await this.framework.RunTearDown(CurrentTest).ConfigureAwait(false);
+        protected async Task RunFrameworkTearDown() => await this.framework.RunTearDown(CurrentTest).ConfigureAwait(false);
 
         [OneTimeTearDown]
-        protected async Task OneTimeTearDown() => await this.framework.DisposeAsync().ConfigureAwait(false);
+        protected async Task RunFrameworkOneTimeTearDown() => await this.framework.DisposeAsync().ConfigureAwait(false);
     }
 }
