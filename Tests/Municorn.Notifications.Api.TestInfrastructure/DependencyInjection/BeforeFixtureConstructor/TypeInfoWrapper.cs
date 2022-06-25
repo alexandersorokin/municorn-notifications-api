@@ -61,7 +61,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                 .AddSingleton<ITest>(currentTest)
                 .AddFixtures(currentTest)
                 .AddSingleton<IFixtureOneTimeSetUpService, FixtureServiceProviderSaver>()
-                .AddScoped<IFixtureSetUpService, ScopeSaver>()
+                .AddScoped<IFixtureSetUpService, ScopeServiceProviderSaver>()
                 .AddFixtureServiceCollectionModuleAttributes(new NUnit.Framework.Internal.TypeWrapper(this.originalType)));
 #pragma warning restore CA2000 // Dispose objects before losing scope
 
@@ -169,14 +169,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             private static void RemoveFixture(object fixture) => GlobalServiceProviders.Remove(fixture);
         }
 
-        private sealed class ScopeSaver : IFixtureSetUpService, IDisposable
+        private sealed class ScopeServiceProviderSaver : IFixtureSetUpService, IDisposable
         {
             private readonly IServiceProvider serviceProvider;
             private readonly IFixtureProvider fixtureProvider;
             private readonly FixtureServiceProviderMap map;
 
             [UsedImplicitly]
-            public ScopeSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider, TestAccessor testAccessor)
+            public ScopeServiceProviderSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider, TestAccessor testAccessor)
             {
                 this.serviceProvider = serviceProvider;
                 this.fixtureProvider = fixtureProvider;
