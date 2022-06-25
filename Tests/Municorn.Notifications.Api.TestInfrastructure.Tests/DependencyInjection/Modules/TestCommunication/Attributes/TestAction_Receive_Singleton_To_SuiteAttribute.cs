@@ -21,10 +21,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
             this.EnsureHaveContainer(test);
         }
 
-        public void AfterTest(ITest test)
-        {
-            this.EnsureHaveContainer(test);
-        }
+        public void AfterTest(ITest test) => this.EnsureHaveContainer(test);
 
         private void EnsureHaveContainer(ITest test) =>
             test

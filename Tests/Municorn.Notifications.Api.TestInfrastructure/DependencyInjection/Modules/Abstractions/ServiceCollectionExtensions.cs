@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework.Interfaces;
+using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions
 {
@@ -9,7 +11,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
         public static IServiceCollection AddFixtureProvider(this IServiceCollection serviceCollection, object fixture) =>
             serviceCollection.AddSingleton<IFixtureProvider>(new FixtureProvider(fixture));
 
-        public static IServiceCollection AddFixtureServiceCollectionModuleAttributes(this IServiceCollection serviceCollection, ITypeInfo typeInfo)
+        public static IServiceCollection AddFixtureServiceCollectionModuleAttributes(this IServiceCollection serviceCollection, Type type) =>
+            serviceCollection.AddFixtureServiceCollectionModuleAttributes(new TypeWrapper(type));
+
+        internal static IServiceCollection AddFixtureServiceCollectionModuleAttributes(this IServiceCollection serviceCollection, ITypeInfo typeInfo)
         {
             var customAttributes = typeInfo.Type
                 .GetInterfaces()

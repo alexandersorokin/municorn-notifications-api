@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.Abstractions
 {
@@ -13,7 +12,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     {
         public Integration_With_Framework_Should()
             : base(serviceCollection => serviceCollection
-                .AddFixtureServiceCollectionModuleAttributes(new TypeWrapper(typeof(Integration_With_Framework_Should)))
+                .AddFixtureServiceCollectionModuleAttributes(typeof(Integration_With_Framework_Should))
                 .AddSingleton<IFixtureOneTimeSetUpService, OneTimeIncrement>())
         {
         }

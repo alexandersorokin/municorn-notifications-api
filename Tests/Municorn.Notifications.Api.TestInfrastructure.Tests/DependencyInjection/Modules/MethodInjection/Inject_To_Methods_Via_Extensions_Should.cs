@@ -69,10 +69,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         };
 
         [CombinatorialTestCaseSource(nameof(CombinatorialCaseSourceValues))]
-        public void Cases(int value, [InjectDependency] SilentLog service)
-        {
-            service.Should().NotBeNull();
-        }
+        public void Cases(int value, [InjectDependency] SilentLog service) => service.Should().NotBeNull();
 
         private static TestCaseData CreateMarkerCase(int value) => new(value, new InjectedService<SilentLog>());
     }

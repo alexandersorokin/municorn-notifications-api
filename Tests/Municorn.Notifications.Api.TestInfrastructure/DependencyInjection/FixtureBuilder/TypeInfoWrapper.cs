@@ -64,7 +64,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                 .AddFixtures(currentTest)
                 .AddSingleton<IFixtureOneTimeSetUpService, FixtureServiceProviderSaver>()
                 .AddScoped<IFixtureSetUpService, ScopeServiceProviderSaver>()
-                .AddFixtureServiceCollectionModuleAttributes(new NUnit.Framework.Internal.TypeWrapper(this.originalType)));
+                .AddFixtureServiceCollectionModuleAttributes(this.originalType));
 
             try
             {

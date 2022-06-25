@@ -12,22 +12,17 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [AttributeUsage(AttributeTargets.Method)]
     internal sealed class Receive_ScopedProvider_ServiceAttribute : NUnitAttribute, IWrapTestMethod
     {
-        public TestCommand Wrap(TestCommand command)
-        {
-            return new EnsureLogResolved(command);
-        }
+        public TestCommand Wrap(TestCommand command) => new EnsureLogResolved(command);
 
         private class EnsureLogResolved : BeforeTestCommand
         {
             public EnsureLogResolved(TestCommand innerCommand)
-                : base(innerCommand)
-            {
+                : base(innerCommand) =>
                 this.BeforeTest = context => context.CurrentTest
                     .GetServiceProvider(context.TestObject)
                     .GetRequiredService<SilentLog>()
                     .Should()
                     .NotBeNull();
-            }
         }
     }
 }

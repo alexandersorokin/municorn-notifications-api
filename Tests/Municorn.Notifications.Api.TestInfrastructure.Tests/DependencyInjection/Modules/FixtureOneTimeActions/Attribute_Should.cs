@@ -2,7 +2,6 @@
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FixtureOneTimeActions;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.FixtureOneTimeActions
 {
@@ -13,7 +12,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         public Attribute_Should()
             : base(serviceCollection => serviceCollection
-                .AddFixtureServiceCollectionModuleAttributes(new TypeWrapper(typeof(Attribute_Should))))
+                .AddFixtureServiceCollectionModuleAttributes(typeof(Attribute_Should)))
         {
         }
 
