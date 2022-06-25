@@ -57,6 +57,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
 #pragma warning disable CA2000 // Dispose objects before losing scope
             ServiceProviderFramework framework = new(serviceCollection => serviceCollection
+                .AddSingleton(fixtureAccessor)
+                .AddSingleton(new FixtureFactoryArgs(this.originalType, args ?? Array.Empty<object>()))
+                .AddSingleton<IFixtureOneTimeSetUpService, FixtureFactory>()
                 .AddSingleton<IFixtureProvider>(fixtureAccessor)
                 .AddSingleton<ITest>(currentTest)
                 .AddFixtures(currentTest)
@@ -65,13 +68,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                 .AddFixtureServiceCollectionModuleAttributes(new NUnit.Framework.Internal.TypeWrapper(this.originalType)));
 #pragma warning restore CA2000 // Dispose objects before losing scope
 
-            var parameters = args ?? Array.Empty<object>();
-            var fixture = ActivatorUtilities.CreateInstance(framework.ServiceProvider, this.originalType, parameters!);
-            fixtureAccessor.Fixture = fixture;
-
-            Frameworks.Add(fixture, framework);
-
             framework.BeforeTestSuite().GetAwaiter().GetResult();
+
+            var fixture = fixtureAccessor.Fixture;
+            Frameworks.Add(fixture, framework);
 
             return fixture;
         }
@@ -150,21 +150,45 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             }
         }
 
+        private record FixtureFactoryArgs(Type FixtureType, object?[] Args);
+
+        private sealed class FixtureFactory : IFixtureOneTimeSetUpService
+        {
+            private readonly IServiceProvider serviceProvider;
+            private readonly FixtureAccessor fixtureProvider;
+            private readonly FixtureFactoryArgs fixtureFactoryArgs;
+
+            [UsedImplicitly]
+            public FixtureFactory(IServiceProvider serviceProvider, FixtureAccessor fixtureProvider, FixtureFactoryArgs fixtureFactoryArgs)
+            {
+                this.serviceProvider = serviceProvider;
+                this.fixtureProvider = fixtureProvider;
+                this.fixtureFactoryArgs = fixtureFactoryArgs;
+            }
+
+            public void Run()
+            {
+                var (type, args) = this.fixtureFactoryArgs;
+                var fixture = ActivatorUtilities.CreateInstance(this.serviceProvider, type, args!);
+                this.fixtureProvider.Fixture = fixture;
+            }
+        }
+
         private sealed class FixtureServiceProviderSaver : IFixtureOneTimeSetUpService, IDisposable
         {
             private readonly IServiceProvider serviceProvider;
-            private readonly IFixtureProvider fixture;
+            private readonly IFixtureProvider fixtureProvider;
 
             [UsedImplicitly]
             public FixtureServiceProviderSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider)
             {
                 this.serviceProvider = serviceProvider;
-                this.fixture = fixtureProvider;
+                this.fixtureProvider = fixtureProvider;
             }
 
-            public void Run() => GlobalServiceProviders.Add(this.fixture.Fixture, this.serviceProvider);
+            public void Run() => GlobalServiceProviders.Add(this.fixtureProvider.Fixture, this.serviceProvider);
 
-            public void Dispose() => RemoveFixture(this.fixture.Fixture);
+            public void Dispose() => RemoveFixture(this.fixtureProvider.Fixture);
 
             private static void RemoveFixture(object fixture) => GlobalServiceProviders.Remove(fixture);
         }
@@ -236,7 +260,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             public object Fixture
             {
                 get => this.fixture ?? throw new InvalidOperationException("Fixture is not yet set");
-                set => this.fixture = value;
+                internal set => this.fixture = value;
             }
         }
 

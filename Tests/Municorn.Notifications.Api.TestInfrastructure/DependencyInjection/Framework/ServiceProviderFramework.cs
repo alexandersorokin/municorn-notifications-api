@@ -13,6 +13,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fram
             ValidateScopes = true,
         };
 
+        private readonly ServiceProvider serviceProvider;
+
         public ServiceProviderFramework(Action<IServiceCollection> configureServices)
         {
             var serviceCollection = new ServiceCollection()
@@ -22,26 +24,24 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fram
                 .AddScoped<FixtureSetUpRunner>();
             configureServices(serviceCollection);
 
-            this.ServiceProvider = serviceCollection.BuildServiceProvider(Options);
+            this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
         }
 
-        internal ServiceProvider ServiceProvider { get; }
-
-        public async ValueTask DisposeAsync() => await this.ServiceProvider.DisposeAsync().ConfigureAwait(false);
+        public async ValueTask DisposeAsync() => await this.serviceProvider.DisposeAsync().ConfigureAwait(false);
 
         internal async Task BeforeTestSuite() =>
-            await this.ServiceProvider
+            await this.serviceProvider
                 .GetRequiredService<FixtureOneTimeSetUpRunner>()
                 .RunAsync().ConfigureAwait(false);
 
         internal async Task BeforeTestCase(ITest test) =>
-            await this.ServiceProvider
+            await this.serviceProvider
                 .GetRequiredService<TestCaseScopesManager>()
                 .BeforeTestCase(test)
                 .ConfigureAwait(false);
 
         internal async Task AfterTestCase(ITest test) =>
-            await this.ServiceProvider
+            await this.serviceProvider
                 .GetRequiredService<TestCaseScopesManager>()
                 .AfterTestCase(test)
                 .ConfigureAwait(false);
