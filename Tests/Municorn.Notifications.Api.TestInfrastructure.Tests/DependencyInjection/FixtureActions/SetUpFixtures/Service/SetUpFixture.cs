@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [TestMethodInjectionModule]
     internal class SetUpFixture : IWithFields
     {
-        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
+        public void SetUpServices(IServiceCollection serviceCollection) => serviceCollection
             .AddSingleton<ILog, SilentLog>();
 
         [field: FieldDependency]

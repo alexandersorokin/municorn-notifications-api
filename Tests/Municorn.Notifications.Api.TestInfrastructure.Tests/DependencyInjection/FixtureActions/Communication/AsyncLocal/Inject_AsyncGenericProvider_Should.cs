@@ -14,7 +14,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [FieldDependency]
         private readonly IAsyncLocalServiceProvider<ILog> service = default!;
 
-        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
+        public void SetUpServices(IServiceCollection serviceCollection) => serviceCollection
             .AddScoped<ILog, SilentLog>();
 
         [SetUp]

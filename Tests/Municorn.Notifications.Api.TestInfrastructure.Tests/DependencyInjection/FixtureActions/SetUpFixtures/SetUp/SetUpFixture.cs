@@ -12,7 +12,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [FieldDependency]
         private readonly Counter counter = default!;
 
-        public void ConfigureServices(IServiceCollection serviceCollection) =>
+        public void SetUpServices(IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddBoundLog()
                 .AddTestTimeLogger();
