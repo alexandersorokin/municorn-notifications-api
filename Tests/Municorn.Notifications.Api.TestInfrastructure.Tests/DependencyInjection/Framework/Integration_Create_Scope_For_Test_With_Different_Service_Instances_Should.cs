@@ -46,12 +46,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         private sealed class AutoResolveService : IFixtureSetUpService
         {
-            public AutoResolveService(ConcurrentDictionary<AutoResolveService, bool> storage) => storage.TryAdd(this, true);
+            private readonly ConcurrentDictionary<AutoResolveService, bool> storage;
 
-            public void Run()
-            {
-                // Marker for resolving
-            }
+            public AutoResolveService(ConcurrentDictionary<AutoResolveService, bool> storage) => this.storage = storage;
+
+            public void Run() => this.storage.TryAdd(this, true);
         }
     }
 }

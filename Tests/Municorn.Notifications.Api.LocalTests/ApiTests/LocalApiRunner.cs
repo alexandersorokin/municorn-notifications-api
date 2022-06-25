@@ -21,9 +21,7 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
                 loggerBuilder => loggerBuilder.AddVostok(this.globalLog.BoundLog));
             var host = NotificationApiApplication.CreateHost(settings);
 
-#pragma warning disable CA2000 // Dispose objects before losing scope
             HostDisposeWrapper hostDisposeWrapper = new(host);
-#pragma warning restore CA2000 // Dispose objects before losing scope
             this.lifecycleManager.RegisterForDispose(hostDisposeWrapper);
 
             await host.StartAsync().ConfigureAwait(false);
