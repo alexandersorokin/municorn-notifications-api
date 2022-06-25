@@ -1,5 +1,6 @@
 ﻿using System;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication
 {

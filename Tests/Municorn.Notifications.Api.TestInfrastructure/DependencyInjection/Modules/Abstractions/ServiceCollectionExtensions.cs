@@ -6,6 +6,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
 {
     public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddFixtureProvider(this IServiceCollection serviceCollection, object fixture) =>
+            serviceCollection.AddSingleton<IFixtureProvider>(new FixtureProvider(fixture));
+
         public static IServiceCollection AddFixtureServiceCollectionModuleAttributes(this IServiceCollection serviceCollection, ITypeInfo typeInfo)
         {
             var customAttributes = typeInfo.Type

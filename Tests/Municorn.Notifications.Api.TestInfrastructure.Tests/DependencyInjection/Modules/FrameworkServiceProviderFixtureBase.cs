@@ -2,17 +2,23 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules
 {
+    [TestFixture]
     internal abstract class FrameworkServiceProviderFixtureBase
     {
         private readonly FixtureServiceProviderFramework framework;
 
         protected FrameworkServiceProviderFixtureBase(Action<IServiceCollection> configureServices) =>
-            this.framework = new(configureServices);
+            this.framework = new(serviceCollection =>
+            {
+                serviceCollection.AddFixtureProvider(this);
+                configureServices(serviceCollection);
+            });
 
         private static Test CurrentTest => TestExecutionContext.CurrentContext.CurrentTest;
 

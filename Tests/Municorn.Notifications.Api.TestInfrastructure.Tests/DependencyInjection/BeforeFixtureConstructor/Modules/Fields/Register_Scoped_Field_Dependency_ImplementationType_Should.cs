@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureBuilder;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
 using NUnit.Framework;

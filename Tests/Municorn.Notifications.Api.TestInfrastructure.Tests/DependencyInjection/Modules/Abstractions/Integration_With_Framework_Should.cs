@@ -8,7 +8,6 @@ using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.Abstractions
 {
-    [TestFixture]
     [RegisterSelfTypeModule]
     internal class Integration_With_Framework_Should : FrameworkServiceProviderFixtureBase
     {

@@ -19,7 +19,6 @@
     <Folder Include="DependencyInjection\FixtureBuilder\" />
     <Folder Include="DependencyInjection\Modules\FieldInjection\" />
     <Folder Include="DependencyInjection\Modules\FixtureOneTimeActions\" />
-    <Folder Include="DependencyInjection\Modules\MethodInjection\" />
     <Folder Include="DependencyInjection\Modules\TestCommunication\" />
   </ItemGroup>
 

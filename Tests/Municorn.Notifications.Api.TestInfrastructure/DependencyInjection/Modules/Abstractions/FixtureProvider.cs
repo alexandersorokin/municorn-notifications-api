@@ -1,4 +1,4 @@
-﻿namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
+﻿namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions
 {
     [PrimaryConstructor]
     internal sealed partial class FixtureProvider : IFixtureProvider

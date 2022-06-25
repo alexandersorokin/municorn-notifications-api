@@ -7,6 +7,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
     {
         public static TService GetRequiredService<TService>(this IFixtureWithServiceProviderFramework fixture)
             where TService : notnull =>
-            new AsyncLocalServiceProvider<TService>(new AsyncLocalServiceProvider(new FixtureProvider(fixture))).Value;
+            new AsyncLocalServiceProvider<TService>(new AsyncLocalServiceProvider(new Modules.Abstractions.FixtureProvider(fixture))).Value;
     }
 }
