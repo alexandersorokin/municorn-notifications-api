@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureActions
 {
     public static class ServiceCollectionExtensions
     {

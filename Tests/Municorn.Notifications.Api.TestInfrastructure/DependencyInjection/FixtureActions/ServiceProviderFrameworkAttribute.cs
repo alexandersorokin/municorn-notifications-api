@@ -7,7 +7,7 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.AfterFixtureConstructor
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureActions
 {
     [AttributeUsage(AttributeTargets.Interface)]
     internal sealed class ServiceProviderFrameworkAttribute : NUnitAttribute, ITestAction

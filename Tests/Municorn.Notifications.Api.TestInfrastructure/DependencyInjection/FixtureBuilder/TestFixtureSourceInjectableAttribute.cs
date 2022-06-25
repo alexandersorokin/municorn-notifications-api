@@ -6,7 +6,7 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.BeforeFixtureConstructor
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureBuilder
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public sealed class TestFixtureSourceInjectableAttribute : NUnitAttribute, IFixtureBuilder2
