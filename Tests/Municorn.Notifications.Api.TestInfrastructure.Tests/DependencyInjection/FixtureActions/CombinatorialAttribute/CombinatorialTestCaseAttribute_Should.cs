@@ -6,7 +6,7 @@ using Municorn.Notifications.Api.TestInfrastructure.Logging;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes.WithServices
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.CombinatorialAttribute
 {
     [TestFixture]
     internal class CombinatorialTestCaseAttribute_Should : IFixtureWithServiceProviderFramework

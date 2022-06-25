@@ -8,10 +8,11 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions
 {
     [TestFixture]
-    [TestMethodInjectionModule]
     internal class Service_Fixture_Should : IFixtureWithServiceProviderFramework
     {
-        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection.AddSingleton<object>();
+        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
+            .AddTestMethodInjection()
+            .AddSingleton<object>();
 
         [Test]
         [Repeat(2)]

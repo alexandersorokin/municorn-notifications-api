@@ -9,13 +9,13 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions
 {
     [TestFixture]
-    [TestMethodInjectionModule]
     internal sealed class Run_Global_Dispose_Should : IFixtureWithServiceProviderFramework, IDisposable
     {
         private readonly Counter counter = new();
 
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
+                .AddTestMethodInjection()
                 .AddContextualLog()
                 .AddSingleton(this.counter)
                 .AddSingleton<FixtureOneTimeTimeLogger>();
