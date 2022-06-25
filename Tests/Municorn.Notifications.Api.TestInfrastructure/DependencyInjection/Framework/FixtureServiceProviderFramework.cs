@@ -29,17 +29,17 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fram
 
         public async ValueTask DisposeAsync() => await this.serviceProvider.DisposeAsync().ConfigureAwait(false);
 
-        public async Task BeforeTestSuite() =>
+        public async Task RunOneTimeSetUp() =>
             await this.GetRequiredService<FixtureOneTimeSetUpRunner>().RunAsync().ConfigureAwait(false);
 
-        public async Task BeforeTestCase(ITest test)
+        public async Task RunSetUp(ITest test)
         {
             var scopedServiceProvider = this.GetScopesManager().CreateScope(test);
             scopedServiceProvider.GetRequiredService<TestAccessor>().Test = test;
             await scopedServiceProvider.GetRequiredService<FixtureSetUpRunner>().RunAsync().ConfigureAwait(false);
         }
 
-        public async Task AfterTestCase(ITest test) =>
+        public async Task RunTearDown(ITest test) =>
             await this.GetScopesManager().DisposeScope(test).ConfigureAwait(false);
 
         private ScopesManager GetScopesManager() => this.GetRequiredService<ScopesManager>();

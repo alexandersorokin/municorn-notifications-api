@@ -68,7 +68,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
 
             try
             {
-                framework.BeforeTestSuite().GetAwaiter().GetResult();
+                framework.RunOneTimeSetUp().GetAwaiter().GetResult();
 
                 var fixture = fixtureAccessor.Fixture;
                 Frameworks.Add(fixture, framework);
@@ -312,7 +312,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                     if (!test.IsSuite)
                     {
                         GetFramework(context.TestObject)
-                            .BeforeTestCase(test)
+                            .RunSetUp(test)
                             .GetAwaiter()
                             .GetResult();
                     }
@@ -339,7 +339,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                         finally
                         {
                             GetFramework(context.TestObject)
-                                .AfterTestCase(context.CurrentTest)
+                                .RunTearDown(context.CurrentTest)
                                 .GetAwaiter()
                                 .GetResult();
                         }

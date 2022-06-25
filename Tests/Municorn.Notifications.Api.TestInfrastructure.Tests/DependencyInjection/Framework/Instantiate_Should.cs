@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Framework
 {
     [TestFixture]
-    internal class Framework_Should
+    internal class Instantiate_Should
     {
         [Test]
         public async Task Instantiate()

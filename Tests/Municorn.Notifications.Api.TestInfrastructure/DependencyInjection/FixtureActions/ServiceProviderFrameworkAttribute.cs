@@ -24,7 +24,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
             }
             else
             {
-                this.GetFramework(test).BeforeTestCase(test).GetAwaiter().GetResult();
+                this.GetFramework(test).RunSetUp(test).GetAwaiter().GetResult();
             }
         }
 
@@ -36,7 +36,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
             }
             else
             {
-                this.GetFramework(test).AfterTestCase(test).GetAwaiter().GetResult();
+                this.GetFramework(test).RunTearDown(test).GetAwaiter().GetResult();
             }
         }
 
@@ -71,7 +71,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                 testFixture.ConfigureServices(serviceCollection);
             });
 
-            this.framework.BeforeTestSuite().GetAwaiter().GetResult();
+            this.framework.RunOneTimeSetUp().GetAwaiter().GetResult();
         }
 
         [MemberNotNull(nameof(framework))]
