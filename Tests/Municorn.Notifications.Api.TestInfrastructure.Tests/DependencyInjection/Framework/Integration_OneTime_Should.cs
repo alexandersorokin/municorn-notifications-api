@@ -28,7 +28,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         public void Test1() => this.counter.Value.Should().BePositive();
 
         [Test]
-        public void Test2() => this.counter.Value.Should().BePositive();
+        public void Test() => this.counter.Value.Should().BePositive();
 
         public void Dispose()
         {
