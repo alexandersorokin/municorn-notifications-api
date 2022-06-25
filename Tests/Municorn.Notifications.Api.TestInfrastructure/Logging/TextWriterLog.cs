@@ -3,7 +3,7 @@ using Vostok.Logging.Formatting;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Logging
 {
-    public class TextWriterLog : ILog
+    public sealed class TextWriterLog : ILog
     {
         private static readonly OutputTemplate Template = new OutputTemplateBuilder()
             .AddTimestamp()
