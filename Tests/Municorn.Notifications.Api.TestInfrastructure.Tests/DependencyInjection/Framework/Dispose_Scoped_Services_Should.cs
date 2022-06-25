@@ -14,7 +14,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [Test]
         public async Task Run_Dispose_Twice_For_Two_Finished_Scopes()
         {
-            var service = Substitute.For<IFixtureSetUpService, IDisposable>();
+            var (service, disposable) = SubstituteExtensions.For<IFixtureSetUpService, IDisposable>();
 
             var framework = CreateFramework(service);
 
@@ -29,13 +29,13 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
                 await framework.RunTearDown(parentTest).ConfigureAwait(false);
             }
 
-            ((IDisposable)service).Received(2).Dispose();
+            disposable.Received(2).Dispose();
         }
 
         [Test]
         public async Task Run_Dispose_Once_For_Finished_And_Unfinished_Scopes()
         {
-            var service = Substitute.For<IFixtureSetUpService, IDisposable>();
+            var (service, disposable) = SubstituteExtensions.For<IFixtureSetUpService, IDisposable>();
 
             var framework = CreateFramework(service);
 
@@ -49,38 +49,38 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
                 await framework.RunTearDown(currentTest).ConfigureAwait(false);
             }
 
-            ((IDisposable)service).Received(1).Dispose();
+            disposable.Received(1).Dispose();
         }
 
         [Test]
         public async Task Run_Dispose()
         {
-            var service = Substitute.For<IFixtureSetUpService, IDisposable>();
+            var (service, disposable) = SubstituteExtensions.For<IFixtureSetUpService, IDisposable>();
 
             await CreateAndDisposeFrameworkScope(service).ConfigureAwait(false);
 
-            ((IDisposable)service).Received().Dispose();
+            disposable.Received().Dispose();
         }
 
         [Test]
         public async Task Run_DisposeAsync()
         {
-            var service = Substitute.For<IFixtureSetUpService, IAsyncDisposable>();
+            var (service, disposable) = SubstituteExtensions.For<IFixtureSetUpService, IAsyncDisposable>();
 
             await CreateAndDisposeFrameworkScope(service).ConfigureAwait(false);
 
-            await ((IAsyncDisposable)service).Received().DisposeAsync().ConfigureAwait(false);
+            await disposable.Received().DisposeAsync().ConfigureAwait(false);
         }
 
         [Test]
         public async Task Run_Only_DisposeAsync_If_Both_Interfaces_Are_Implemented()
         {
-            var service = Substitute.For<IFixtureSetUpService, IAsyncDisposable, IDisposable>();
+            var (service, asyncDisposable, disposable) = SubstituteExtensions.For<IFixtureSetUpService, IAsyncDisposable, IDisposable>();
 
             await CreateAndDisposeFrameworkScope(service).ConfigureAwait(false);
 
-            await ((IAsyncDisposable)service).Received().DisposeAsync().ConfigureAwait(false);
-            ((IDisposable)service).DidNotReceive().Dispose();
+            await asyncDisposable.Received().DisposeAsync().ConfigureAwait(false);
+            disposable.DidNotReceive().Dispose();
         }
 
         private static async Task CreateAndDisposeFrameworkScope(IFixtureSetUpService service)

@@ -13,32 +13,32 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [Test]
         public async Task Run_Dispose()
         {
-            var service = Substitute.For<IFixtureOneTimeSetUpService, IDisposable>();
+            var (service, disposable) = SubstituteExtensions.For<IFixtureOneTimeSetUpService, IDisposable>();
 
             await CreateAndDisposeFramework(service).ConfigureAwait(false);
 
-            ((IDisposable)service).Received().Dispose();
+            disposable.Received().Dispose();
         }
 
         [Test]
         public async Task Run_DisposeAsync()
         {
-            var service = Substitute.For<IFixtureOneTimeSetUpService, IAsyncDisposable>();
+            var (service, disposable) = SubstituteExtensions.For<IFixtureOneTimeSetUpService, IAsyncDisposable>();
 
             await CreateAndDisposeFramework(service).ConfigureAwait(false);
 
-            await ((IAsyncDisposable)service).Received().DisposeAsync().ConfigureAwait(false);
+            await disposable.Received().DisposeAsync().ConfigureAwait(false);
         }
 
         [Test]
         public async Task Run_Only_DisposeAsync_If_Both_Interfaces_Are_Implemented()
         {
-            var service = Substitute.For<IFixtureOneTimeSetUpService, IDisposable, IAsyncDisposable>();
+            var (service, disposable, asyncDisposable) = SubstituteExtensions.For<IFixtureOneTimeSetUpService, IDisposable, IAsyncDisposable>();
 
             await CreateAndDisposeFramework(service).ConfigureAwait(false);
 
-            await ((IAsyncDisposable)service).Received().DisposeAsync().ConfigureAwait(false);
-            ((IDisposable)service).DidNotReceive().Dispose();
+            await asyncDisposable.Received().DisposeAsync().ConfigureAwait(false);
+            disposable.DidNotReceive().Dispose();
         }
 
         private static async Task CreateAndDisposeFramework(IFixtureOneTimeSetUpService service)
