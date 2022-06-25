@@ -5,11 +5,11 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framewor
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FixtureOneTimeActions
 {
     [PrimaryConstructor]
-    internal partial class FixtureOneTimeActionRunner : IFixtureOneTimeSetUpService, IAsyncDisposable
+    internal partial class FixtureOneTimeActionRunner : IFixtureOneTimeSetUpAsyncService, IAsyncDisposable
     {
         private readonly IFixtureProvider fixtureProvider;
 
-        public void Run()
+        public async Task RunAsync()
         {
             var fixture = this.fixtureProvider.Fixture;
             if (fixture is IOneTimeSetUpAction oneTimeSetUp)
@@ -19,7 +19,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
 
             if (fixture is IOneTimeSetUpAsyncAction oneTimeSetUpAsync)
             {
-                oneTimeSetUpAsync.OneTimeSetUpAsync().GetAwaiter().GetResult();
+                await oneTimeSetUpAsync.OneTimeSetUpAsync().ConfigureAwait(false);
             }
         }
 

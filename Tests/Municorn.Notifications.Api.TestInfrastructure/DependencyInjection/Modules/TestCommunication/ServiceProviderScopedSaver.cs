@@ -1,24 +1,23 @@
 ﻿using System;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
-using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication
 {
-    internal sealed class MapProviderSaver : IFixtureOneTimeSetUpService, IDisposable
+    internal sealed class ServiceProviderScopedSaver : IFixtureSetUpService, IDisposable
     {
         private readonly IServiceProvider serviceProvider;
         private readonly IFixtureProvider fixtureProvider;
         private readonly FixtureServiceProviderMap map;
 
-        public MapProviderSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider, ITest test)
+        public ServiceProviderScopedSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider, TestAccessor testAccessor)
         {
             this.serviceProvider = serviceProvider;
             this.fixtureProvider = fixtureProvider;
-            this.map = test.GetFixtureServiceProviderMap();
+            this.map = testAccessor.Test.GetFixtureServiceProviderMap();
         }
 
-        public void Run() => this.map.AddScope(this.fixtureProvider.Fixture, this.serviceProvider);
+        public void Run() => this.map.Add(this.fixtureProvider.Fixture, this.serviceProvider);
 
-        public void Dispose() => this.map.RemoveScope(this.fixtureProvider.Fixture);
+        public void Dispose() => this.map.Remove(this.fixtureProvider.Fixture);
     }
 }

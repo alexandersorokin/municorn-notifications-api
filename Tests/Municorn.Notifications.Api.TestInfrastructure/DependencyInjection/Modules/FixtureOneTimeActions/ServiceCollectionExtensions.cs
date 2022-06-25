@@ -6,6 +6,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddFixtureOneTimeActions(this IServiceCollection serviceCollection) =>
-            serviceCollection.AddSingleton<IFixtureOneTimeSetUpService, FixtureOneTimeActionRunner>();
+            serviceCollection.AddSingleton<IFixtureOneTimeSetUpAsyncService, FixtureOneTimeActionRunner>();
     }
 }

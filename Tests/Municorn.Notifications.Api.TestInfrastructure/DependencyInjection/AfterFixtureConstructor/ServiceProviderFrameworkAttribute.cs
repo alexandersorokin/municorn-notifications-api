@@ -12,13 +12,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
     [AttributeUsage(AttributeTargets.Interface)]
     internal sealed class ServiceProviderFrameworkAttribute : NUnitAttribute, ITestAction
     {
-        private static readonly ServiceProviderOptions Options = new()
-        {
-            ValidateOnBuild = true,
-            ValidateScopes = true,
-        };
-
-        private ServiceProvider? serviceProvider;
+        private ServiceProviderFramework? framework;
 
         public ActionTargets Targets => ActionTargets.Suite | ActionTargets.Test;
 
@@ -30,7 +24,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
             }
             else
             {
-                this.GetServiceProvider(test).GetRequiredService<TestActionMethodManager>().BeforeTestCase(test);
+                this.GetFramework(test).BeforeTestCase(test).GetAwaiter().GetResult();
             }
         }
 
@@ -42,7 +36,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
             }
             else
             {
-                this.GetServiceProvider(test).GetRequiredService<TestActionMethodManager>().AfterTestCase(test);
+                this.GetFramework(test).AfterTestCase(test).GetAwaiter().GetResult();
             }
         }
 
@@ -51,7 +45,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
             // workaround https://github.com/nunit/nunit/issues/2938
             try
             {
-                this.serviceProvider?.DisposeAsync().AsTask().GetAwaiter().GetResult();
+                this.framework?.DisposeAsync().AsTask().GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
@@ -67,19 +61,20 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Afte
                 throw new InvalidOperationException($"Test {test.FullName} with fixture {fixture} do not implement {nameof(IFixtureServiceProviderFramework)}");
             }
 
-            var serviceCollection = new ServiceCollection()
-                .AddSingleton<IFixtureProvider>(new FixtureProvider(testFixture))
-                .AddSingleton(test)
-                .AddFixtures(test)
-                .AddFixtureAutoMethods()
-                .AddFixtureServiceCollectionModuleAttributes(test.TypeInfo ?? throw new InvalidOperationException("No typeInfo is found at service collection configuration"));
-            testFixture.ConfigureServices(serviceCollection);
+            this.framework = new(serviceCollection =>
+            {
+                serviceCollection
+                    .AddSingleton<IFixtureProvider>(new FixtureProvider(testFixture))
+                    .AddSingleton(test)
+                    .AddFixtures(test)
+                    .AddFixtureServiceCollectionModuleAttributes(test.TypeInfo ?? throw new InvalidOperationException("No typeInfo is found at service collection configuration"));
+                testFixture.ConfigureServices(serviceCollection);
+            });
 
-            this.serviceProvider = serviceCollection.BuildServiceProvider(Options);
-            this.serviceProvider.GetRequiredService<FixtureOneTimeSetUpRunner>().Run();
+            this.framework.BeforeTestSuite().GetAwaiter().GetResult();
         }
 
-        [MemberNotNull(nameof(serviceProvider))]
-        private ServiceProvider GetServiceProvider(ITest test) => this.serviceProvider ?? throw new InvalidOperationException($"Service provider is not initialized for {test.FullName}");
+        [MemberNotNull(nameof(framework))]
+        private ServiceProviderFramework GetFramework(ITest test) => this.framework ?? throw new InvalidOperationException($"Service provider framework is not initialized for {test.FullName}");
     }
 }

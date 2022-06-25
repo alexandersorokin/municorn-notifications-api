@@ -19,15 +19,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 {
     internal sealed class TypeInfoWrapper : TypeWrapper, ITypeInfo
     {
-        private static readonly ConditionalWeakTable<object, IServiceProvider> ServiceProviders = new();
-        private static readonly ConditionalWeakTable<object, IAsyncDisposable> ServiceProvidersDisposers = new();
-        private static readonly ConditionalWeakTable<ITest, FixtureServiceProviderMap> FixtureServiceProviderMaps = new();
-
-        private static readonly ServiceProviderOptions Options = new()
-        {
-            ValidateOnBuild = true,
-            ValidateScopes = true,
-        };
+        private static readonly FixtureServiceProviderMap GlobalServiceProviders = new();
+        private static readonly ConditionalWeakTable<ITest, FixtureServiceProviderMap> ScopedServiceProviders = new();
+        private static readonly ConditionalWeakTable<object, ServiceProviderFramework> Frameworks = new();
 
         private readonly Type originalType;
         private readonly Type wrappedType;
@@ -60,23 +54,24 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             FixtureAccessor fixtureAccessor = new();
 
             var currentTest = TestExecutionContext.CurrentContext.CurrentTest;
-            var serviceCollection = new ServiceCollection()
+
+#pragma warning disable CA2000 // Dispose objects before losing scope
+            ServiceProviderFramework framework = new(serviceCollection => serviceCollection
                 .AddSingleton<IFixtureProvider>(fixtureAccessor)
                 .AddSingleton<ITest>(currentTest)
                 .AddFixtures(currentTest)
-                .AddFixtureAutoMethods()
-                .AddSingleton<IFixtureOneTimeSetUpService, FixtureOneTimeSaver>()
+                .AddSingleton<IFixtureOneTimeSetUpService, FixtureServiceProviderSaver>()
                 .AddScoped<IFixtureSetUpService, ScopeSaver>()
-                .AddFixtureServiceCollectionModuleAttributes(new NUnit.Framework.Internal.TypeWrapper(this.originalType));
-
-            var serviceProvider = serviceCollection.BuildServiceProvider(Options);
+                .AddFixtureServiceCollectionModuleAttributes(new NUnit.Framework.Internal.TypeWrapper(this.originalType)));
+#pragma warning restore CA2000 // Dispose objects before losing scope
 
             var parameters = args ?? Array.Empty<object>();
-            var fixture = ActivatorUtilities.CreateInstance(serviceProvider, this.originalType, parameters!);
+            var fixture = ActivatorUtilities.CreateInstance(framework.ServiceProvider, this.originalType, parameters!);
             fixtureAccessor.Fixture = fixture;
 
-            ServiceProvidersDisposers.Add(fixture, serviceProvider);
-            serviceProvider.GetRequiredService<Framework.FixtureOneTimeSetUpRunner>().Run();
+            Frameworks.Add(fixture, framework);
+
+            framework.BeforeTestSuite().GetAwaiter().GetResult();
 
             return fixture;
         }
@@ -128,10 +123,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
         public Task TearDownMethodExample() => Task.CompletedTask;
 
-        private static IServiceProvider GetServiceProvider(object fixture) =>
-            ServiceProviders.GetValue(
+        private static ServiceProviderFramework GetFramework(object fixture) =>
+            Frameworks.GetValue(
                 fixture,
-                _ => throw new InvalidOperationException($"Service provider for {fixture} fixture is not found"));
+                _ => throw new InvalidOperationException($"Service provider framework for {fixture} fixture is not found"));
 
         private static object[] ResolveArguments(IServiceProvider serviceProvider, IEnumerable<ParameterInfo> methodInfo) =>
             methodInfo
@@ -150,34 +145,28 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
-                var serviceProvider = GetServiceProvider(fixture ?? throw new InvalidOperationException($"Fixture is not passed to {this.MethodInfo.Name} method call"));
+                var serviceProvider = GlobalServiceProviders.Get(fixture ?? throw new InvalidOperationException("Fixture is not passed to OneTime action method"));
                 return this.Invoke(fixture, ResolveArguments(serviceProvider, this.MethodInfo.GetParameters()));
             }
         }
 
-        private sealed class FixtureOneTimeSaver : IFixtureOneTimeSetUpService, IDisposable
+        private sealed class FixtureServiceProviderSaver : IFixtureOneTimeSetUpService, IDisposable
         {
             private readonly IServiceProvider serviceProvider;
-            private readonly object fixture;
+            private readonly IFixtureProvider fixture;
 
             [UsedImplicitly]
-            public FixtureOneTimeSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider)
+            public FixtureServiceProviderSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider)
             {
                 this.serviceProvider = serviceProvider;
-                this.fixture = fixtureProvider.Fixture;
+                this.fixture = fixtureProvider;
             }
 
-            public void Run() => ServiceProviders.Add(this.fixture, this.serviceProvider);
+            public void Run() => GlobalServiceProviders.Add(this.fixture.Fixture, this.serviceProvider);
 
-            public void Dispose() => RemoveFixture(this.fixture);
+            public void Dispose() => RemoveFixture(this.fixture.Fixture);
 
-            private static void RemoveFixture(object fixture)
-            {
-                if (!ServiceProviders.Remove(fixture))
-                {
-                    throw new InvalidOperationException($"Failed to remove {fixture} from saved providers");
-                }
-            }
+            private static void RemoveFixture(object fixture) => GlobalServiceProviders.Remove(fixture);
         }
 
         private sealed class ScopeSaver : IFixtureSetUpService, IDisposable
@@ -186,19 +175,20 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             private readonly IFixtureProvider fixtureProvider;
             private readonly FixtureServiceProviderMap map;
 
+            [UsedImplicitly]
             public ScopeSaver(IServiceProvider serviceProvider, IFixtureProvider fixtureProvider, TestAccessor testAccessor)
             {
                 this.serviceProvider = serviceProvider;
                 this.fixtureProvider = fixtureProvider;
-                this.map = FixtureServiceProviderMaps.GetOrCreateValue(testAccessor.Test);
+                this.map = ScopedServiceProviders.GetOrCreateValue(testAccessor.Test);
             }
 
             public void Run()
             {
-                this.map.AddScope(this.fixtureProvider.Fixture, this.serviceProvider);
+                this.map.Add(this.fixtureProvider.Fixture, this.serviceProvider);
             }
 
-            public void Dispose() => this.map.RemoveScope(this.fixtureProvider.Fixture);
+            public void Dispose() => this.map.Remove(this.fixtureProvider.Fixture);
         }
 
         private class FixtureActionMethodInfo : MethodWrapper, IMethodInfo
@@ -212,8 +202,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
 
             object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
-                var map = FixtureServiceProviderMaps.GetOrCreateValue(TestExecutionContext.CurrentContext.CurrentTest);
-                var serviceProvider = map.GetScope(fixture ?? throw new InvalidOperationException("Fixture is found for fixture method"));
+                var map = ScopedServiceProviders.GetOrCreateValue(TestExecutionContext.CurrentContext.CurrentTest);
+                var serviceProvider = map.Get(fixture ?? throw new InvalidOperationException("Fixture is found for fixture method"));
                 return this.Invoke(fixture, ResolveArguments(serviceProvider, this.MethodInfo.GetParameters()));
             }
         }
@@ -230,11 +220,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
             object IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
                 var testFixture = fixture ?? throw new InvalidOperationException("Fixture is not passed to container dispose method");
-                var serviceProvider = ServiceProvidersDisposers.GetValue(
+                var serviceProvider = Frameworks.GetValue(
                         testFixture,
                         _ => throw new InvalidOperationException($"Service provider for {fixture} fixture is not found"));
 
-                ServiceProvidersDisposers.Remove(testFixture);
+                Frameworks.Remove(testFixture);
                 return serviceProvider.DisposeAsync().AsTask();
             }
         }
@@ -292,7 +282,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                     var test = context.CurrentTest;
                     if (!test.IsSuite)
                     {
-                        GetServiceProvider(context.TestObject).GetRequiredService<Framework.TestActionMethodManager>().BeforeTestCase(test);
+                        GetFramework(context.TestObject)
+                            .BeforeTestCase(test)
+                            .GetAwaiter()
+                            .GetResult();
                     }
                 }
             }
@@ -316,9 +309,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Befo
                         }
                         finally
                         {
-                            GetServiceProvider(context.TestObject)
-                                .GetRequiredService<Framework.TestActionMethodManager>()
-                                .AfterTestCase(context.CurrentTest);
+                            GetFramework(context.TestObject)
+                                .AfterTestCase(context.CurrentTest)
+                                .GetAwaiter()
+                                .GetResult();
                         }
                     }
                 }

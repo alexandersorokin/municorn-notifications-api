@@ -9,7 +9,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
             serviceCollection
                 .AddSingleton<IAsyncLocalServiceProvider, AsyncLocalServiceProvider>()
                 .AddSingleton(typeof(IAsyncLocalServiceProvider<>), typeof(AsyncLocalServiceProvider<>))
-                .AddSingleton<IFixtureOneTimeSetUpService, MapProviderSaver>()
-                .AddScoped<IFixtureSetUpService, MapScopeSaver>();
+                .AddSingleton<IFixtureOneTimeSetUpService, ServiceProviderSaver>()
+                .AddScoped<IFixtureSetUpService, ServiceProviderScopedSaver>();
     }
 }

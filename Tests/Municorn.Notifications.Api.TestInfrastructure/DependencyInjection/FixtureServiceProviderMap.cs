@@ -7,14 +7,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
     {
         private readonly ConditionalWeakTable<object, IServiceProvider> serviceScopes = new();
 
-        internal IServiceProvider GetScope(object fixture) =>
+        internal IServiceProvider Get(object fixture) =>
             this.serviceScopes.TryGetValue(fixture, out var serviceScope)
                 ? serviceScope
                 : throw CreateNotFoundException(fixture);
 
-        internal void AddScope(object fixture, IServiceProvider serviceScope) => this.serviceScopes.Add(fixture, serviceScope);
+        internal void Add(object fixture, IServiceProvider serviceScope) => this.serviceScopes.Add(fixture, serviceScope);
 
-        internal void RemoveScope(object fixture)
+        internal void Remove(object fixture)
         {
             if (!this.serviceScopes.Remove(fixture))
             {
@@ -22,6 +22,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
             }
         }
 
-        private static InvalidOperationException CreateNotFoundException(object fixture) => new($"Service scope is not found for fixture {fixture}");
+        private static InvalidOperationException CreateNotFoundException(object fixture) => new($"Service provider is not found for fixture {fixture}");
     }
 }
