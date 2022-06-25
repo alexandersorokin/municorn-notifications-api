@@ -3,7 +3,7 @@
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication
 {
     [PrimaryConstructor]
-    internal partial class AsyncLocalServiceProvider<TService> : IAsyncLocalServiceProvider<TService>
+    internal sealed partial class AsyncLocalServiceProvider<TService> : IAsyncLocalServiceProvider<TService>
         where TService : notnull
     {
         private readonly IAsyncLocalServiceProvider asyncLocalServiceProvider;

@@ -7,7 +7,7 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framewor
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection
 {
     [PrimaryConstructor]
-    internal partial class SingletonFieldInitializer : IFixtureOneTimeSetUpService
+    internal sealed partial class SingletonFieldInitializer : IFixtureOneTimeSetUpService
     {
         private readonly FieldInfoProvider fieldInfoProvider;
         private readonly IServiceProvider serviceProvider;

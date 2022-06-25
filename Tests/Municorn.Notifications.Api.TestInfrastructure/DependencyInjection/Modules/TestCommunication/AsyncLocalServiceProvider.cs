@@ -4,7 +4,7 @@ using NUnit.Framework.Internal;
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication
 {
     [PrimaryConstructor]
-    internal partial class AsyncLocalServiceProvider : IAsyncLocalServiceProvider
+    internal sealed partial class AsyncLocalServiceProvider : IAsyncLocalServiceProvider
     {
         private readonly IFixtureProvider fixtureProvider;
 
