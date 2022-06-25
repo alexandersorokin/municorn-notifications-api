@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions
 {
     internal static class ServiceCollectionExtensions
     {
