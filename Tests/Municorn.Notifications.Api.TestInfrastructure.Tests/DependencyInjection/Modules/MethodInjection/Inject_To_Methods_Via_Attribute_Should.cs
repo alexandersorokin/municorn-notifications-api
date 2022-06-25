@@ -19,6 +19,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         }
 
         [Test]
-        public void Simple_Inject([InjectDependency] SilentLog service) => service.Should().NotBeNull();
+        public void Inject([InjectDependency] SilentLog service) => service.Should().NotBeNull();
     }
 }

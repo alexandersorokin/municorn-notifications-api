@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
@@ -17,18 +18,51 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         }
 
         [Test]
+        public void Plain_Test() => true.Should().BeTrue();
+
+        [TestCase(1)]
+        [TestCase(2)]
+        public void Plain_TestCase(int value) => value.Should().BePositive();
+
+        [Test]
         public void Simple_Inject([InjectDependency] SilentLog service) => service.Should().NotBeNull();
 
         [Test]
         [Repeat(3)]
         public void Repeat_Inject([InjectDependency] SilentLog service) => service.Should().NotBeNull();
 
+        [Test]
+        public void Select_Service([InjectDependency(typeof(SilentLog))] ILog service) => service.Should().NotBeNull();
+
+        [Test]
+        public void Select_Two_Services([InjectDependency(typeof(SilentLog)), InjectDependency(typeof(IFixtureSetUpService))] object service) =>
+            service.Should().NotBeNull();
+
+        [Test]
+        public void Case_With_Provider([InjectDependency] SilentLog service, [Values] bool value) =>
+            service.Should().NotBeNull();
+
+        [TestCaseSource(nameof(CaseValues))]
+        [Repeat(2)]
+        public void Cases_With_Marker_Created_Manually(int value, ILog service) => service.Should().NotBeNull();
+
+        private static readonly TestCaseData[] CaseValues =
+        {
+            CreateMarkerCase(10),
+            CreateMarkerCase(11),
+        };
+
+        [CombinatorialTestCase]
+        public void CombinatorialTestCase_Inject([InjectDependency] SilentLog service) => service.Should().NotBeNull();
+
         [CombinatorialTestCase(1)]
         [CombinatorialTestCase(2)]
-        public void Case_Inject([InjectDependency] SilentLog service, int value)
+        public void TestCases_Inject([InjectDependency] SilentLog service, int value)
         {
             service.Should().NotBeNull();
             value.Should().BePositive();
         }
+
+        private static TestCaseData CreateMarkerCase(int value) => new(value, new InjectedService<SilentLog>());
     }
 }
