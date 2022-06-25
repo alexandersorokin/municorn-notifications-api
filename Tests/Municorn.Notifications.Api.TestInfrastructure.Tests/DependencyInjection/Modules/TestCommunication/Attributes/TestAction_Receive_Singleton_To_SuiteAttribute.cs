@@ -6,14 +6,14 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using Vostok.Logging.Abstractions;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor.Communication
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.TestCommunication.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
-    internal sealed class TestActionLoggerTestAttribute : NUnitAttribute, ITestAction
+    internal sealed class TestAction_Receive_Singleton_To_SuiteAttribute : NUnitAttribute, ITestAction
     {
         private object? testFixture;
 
-        public ActionTargets Targets => ActionTargets.Test;
+        public ActionTargets Targets => ActionTargets.Suite;
 
         public void BeforeTest(ITest test)
         {
@@ -26,12 +26,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
             this.EnsureHaveContainer(test);
         }
 
-        private void EnsureHaveContainer(ITest test)
-        {
-            var service = test
+        private void EnsureHaveContainer(ITest test) =>
+            test
                 .GetServiceProvider(this.testFixture ?? throw new InvalidOperationException("Fixture is not found"))
-                .GetRequiredService<ILog>();
-            service.Should().NotBeNull();
-        }
+                .GetRequiredService<SilentLog>()
+                .Should()
+                .NotBeNull();
     }
 }

@@ -7,6 +7,7 @@ using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.AfterFixtureConstructor.Communication
 {
+    [AttributeUsage(AttributeTargets.Class)]
     internal sealed class TestActionLoggerSuiteAttribute : NUnitAttribute, ITestAction
     {
         private object? testFixture;
