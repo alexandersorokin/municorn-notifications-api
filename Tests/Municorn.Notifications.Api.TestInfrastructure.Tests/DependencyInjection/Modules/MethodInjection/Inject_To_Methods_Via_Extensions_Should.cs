@@ -13,7 +13,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         public Inject_To_Methods_Via_Extensions_Should()
             : base(serviceCollection => serviceCollection
                 .AddTestMethodInjection()
-                .AddSingleton(new SilentLog()))
+                .AddSingleton<SilentLog>())
         {
         }
 

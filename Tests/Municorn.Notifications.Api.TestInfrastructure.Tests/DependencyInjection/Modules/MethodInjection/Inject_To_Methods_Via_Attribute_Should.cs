@@ -14,7 +14,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         public Inject_To_Methods_Via_Attribute_Should()
             : base(serviceCollection => serviceCollection
                 .AddFixtureServiceCollectionModuleAttributes(new TypeWrapper(typeof(Inject_To_Methods_Via_Attribute_Should)))
-                .AddSingleton(new SilentLog()))
+                .AddSingleton<SilentLog>())
         {
         }
 

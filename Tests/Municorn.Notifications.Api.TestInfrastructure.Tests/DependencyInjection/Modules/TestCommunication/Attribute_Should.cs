@@ -16,12 +16,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
             : base(serviceCollection => serviceCollection
                 .AddFixtureServiceCollectionModuleAttributes(new TypeWrapper(typeof(Attribute_Should)))
                 .AddSingleton<ITest>(TestExecutionContext.CurrentContext.CurrentTest)
-                .AddSingleton(new SilentLog()))
+                .AddSingleton<SilentLog>())
         {
         }
 
         [Test]
-        public void Provider_Service_Provider_Via_Test() =>
+        public void Provide_Service_Provider_Via_Test() =>
             TestExecutionContext.CurrentContext.CurrentTest
                 .GetServiceProvider(this)
                 .GetRequiredService<SilentLog>()

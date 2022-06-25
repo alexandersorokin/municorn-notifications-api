@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentAssertions.Primitives;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
 using NUnit.Framework;
@@ -8,27 +9,30 @@ using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.TestCommunication
 {
-    internal class Provider_Scoped_Service_Should : FrameworkServiceProviderFixtureBase
+    internal class Provide_Scoped_Service_Should : FrameworkServiceProviderFixtureBase
     {
-        public Provider_Scoped_Service_Should()
+        public Provide_Scoped_Service_Should()
             : base(serviceCollection => serviceCollection
                 .AddTestCommunication()
                 .AddSingleton<ITest>(TestExecutionContext.CurrentContext.CurrentTest)
-                .AddSingleton(new SilentLog()))
+                .AddScoped<SilentLog>())
         {
         }
 
+        [SetUp]
+        public void Provide_Service_Provider_Via_Test_SetUp() => this.EnsureResolved();
+
+        [TearDown]
+        public void Provide_Service_Provider_Via_Test_TearDown() => this.EnsureResolved();
+
         [Test]
-        public void Provider_Service_Provider_Via_Test() =>
-            TestExecutionContext.CurrentContext.CurrentTest
-                .GetServiceProvider(this)
-                .GetRequiredService<SilentLog>()
-                .Should()
-                .NotBeNull();
+        public void Provide_Service_Provider_Via_Test() => this.EnsureResolved();
 
         [Test]
         [Repeat(3)]
-        public void Provider_Service_Provider_Via_Test_Repeated() =>
+        public void Provide_Service_Provider_Via_Test_Repeated() => this.EnsureResolved();
+
+        private void EnsureResolved() =>
             TestExecutionContext.CurrentContext.CurrentTest
                 .GetServiceProvider(this)
                 .GetRequiredService<SilentLog>()
