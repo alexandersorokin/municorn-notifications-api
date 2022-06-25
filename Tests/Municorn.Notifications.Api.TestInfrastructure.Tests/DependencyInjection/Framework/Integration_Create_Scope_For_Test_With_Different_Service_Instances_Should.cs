@@ -31,10 +31,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(RepeatCount)]
-        public void Test1() => this.storage.Should().HaveCountGreaterThan(1);
+        public void Test1() => this.storage.Should().HaveCountGreaterThanOrEqualTo(1);
 
         [Test]
-        public void Test2() => this.storage.Should().HaveCountGreaterThan(1);
+        public void Test2() => this.storage.Should().HaveCountGreaterThanOrEqualTo(1);
 
         public void Dispose()
         {
