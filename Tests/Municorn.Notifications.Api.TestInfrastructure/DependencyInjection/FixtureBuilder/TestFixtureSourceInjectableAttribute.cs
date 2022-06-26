@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureBuilder.Decorators;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
@@ -53,7 +54,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                 }
 
                 var typeArgs = testFixtureData.TypeArgs ?? Array.Empty<Type>();
-                TypeInfoWrapper wrapper = new(type, testFixtureData.Arguments, typeArgs);
+                TypeInfoDecorator wrapper = new(type, testFixtureData.Arguments, typeArgs);
                 TestFixtureAttribute implementation = new(testFixtureData.Arguments)
                 {
                     TypeArgs = typeArgs,

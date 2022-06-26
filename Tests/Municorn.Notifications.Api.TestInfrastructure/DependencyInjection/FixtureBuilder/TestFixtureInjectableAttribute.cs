@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureBuilder.Decorators;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
@@ -20,11 +21,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
 
         public Type[] TypeArgs { get; init; } = Array.Empty<Type>();
 
-        public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo) => this.CreateImplementation().BuildFrom(this.CreateWrapper(typeInfo));
+        public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo) =>
+            this.CreateImplementation().BuildFrom(this.CreateWrapper(typeInfo));
 
-        public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo, IPreFilter filter) => this.CreateImplementation().BuildFrom(this.CreateWrapper(typeInfo), filter);
+        public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo, IPreFilter filter) =>
+            this.CreateImplementation().BuildFrom(this.CreateWrapper(typeInfo), filter);
 
-        private TypeInfoWrapper CreateWrapper(ITypeInfo typeInfo) => new(typeInfo.Type, this.arguments, this.TypeArgs);
+        private TypeInfoDecorator CreateWrapper(ITypeInfo typeInfo) =>
+            new(typeInfo.Type, this.arguments, this.TypeArgs);
 
         private TestFixtureAttribute CreateImplementation() => new(this.arguments)
         {
