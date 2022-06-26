@@ -43,50 +43,16 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
 
         Type ITypeInfo.Type => this.wrappedType;
 
-        IMethodInfo[] ITypeInfo.GetMethods(BindingFlags flags) => this
-            .GetMethods(flags)
-            .Select(method => new ModifyAttributesMethodWrapperDecorator(method, this.frameworks))
-            .ToArray<IMethodInfo>();
-
-        object ITypeInfo.Construct(object?[]? args)
-        {
-            FixtureAccessor fixtureAccessor = new();
-
-            var currentTest = TestExecutionContext.CurrentContext.CurrentTest;
-
-            FixtureServiceProviderFramework framework = new(serviceCollection => serviceCollection
-                .AddSingleton(fixtureAccessor)
-                .AddSingleton(new FixtureFactoryArgs(this.originalType, args ?? Array.Empty<object>()))
-                .AddSingleton<IFixtureOneTimeSetUpService, FixtureFactory>()
-                .AddSingleton<IFixtureProvider>(fixtureAccessor)
-                .AddSingleton<ITest>(currentTest)
-                .AddFixtures(currentTest)
-                .AddSingleton(this.globalServiceProviders)
-                .AddSingleton<IFixtureOneTimeSetUpService, FixtureServiceProviderSaver>()
-                .AddSingleton(this.scopedServiceProviders)
-                .AddScoped<IFixtureSetUpService, ScopeServiceProviderSaver>()
-                .AddFixtureServiceCollectionModuleAttributes(this.originalTypeInfo));
-
-            try
-            {
-                framework.RunOneTimeSetUp().GetAwaiter().GetResult();
-
-                var fixture = fixtureAccessor.Fixture;
-                this.frameworks.Add(fixture, framework);
-                return fixture;
-            }
-            catch (Exception)
-            {
-                framework.DisposeAsync().AsTask().GetAwaiter().GetResult();
-                throw;
-            }
-        }
-
         ITypeInfo ITypeInfo.MakeGenericType(Type[] typeArgs) =>
             new TypeWrapperDecorator(
                 this.originalTypeInfo.MakeGenericType(typeArgs),
                 this.arguments,
                 Array.Empty<Type>());
+
+        IMethodInfo[] ITypeInfo.GetMethods(BindingFlags flags) => this
+            .GetMethods(flags)
+            .Select(method => new ModifyAttributesTestMethodWrapperDecorator(method, this.frameworks))
+            .ToArray<IMethodInfo>();
 
         IMethodInfo[] ITypeInfo.GetMethodsWithAttribute<T>(bool inherit)
             where T : class
@@ -129,20 +95,37 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
 
         public Task TearDownMethodExample() => Task.CompletedTask;
 
-        private class FixtureOneTimeActionMethodInfo : MethodWrapper, IMethodInfo
+        object ITypeInfo.Construct(object?[]? args)
         {
-            private readonly FixtureServiceProviderMap globalServiceProviders;
+            FixtureAccessor fixtureAccessor = new();
 
-            internal FixtureOneTimeActionMethodInfo(Type type, MethodInfo methodInfo, FixtureServiceProviderMap globalServiceProviders)
-                : base(type, methodInfo) =>
-                this.globalServiceProviders = globalServiceProviders;
+            var currentTest = TestExecutionContext.CurrentContext.CurrentTest;
 
-            IParameterInfo[] IMethodInfo.GetParameters() => Array.Empty<IParameterInfo>();
+            FixtureServiceProviderFramework framework = new(serviceCollection => serviceCollection
+                .AddSingleton(fixtureAccessor)
+                .AddSingleton(new FixtureFactoryArgs(this.originalType, args ?? Array.Empty<object>()))
+                .AddSingleton<IFixtureOneTimeSetUpService, FixtureFactory>()
+                .AddSingleton<IFixtureProvider>(fixtureAccessor)
+                .AddSingleton<ITest>(currentTest)
+                .AddFixtures(currentTest)
+                .AddSingleton(this.globalServiceProviders)
+                .AddSingleton<IFixtureOneTimeSetUpService, FixtureServiceProviderSaver>()
+                .AddSingleton(this.scopedServiceProviders)
+                .AddScoped<IFixtureSetUpService, ScopeServiceProviderSaver>()
+                .AddFixtureServiceCollectionModuleAttributes(this.originalTypeInfo));
 
-            object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
+            try
             {
-                var serviceProvider = this.globalServiceProviders.Get(fixture ?? throw new InvalidOperationException("Fixture is not passed to OneTime action method"));
-                return this.Invoke(fixture, GetServiceArray(serviceProvider, this.MethodInfo.GetParameters()));
+                framework.RunOneTimeSetUp().GetAwaiter().GetResult();
+
+                var fixture = fixtureAccessor.Fixture;
+                this.frameworks.Add(fixture, framework);
+                return fixture;
+            }
+            catch (Exception)
+            {
+                framework.DisposeAsync().AsTask().GetAwaiter().GetResult();
+                throw;
             }
         }
 
@@ -153,6 +136,17 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                 .ToArray();
 
         private record FixtureFactoryArgs(Type FixtureType, object?[] Args);
+
+        private class FixtureAccessor : IFixtureProvider
+        {
+            private object? fixture;
+
+            public object Fixture
+            {
+                get => this.fixture ?? throw new InvalidOperationException("Fixture is not yet set");
+                internal set => this.fixture = value;
+            }
+        }
 
         private sealed class FixtureFactory : IFixtureOneTimeSetUpService
         {
@@ -203,8 +197,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
             private readonly ConditionalWeakTable<ITest, FixtureServiceProviderMap> scopedServiceProviders;
             private readonly IServiceProvider serviceProvider;
             private readonly IFixtureProvider fixtureProvider;
-            private readonly FixtureServiceProviderMap map;
             private readonly ITest test;
+            private readonly FixtureServiceProviderMap map;
 
             [UsedImplicitly]
             public ScopeServiceProviderSaver(
@@ -216,11 +210,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                 this.scopedServiceProviders = scopedServiceProviders;
                 this.serviceProvider = serviceProvider;
                 this.fixtureProvider = fixtureProvider;
-
-                FixtureServiceProviderMap createdMap = new();
                 this.test = testAccessor.Test;
-                scopedServiceProviders.Add(this.test, createdMap);
-                this.map = createdMap;
+                this.map = new();
+
+                scopedServiceProviders.Add(this.test, this.map);
             }
 
             public void Run() => this.map.Add(this.fixtureProvider.Fixture, this.serviceProvider);
@@ -261,6 +254,23 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
             }
         }
 
+        private class FixtureOneTimeActionMethodInfo : MethodWrapper, IMethodInfo
+        {
+            private readonly FixtureServiceProviderMap globalServiceProviders;
+
+            internal FixtureOneTimeActionMethodInfo(Type type, MethodInfo methodInfo, FixtureServiceProviderMap globalServiceProviders)
+                : base(type, methodInfo) =>
+                this.globalServiceProviders = globalServiceProviders;
+
+            IParameterInfo[] IMethodInfo.GetParameters() => Array.Empty<IParameterInfo>();
+
+            object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
+            {
+                var serviceProvider = this.globalServiceProviders.Get(fixture ?? throw new InvalidOperationException("Fixture is not passed to OneTime action method"));
+                return this.Invoke(fixture, GetServiceArray(serviceProvider, this.MethodInfo.GetParameters()));
+            }
+        }
+
         private class OneTimeTearDownMethodInfo : MethodWrapper, IMethodInfo
         {
             private readonly ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks;
@@ -287,17 +297,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                 }
 
                 return serviceProvider.DisposeAsync().AsTask();
-            }
-        }
-
-        private class FixtureAccessor : IFixtureProvider
-        {
-            private object? fixture;
-
-            public object Fixture
-            {
-                get => this.fixture ?? throw new InvalidOperationException("Fixture is not yet set");
-                internal set => this.fixture = value;
             }
         }
     }

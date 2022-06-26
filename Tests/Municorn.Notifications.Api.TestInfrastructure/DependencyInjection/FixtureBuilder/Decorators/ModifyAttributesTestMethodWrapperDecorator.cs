@@ -10,11 +10,11 @@ using NUnit.Framework.Internal.Commands;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureBuilder.Decorators
 {
-    internal class ModifyAttributesMethodWrapperDecorator : MethodWrapper, IReflectionInfo
+    internal class ModifyAttributesTestMethodWrapperDecorator : MethodWrapper, IReflectionInfo
     {
         private readonly ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks;
 
-        internal ModifyAttributesMethodWrapperDecorator(IMethodInfo methodInfo, ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks)
+        internal ModifyAttributesTestMethodWrapperDecorator(IMethodInfo methodInfo, ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks)
             : base(methodInfo.TypeInfo.Type, methodInfo.MethodInfo) =>
             this.frameworks = frameworks;
 
