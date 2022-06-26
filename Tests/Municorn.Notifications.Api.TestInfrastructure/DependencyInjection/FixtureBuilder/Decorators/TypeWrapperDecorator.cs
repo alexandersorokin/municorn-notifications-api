@@ -27,12 +27,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
         private readonly Type wrappedType;
         private readonly object?[] arguments;
 
-        public TypeWrapperDecorator(ITypeInfo originalTypeInfo, Type type, object?[] arguments, Type[] typeArgs)
-            : base(type)
+        public TypeWrapperDecorator(ITypeInfo originalTypeInfo, object?[] arguments, Type[] typeArgs)
+            : base(originalTypeInfo.Type)
         {
             this.originalTypeInfo = originalTypeInfo;
-            this.originalType = type;
-            if (type.ContainsGenericParameters && !typeArgs.Any())
+            this.originalType = originalTypeInfo.Type;
+            if (originalTypeInfo.Type.ContainsGenericParameters && !typeArgs.Any())
             {
                 arguments = arguments
                     .SkipWhile(arg => arg?.GetType().IsAssignableTo(typeof(Type)) == true)
@@ -40,7 +40,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
             }
 
             this.arguments = arguments;
-            this.wrappedType = new LimitingConstructorParametersTypeDecorator(type, arguments);
+            this.wrappedType = new LimitingConstructorParametersTypeDecorator(originalTypeInfo.Type, arguments);
         }
 
         Type ITypeInfo.Type => this.wrappedType;
@@ -86,8 +86,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
 
         ITypeInfo ITypeInfo.MakeGenericType(Type[] typeArgs) =>
             new TypeWrapperDecorator(
-                this.originalTypeInfo,
-                this.originalType.MakeGenericType(typeArgs),
+                this.originalTypeInfo.MakeGenericType(typeArgs),
                 this.arguments,
                 Array.Empty<Type>());
 

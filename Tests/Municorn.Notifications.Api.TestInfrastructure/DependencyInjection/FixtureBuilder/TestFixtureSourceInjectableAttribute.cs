@@ -42,8 +42,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
             {
                 Category = this.Category,
             };
-            var type = typeInfo.Type;
-            var testFixtureDatas = sourceAttribute.GetParametersFor(this.SourceType ?? type);
+            var testFixtureDatas = sourceAttribute.GetParametersFor(this.SourceType ?? typeInfo.Type);
 
             foreach (var testFixtureData in testFixtureDatas)
             {
@@ -54,7 +53,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                 }
 
                 var typeArgs = testFixtureData.TypeArgs ?? Array.Empty<Type>();
-                TypeWrapperDecorator decorator = new(typeInfo, type, testFixtureData.Arguments, typeArgs);
+                TypeWrapperDecorator decorator = new(typeInfo, testFixtureData.Arguments, typeArgs);
                 TestFixtureAttribute implementation = new(testFixtureData.Arguments)
                 {
                     TypeArgs = typeArgs,
