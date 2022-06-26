@@ -4,7 +4,6 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureA
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions
 {
@@ -13,7 +12,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddTestMethodInjection()
-            .AddScoped<ILog, SilentLog>();
+            .AddScoped<Counter>();
 
         [CombinatorialTestCase]
         [Repeat(2)]
@@ -21,11 +20,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [CombinatorialTestCase]
         [Repeat(2)]
-        public void Case([InjectDependency] ILog service) => service.Should().NotBeNull();
+        public void Case([InjectDependency] Counter service) => service.Should().NotBeNull();
 
         [CombinatorialTestCase(10)]
         [CombinatorialTestCase(11)]
         [Repeat(2)]
-        public void Cases(int value, [InjectDependency] ILog service) => service.Should().NotBeNull();
+        public void Cases(int value, [InjectDependency] Counter service) => service.Should().NotBeNull();
     }
 }
