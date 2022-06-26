@@ -24,19 +24,21 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         {
         }
 
+        [SetUp]
+        public void AsyncLocal_Is_Available_In_SetUp() => this.EnsureServiceIsNotNull();
+
+        [TearDown]
+        public void AsyncLocal_Is_Available_In_TearDown() => this.EnsureServiceIsNotNull();
+
         [Test]
         [Repeat(2)]
-        public void Case()
-        {
-            this.service.Value.Should().NotBeNull();
-        }
+        public void Case() => this.EnsureServiceIsNotNull();
 
         [TestCase(10)]
         [TestCase(11)]
         [Repeat(2)]
-        public void Cases(int value)
-        {
-            this.service.Value.Should().NotBeNull();
-        }
+        public void Cases(int value) => this.EnsureServiceIsNotNull();
+
+        private void EnsureServiceIsNotNull() => this.service.Value.Should().NotBeNull();
     }
 }

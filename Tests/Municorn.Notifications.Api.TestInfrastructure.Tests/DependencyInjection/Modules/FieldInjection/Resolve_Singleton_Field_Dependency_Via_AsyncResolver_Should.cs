@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
 using NUnit.Framework;
@@ -10,25 +9,31 @@ using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.FieldInjection
 {
-    internal class Register_Scoped_Field_Dependency_ImplementationType_Should : FrameworkServiceProviderFixtureBase
+    internal class Resolve_Singleton_Field_Dependency_Via_AsyncResolver_Should : FrameworkServiceProviderFixtureBase
     {
         [FieldDependency]
-        [RegisterDependency(typeof(SilentLog))]
-        private readonly IAsyncLocalServiceProvider<ILog> service = default!;
+        private readonly IAsyncLocalServiceProvider<SilentLog> service = default!;
 
-        public Register_Scoped_Field_Dependency_ImplementationType_Should()
+        public Resolve_Singleton_Field_Dependency_Via_AsyncResolver_Should()
             : base(serviceCollection => serviceCollection
                 .AddSingleton<ITest>(TestExecutionContext.CurrentContext.CurrentTest)
                 .AddTestCommunication()
-                .AddFieldInjection(typeof(Register_Scoped_Field_Dependency_ImplementationType_Should)))
+                .AddFieldInjection(typeof(Resolve_Singleton_Field_Dependency_Via_AsyncResolver_Should))
+                .AddSingleton<SilentLog>())
         {
         }
 
+        [OneTimeSetUp]
+        public void AsyncLocal_Is_Available_In_OneTimeSetUp_From_Root_Provider() => this.EnsureServiceIsNotNull();
+
+        [OneTimeTearDown]
+        public void AsyncLocal_Is_Available_In_OneTimeTearDown_From_Root_Provider() => this.EnsureServiceIsNotNull();
+
         [SetUp]
-        public void AsyncLocal_Is_Available_In_SetUp() => this.EnsureServiceIsNotNull();
+        public void AsyncLocal_Is_Available_In_SetUp_From_Child_Provider() => this.EnsureServiceIsNotNull();
 
         [TearDown]
-        public void AsyncLocal_Is_Available_In_TearDown() => this.EnsureServiceIsNotNull();
+        public void AsyncLocal_Is_Available_In_TearDown_Provider() => this.EnsureServiceIsNotNull();
 
         [Test]
         [Repeat(2)]
