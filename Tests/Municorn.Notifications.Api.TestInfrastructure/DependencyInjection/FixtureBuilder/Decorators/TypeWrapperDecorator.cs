@@ -8,11 +8,9 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
-using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
-using NUnit.Framework.Internal.Commands;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureBuilder.Decorators
 {
@@ -47,7 +45,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
 
         IMethodInfo[] ITypeInfo.GetMethods(BindingFlags flags) => this
             .GetMethods(flags)
-            .Select(method => new PatchAttributesMethodWrapper(method, this.frameworks))
+            .Select(method => new ModifyAttributesMethodWrapperDecorator(method, this.frameworks))
             .ToArray<IMethodInfo>();
 
         object ITypeInfo.Construct(object?[]? args)
@@ -130,11 +128,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
         }
 
         public Task TearDownMethodExample() => Task.CompletedTask;
-
-        private static FixtureServiceProviderFramework GetFramework(ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks, object fixture) =>
-            frameworks.GetValue(
-                fixture,
-                _ => throw new InvalidOperationException($"Service provider framework for {fixture} fixture is not found"));
 
         private class FixtureOneTimeActionMethodInfo : MethodWrapper, IMethodInfo
         {
@@ -282,103 +275,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
             {
                 get => this.fixture ?? throw new InvalidOperationException("Fixture is not yet set");
                 internal set => this.fixture = value;
-            }
-        }
-
-        private class PatchAttributesMethodWrapper : MethodWrapper, IReflectionInfo
-        {
-            private readonly ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks;
-
-            public PatchAttributesMethodWrapper(IMethodInfo methodInfo, ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks)
-                : base(methodInfo.TypeInfo.Type, methodInfo.MethodInfo) =>
-                this.frameworks = frameworks;
-
-            T[] IReflectionInfo.GetCustomAttributes<T>(bool inherit)
-                where T : class
-            {
-                var customAttributes = this.GetCustomAttributes<T>(inherit);
-                if (typeof(T) == typeof(IApplyToContext))
-                {
-                    return customAttributes.Append((T)(object)new FirstSetUpAction(this.frameworks)).ToArray();
-                }
-
-                if (typeof(T) == typeof(IWrapSetUpTearDown))
-                {
-                    return customAttributes.Append((T)(object)new LastTearDownAction(this.frameworks)).ToArray();
-                }
-
-                return typeof(T) == typeof(ITestBuilder)
-                    ? customAttributes.Select(ReplaceAttribute).ToArray()
-                    : customAttributes;
-            }
-
-            private static T ReplaceAttribute<T>(T attribute)
-                where T : class =>
-                attribute switch
-                {
-                    TestCaseAttribute testCaseAttribute => (T)(object)new CombinatorialTestCaseAttribute(testCaseAttribute),
-                    TestCaseSourceAttribute testCaseSourceAttribute => (T)(object)new CombinatorialTestCaseSourceAttribute(testCaseSourceAttribute),
-                    _ => attribute,
-                };
-
-            private class FirstSetUpAction : IApplyToContext
-            {
-                private readonly ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks;
-
-                public FirstSetUpAction(ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks) =>
-                    this.frameworks = frameworks;
-
-                public void ApplyToContext(TestExecutionContext context)
-                {
-                    var test = context.CurrentTest;
-                    if (!test.IsSuite)
-                    {
-                        GetFramework(this.frameworks, context.TestObject)
-                            .RunSetUp(test)
-                            .GetAwaiter()
-                            .GetResult();
-                    }
-                }
-            }
-
-            private class LastTearDownAction : IWrapSetUpTearDown
-            {
-                private readonly ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks;
-
-                public LastTearDownAction(ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks) =>
-                    this.frameworks = frameworks;
-
-                public TestCommand Wrap(TestCommand command) => new LastTearDownCommand(command, this.frameworks);
-
-                private class LastTearDownCommand : TestCommand
-                {
-                    private readonly ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks;
-                    private readonly TestCommand command;
-
-                    public LastTearDownCommand(
-                        TestCommand command,
-                        ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks)
-                        : base(command.Test)
-                    {
-                        this.command = command;
-                        this.frameworks = frameworks;
-                    }
-
-                    public override TestResult Execute(TestExecutionContext context)
-                    {
-                        try
-                        {
-                            return this.command.Execute(context);
-                        }
-                        finally
-                        {
-                            GetFramework(this.frameworks, context.TestObject)
-                                .RunTearDown(context.CurrentTest)
-                                .GetAwaiter()
-                                .GetResult();
-                        }
-                    }
-                }
             }
         }
     }
