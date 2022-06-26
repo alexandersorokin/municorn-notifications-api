@@ -15,6 +15,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.NUnitAttributes
 
         [CombinatorialTestCaseSource(nameof(ValueData))]
         [CombinatorialTestCaseSource(nameof(GetValueData), new object[] { 1 })]
+        [CombinatorialTestCaseSource(nameof(GetValueData),  1)]
         [CombinatorialTestCaseSource(typeof(Cases))]
         [CombinatorialTestCaseSource(typeof(CaseMethod), nameof(CaseMethod.ClassValueData))]
         [CombinatorialTestCaseSource(typeof(CaseMethod), nameof(CaseMethod.GetClassValueData), new object[] { 1 })]

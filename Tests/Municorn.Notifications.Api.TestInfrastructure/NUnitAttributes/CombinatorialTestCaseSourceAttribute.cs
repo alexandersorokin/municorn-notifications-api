@@ -24,7 +24,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes
         {
         }
 
-        public CombinatorialTestCaseSourceAttribute(Type sourceType, string sourceName, object?[]? methodParams)
+        public CombinatorialTestCaseSourceAttribute(Type sourceType, string sourceName, params object?[] methodParams)
             : this(new TestCaseSourceAttribute(sourceType, sourceName, methodParams))
         {
         }
@@ -34,7 +34,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes
         {
         }
 
-        public CombinatorialTestCaseSourceAttribute(string sourceName, object?[]? methodParams)
+        public CombinatorialTestCaseSourceAttribute(string sourceName, params object?[] methodParams)
             : this(new TestCaseSourceAttribute(sourceName, methodParams))
         {
         }
