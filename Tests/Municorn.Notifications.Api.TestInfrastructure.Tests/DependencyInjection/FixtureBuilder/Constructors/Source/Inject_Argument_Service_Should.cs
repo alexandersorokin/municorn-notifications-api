@@ -9,7 +9,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [PrimaryConstructor]
     internal partial class Inject_Argument_Service_Should
     {
-        public static readonly TestFixtureData[] FixtureData =
+        internal static readonly TestFixtureData[] FixtureData =
         {
             new("passed"),
         };

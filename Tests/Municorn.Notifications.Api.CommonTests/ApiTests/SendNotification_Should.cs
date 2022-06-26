@@ -9,7 +9,7 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
     [TestFixture]
     internal class SendNotification_Should : IServiceClientFixture
     {
-        public static readonly SendNotificationRequest[] CorrectNotifications =
+        private static readonly SendNotificationRequest[] CorrectNotifications =
         {
             new AndroidSendNotificationRequest("token", "MessageA", "title1"),
             new AndroidSendNotificationRequest("token", "MessageB", "title2")
@@ -46,7 +46,7 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
             notificationId.Should().NotBeEmpty();
         }
 
-        public static readonly SendNotificationRequest[] IncorrectNotifications =
+        private static readonly SendNotificationRequest[] IncorrectNotifications =
         {
             null!,
             new AndroidSendNotificationRequest(null!, "MessageA", "title1"),

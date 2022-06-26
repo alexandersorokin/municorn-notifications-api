@@ -9,7 +9,7 @@ namespace Municorn.Notifications.Api.Tests.UnitTests.PolymorphicConverter
     [TestFixture]
     internal class Choose_Type_Should
     {
-        public static readonly IBase[] TypeCases =
+        private static readonly IBase[] TypeCases =
         {
             new A(),
             new B(),

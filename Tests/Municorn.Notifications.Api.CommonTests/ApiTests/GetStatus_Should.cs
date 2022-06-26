@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
     [TestFixture]
     internal class GetStatus_Should : IServiceClientFixture
     {
-        public static readonly SendNotificationRequest[] Notifications =
+        private static readonly SendNotificationRequest[] Notifications =
         {
             new AndroidSendNotificationRequest("token", "Message", "title"),
             new IosSendNotificationRequest("token", "alert"),
