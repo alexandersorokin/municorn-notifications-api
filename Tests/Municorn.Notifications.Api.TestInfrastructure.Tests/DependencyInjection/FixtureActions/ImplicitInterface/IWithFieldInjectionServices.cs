@@ -3,7 +3,7 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureA
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.ImplicitInterface
 {
-    internal interface IWithNoServices : IFixtureWithServiceProviderFramework
+    internal interface IWithFieldInjectionServices : IFixtureWithServiceProviderFramework
     {
         void IFixtureWithServiceProviderFramework.ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection.AddFieldInjection(this);

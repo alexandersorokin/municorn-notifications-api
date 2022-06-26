@@ -1,23 +1,20 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureActions;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.ImplicitInterface
 {
     [TestFixture]
-    internal class Override_Explicit_ConfigureServices_Should : IWithNoServices
+    internal class Override_Explicit_ConfigureServices_Should : IWithFieldInjectionServices
     {
-        [FieldDependency]
-        private readonly Counter service = default!;
-
         void IFixtureWithServiceProviderFramework.ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
-            .AddFieldInjection(this)
+            .AddTestMethodInjection()
             .AddSingleton<Counter>();
 
         [Test]
         [Repeat(2)]
-        public void Case() => this.service.Should().NotBeNull();
+        public void Case([InjectDependency] Counter service) => service.Should().NotBeNull();
     }
 }

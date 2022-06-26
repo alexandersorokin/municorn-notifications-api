@@ -19,7 +19,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(2)]
-        public void Inject_Fixture([InjectDependency] SetUpFixture fixtureService) =>
-            fixtureService.Should().NotBeNull();
+        public void Inject_SetUpFixture([InjectDependency] SetUpFixture setUpFixture) =>
+            setUpFixture.Should().NotBeNull();
     }
 }

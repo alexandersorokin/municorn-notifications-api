@@ -19,8 +19,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [TestCaseSource(nameof(InjectParentServiceCase))]
         [Repeat(2)]
-        public void Inject_SetUpFixture_Service(SetUpFixture fixtureService, MockService setUpFixtureService) =>
-            fixtureService.Service.Should().Be(setUpFixtureService);
+        public void Inject_SetUpFixture_Service(SetUpFixture setUpFixture, MockService setUpFixtureService) =>
+            setUpFixture.Service.Should().Be(setUpFixtureService);
 
         private static readonly TestCaseData[] InjectParentServiceCase =
         {
