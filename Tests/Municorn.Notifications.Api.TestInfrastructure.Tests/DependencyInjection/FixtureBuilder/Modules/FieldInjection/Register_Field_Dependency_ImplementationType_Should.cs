@@ -4,7 +4,7 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.Modules.Fields
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.Modules.FieldInjection
 {
     [TestFixtureInjectable]
     [FieldInjectionModule]
