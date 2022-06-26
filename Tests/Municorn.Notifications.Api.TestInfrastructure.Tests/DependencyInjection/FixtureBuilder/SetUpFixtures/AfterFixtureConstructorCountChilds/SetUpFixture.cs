@@ -5,7 +5,9 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureA
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
+using Municorn.Notifications.Api.TestInfrastructure.Logging;
 using NUnit.Framework;
+using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.SetUpFixtures.AfterFixtureConstructorCountChilds
 {
@@ -16,8 +18,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     {
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
-                .AddBoundLog()
-                .AddFixtureTimeLogger()
+                .AddSingleton(TestContext.Out)
+                .AddSingleton<ITextWriterProvider, AdHocTextWriterProvider>()
+                .AddSingleton<ILog, TextWriterLog>()
+                .AddSingleton<Counter>()
+                .AddSingleton<IFixtureOneTimeSetUpService, FixtureOneTimeTimeLogger>()
                 .AddScoped<IFixtureSetUpService, TestTimeLogger>();
 
         [field: FieldDependency]

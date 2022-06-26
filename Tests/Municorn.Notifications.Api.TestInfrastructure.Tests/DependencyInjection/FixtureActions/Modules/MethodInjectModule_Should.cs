@@ -11,30 +11,30 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddTestMethodInjection()
-            .AddScoped<Counter>();
+            .AddScoped<MockService>();
 
         [Test]
         [Repeat(2)]
-        public void Case([InjectDependency] Counter service) => service.Should().NotBeNull();
+        public void Case([InjectDependency] MockService service) => service.Should().NotBeNull();
 
         [Test]
         [Repeat(2)]
-        public void Select_Service([InjectDependency(typeof(Counter))] object service) =>
+        public void Select_Service([InjectDependency(typeof(MockService))] object service) =>
             service.Should().NotBeNull();
 
         [Test]
         [Repeat(2)]
         public void Select_Two_Services(
-            [InjectDependency(typeof(Counter)), InjectDependency(typeof(MethodInjectModule_Should))] object service) =>
+            [InjectDependency(typeof(MockService)), InjectDependency(typeof(MethodInjectModule_Should))] object service) =>
             service.Should().NotBeNull();
 
         [Test]
         [Repeat(2)]
-        public void Case_With_Provider([InjectDependency] Counter service, [Values] bool value) => service.Should().NotBeNull();
+        public void Case_With_Provider([InjectDependency] MockService service, [Values] bool value) => service.Should().NotBeNull();
 
         [TestCaseSource(nameof(CaseValues))]
         [Repeat(2)]
-        public void Cases(int value, Counter service) => service.Should().NotBeNull();
+        public void Cases(int value, MockService service) => service.Should().NotBeNull();
 
         private static readonly TestCaseData[] CaseValues =
         {
@@ -42,6 +42,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
             CreateCase(11),
         };
 
-        private static TestCaseData CreateCase(int value) => new(value, new InjectedService<Counter>());
+        private static TestCaseData CreateCase(int value) => new(value, new InjectedService<MockService>());
     }
 }

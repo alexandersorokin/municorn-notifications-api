@@ -1,6 +1,4 @@
 ﻿using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureActions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FixtureOneTimeActions;
 using NUnit.Framework;
@@ -9,13 +7,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixture]
     [FieldInjectionWithFixtureOneTimeActionsModule]
-    internal class Fields_With_OneTimeActions_Module_Should : IFixtureWithServiceProviderFramework, IOneTimeSetUpAction
+    internal class Fields_With_OneTimeActions_Module_Should : IWithoutServices, IOneTimeSetUpAction
     {
-        [FieldDependency]
-        private readonly Counter service = default!;
-
-        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
-            .AddSingleton<Counter>();
+        private readonly Counter service = new();
 
         public void OneTimeSetUp() => this.service.Increment();
 

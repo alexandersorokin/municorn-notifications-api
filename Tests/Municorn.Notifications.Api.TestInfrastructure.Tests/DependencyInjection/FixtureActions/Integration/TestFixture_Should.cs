@@ -14,6 +14,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal sealed class TestFixture_Should : IWithDefaultModules, IOneTimeSetUpAction, IDisposable
     {
         private readonly Counter setUpActionCounter = new();
+
         [FieldDependency]
         [RegisterDependency(typeof(MockService))]
         private readonly IMockService fieldService = default!;
