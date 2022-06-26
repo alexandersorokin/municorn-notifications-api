@@ -3,12 +3,11 @@ using System.Diagnostics;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
 using Vostok.Logging.Abstractions;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.FixtureTime
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.Logging.TestTime
 {
     [PrimaryConstructor]
     internal sealed partial class TestTimeLogger : IFixtureSetUpService, IDisposable
     {
-        private readonly Counter counter;
         private readonly TestAccessor testAccessor;
         private readonly ILog log;
         private Stopwatch? stopWatch;
@@ -19,7 +18,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         {
             var stopwatch = this.stopWatch ?? throw new InvalidOperationException("Run wasn't called");
             this.log.Info($"Test {this.testAccessor.Test.FullName} finished. Elapsed: {stopwatch.Elapsed}");
-            this.counter.Increment();
         }
     }
 }

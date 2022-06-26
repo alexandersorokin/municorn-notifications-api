@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Municorn.Notifications.Api.TestInfrastructure\Municorn.Notifications.Api.TestInfrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Logging\TestTime\SetUpFixture\AllGoesToSetUpFixture\" />
+  </ItemGroup>
+
 </Project>
