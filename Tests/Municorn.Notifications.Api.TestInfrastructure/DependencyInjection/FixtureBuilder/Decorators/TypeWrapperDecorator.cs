@@ -200,9 +200,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
 
         private sealed class ScopeServiceProviderSaver : IFixtureSetUpService, IDisposable
         {
+            private readonly ConditionalWeakTable<ITest, FixtureServiceProviderMap> scopedServiceProviders;
             private readonly IServiceProvider serviceProvider;
             private readonly IFixtureProvider fixtureProvider;
             private readonly FixtureServiceProviderMap map;
+            private readonly ITest test;
 
             [UsedImplicitly]
             public ScopeServiceProviderSaver(
@@ -211,14 +213,31 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                 IFixtureProvider fixtureProvider,
                 TestAccessor testAccessor)
             {
+                this.scopedServiceProviders = scopedServiceProviders;
                 this.serviceProvider = serviceProvider;
                 this.fixtureProvider = fixtureProvider;
-                this.map = scopedServiceProviders.GetOrCreateValue(testAccessor.Test);
+
+                FixtureServiceProviderMap createdMap = new();
+                this.test = testAccessor.Test;
+                scopedServiceProviders.Add(this.test, createdMap);
+                this.map = createdMap;
             }
 
             public void Run() => this.map.Add(this.fixtureProvider.Fixture, this.serviceProvider);
 
-            public void Dispose() => this.map.Remove(this.fixtureProvider.Fixture);
+            public void Dispose()
+            {
+                this.map.Remove(this.fixtureProvider.Fixture);
+                this.RemoveMap();
+            }
+
+            private void RemoveMap()
+            {
+                if (!this.scopedServiceProviders.Remove(this.test))
+                {
+                    throw new InvalidOperationException($"Failed to remove scoped service provider map for test ${this.test.FullName}");
+                }
+            }
         }
 
         private class FixtureActionMethodInfo : MethodWrapper, IMethodInfo
@@ -233,7 +252,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
 
             object? IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
-                var map = this.scopedServiceProviders.GetOrCreateValue(TestExecutionContext.CurrentContext.CurrentTest);
+                var test = TestExecutionContext.CurrentContext.CurrentTest;
+                var map = this.scopedServiceProviders.TryGetValue(test, out var result)
+                        ? result
+                        : throw new InvalidOperationException($"Scoped service provider map is not created for test {test.FullName}");
                 var serviceProvider = map.Get(fixture ?? throw new InvalidOperationException("Fixture is found for fixture method"));
                 return this.Invoke(fixture, GetServiceArray(serviceProvider, this.MethodInfo.GetParameters()));
             }
@@ -255,9 +277,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
             object IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
                 var testFixture = fixture ?? throw new InvalidOperationException("Fixture is not passed to container dispose method");
-                var serviceProvider = this.frameworks.GetValue(
-                        testFixture,
-                        _ => throw new InvalidOperationException($"Service provider for {fixture} fixture is not found"));
+                var serviceProvider = this.frameworks.TryGetValue(testFixture, out var result)
+                    ? result
+                    : throw new InvalidOperationException($"Service provider for {fixture} fixture is not found");
 
                 if (!this.frameworks.Remove(testFixture))
                 {

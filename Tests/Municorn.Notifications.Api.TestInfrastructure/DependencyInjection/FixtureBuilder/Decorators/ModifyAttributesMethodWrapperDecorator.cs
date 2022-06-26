@@ -47,9 +47,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
             };
 
         private static FixtureServiceProviderFramework GetFramework(ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks, object fixture) =>
-            frameworks.GetValue(
-                fixture,
-                _ => throw new InvalidOperationException($"Service provider framework for {fixture} fixture is not found"));
+            frameworks.TryGetValue(fixture, out var result)
+                ? result
+                : throw new InvalidOperationException($"Service provider framework for {fixture} fixture is not found");
 
         private class FirstSetUpAction : IApplyToContext
         {
