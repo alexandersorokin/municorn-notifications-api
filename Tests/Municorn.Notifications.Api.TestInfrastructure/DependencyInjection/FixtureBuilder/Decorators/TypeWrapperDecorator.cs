@@ -221,15 +221,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
             public void Dispose()
             {
                 this.map.Remove(this.fixtureProvider.Fixture);
-                this.RemoveMap();
-            }
-
-            private void RemoveMap()
-            {
-                if (!this.scopedServiceProviders.Remove(this.test))
-                {
-                    throw new InvalidOperationException($"Failed to remove scoped service provider map for test ${this.test.FullName}");
-                }
+                this.scopedServiceProviders.Remove(this.test);
             }
         }
 

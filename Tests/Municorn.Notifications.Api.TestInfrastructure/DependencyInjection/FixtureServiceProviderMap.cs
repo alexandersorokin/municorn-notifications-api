@@ -10,18 +10,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection
         internal IServiceProvider Get(object fixture) =>
             this.serviceScopes.TryGetValue(fixture, out var serviceScope)
                 ? serviceScope
-                : throw CreateNotFoundException(fixture);
+                : throw new InvalidOperationException($"Service provider is not found for fixture {fixture}");
 
         internal void Add(object fixture, IServiceProvider serviceScope) => this.serviceScopes.Add(fixture, serviceScope);
 
-        internal void Remove(object fixture)
-        {
-            if (!this.serviceScopes.Remove(fixture))
-            {
-                throw CreateNotFoundException(fixture);
-            }
-        }
-
-        private static InvalidOperationException CreateNotFoundException(object fixture) => new($"Service provider is not found for fixture {fixture}");
+        internal void Remove(object fixture) => this.serviceScopes.Remove(fixture);
     }
 }
