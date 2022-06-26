@@ -4,10 +4,10 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureA
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.SetUpFixtures.Empty
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.SetUpFixtures.WithContainerInjectSetUpFixtureService
 {
     [TestFixture]
-    internal class SetUpFixture_Inject_Should : IFixtureWithServiceProviderFramework
+    internal class TestFixture_With_Container : IFixtureWithServiceProviderFramework
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddTestMethodInjection()
@@ -17,8 +17,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [Repeat(2)]
         public void Inject_Service([InjectDependency] MockService service) => service.Should().NotBeNull();
 
-        [Test]
+        [TestCaseSource(nameof(InjectParentServiceCase))]
         [Repeat(2)]
-        public void Inject_Fixture([InjectDependency] SetUpFixture fixtureService) => fixtureService.Should().NotBeNull();
+        public void Inject_SetUpFixture_Service(SetUpFixture fixtureService, MockService setUpFixtureService) =>
+            fixtureService.Service.Should().Be(setUpFixtureService);
+
+        private static readonly TestCaseData[] InjectParentServiceCase =
+        {
+            new(new InjectedService<SetUpFixture>(), new InjectedServiceFromSetUpFixture()),
+        };
     }
 }
