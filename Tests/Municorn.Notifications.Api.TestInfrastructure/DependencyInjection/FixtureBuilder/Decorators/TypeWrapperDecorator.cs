@@ -282,8 +282,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                 : base(type, methodInfo) =>
                 this.frameworks = frameworks;
 
-            IParameterInfo[] IMethodInfo.GetParameters() => Array.Empty<IParameterInfo>();
-
             object IMethodInfo.Invoke(object? fixture, params object?[]? args)
             {
                 var testFixture = fixture ?? throw new InvalidOperationException("Fixture is not passed to container dispose method");
