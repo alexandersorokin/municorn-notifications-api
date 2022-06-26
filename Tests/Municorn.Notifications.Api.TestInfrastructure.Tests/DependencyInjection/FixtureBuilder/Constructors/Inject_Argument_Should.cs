@@ -11,9 +11,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         private readonly string argument;
 
         [Test]
-        public void Case()
-        {
-            this.argument.Should().Be("passed");
-        }
+        public void Case() => this.argument.Should().Be("passed");
     }
 }

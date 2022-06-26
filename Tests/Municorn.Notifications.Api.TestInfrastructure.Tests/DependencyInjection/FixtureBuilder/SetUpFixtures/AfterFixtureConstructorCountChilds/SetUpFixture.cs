@@ -1,36 +1,56 @@
 ﻿using System;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureActions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
-using Municorn.Notifications.Api.TestInfrastructure.Logging;
 using NUnit.Framework;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.SetUpFixtures.AfterFixtureConstructorCountChilds
 {
     [SetUpFixture]
-    [TestMethodInjectionModule]
-    [FieldInjectionModule]
     internal sealed class SetUpFixture : IFixtureWithServiceProviderFramework, IDisposable
     {
+        private readonly Counter counter = new();
+
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
-                .AddSingleton(TestContext.Out)
-                .AddSingleton<ITextWriterProvider, AdHocTextWriterProvider>()
-                .AddSingleton<ILog, TextWriterLog>()
-                .AddSingleton<Counter>()
-                .AddSingleton<IFixtureOneTimeSetUpService, FixtureOneTimeTimeLogger>()
-                .AddScoped<IFixtureSetUpService, TestTimeLogger>();
+                .AddTestMethodInjection()
+                .AddFieldInjection(this)
+                .AddSingleton<IMockService, MockService>()
+                .AddSingleton(this.counter)
+                .AddSingleton<IFixtureOneTimeSetUpService, IncrementService>()
+                .AddScoped<IFixtureSetUpService, ScopedIncrementService>();
 
         [field: FieldDependency]
-        public Counter Counter { get; } = default!;
+        public IMockService Service { get; } = default!;
 
-        public void Dispose()
+        public void Dispose() => this.counter.Value.Should().Be(14);
+
+        private sealed class IncrementService : IFixtureOneTimeSetUpService, IDisposable
         {
-            this.Counter.Value.Should().Be(7);
+            private readonly Counter counter;
+
+            [UsedImplicitly]
+            public IncrementService(Counter counter) => this.counter = counter;
+
+            public void Run() => this.counter.Increment();
+
+            public void Dispose() => this.counter.Increment();
+        }
+
+        private sealed class ScopedIncrementService : IFixtureSetUpService, IDisposable
+        {
+            private readonly Counter counter;
+
+            [UsedImplicitly]
+            public ScopedIncrementService(Counter counter) => this.counter = counter;
+
+            public void Run() => this.counter.Increment();
+
+            public void Dispose() => this.counter.Increment();
         }
     }
 }

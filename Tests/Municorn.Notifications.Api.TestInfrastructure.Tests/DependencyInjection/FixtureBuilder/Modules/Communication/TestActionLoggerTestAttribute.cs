@@ -6,7 +6,7 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using Vostok.Logging.Abstractions;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.Communication
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.Modules.Communication
 {
     internal sealed class TestActionLoggerTestAttribute : NUnitAttribute, ITestAction
     {

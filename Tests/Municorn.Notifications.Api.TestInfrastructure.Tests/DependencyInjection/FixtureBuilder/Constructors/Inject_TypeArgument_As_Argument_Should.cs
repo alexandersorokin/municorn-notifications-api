@@ -9,9 +9,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal partial class Inject_TypeArgument_As_Argument_Should<T>
     {
         [Test]
-        public void Case()
-        {
-            typeof(T).Should().Be(typeof(int));
-        }
+        public void Case() => typeof(T).Should().Be(typeof(int));
     }
 }

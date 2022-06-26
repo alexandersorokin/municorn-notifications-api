@@ -12,9 +12,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         private readonly ITest service;
 
         [Test]
-        public void Case()
-        {
-            this.service.Should().NotBeNull();
-        }
+        public void Case() => this.service.Should().NotBeNull();
     }
 }

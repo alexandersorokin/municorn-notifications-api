@@ -1,22 +1,24 @@
 ﻿using FluentAssertions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureBuilder;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.Communication
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.Modules.Communication
 {
     [TestFixtureInjectable]
     [TestCommunicationModule]
-    [LogModule]
-    [TestActionLoggerSuite]
-    [TestActionLoggerTest]
-    internal class Pass_Container_To_TestAction_Attribute_Should
+    [TimeLoggerModule]
+    [PrimaryConstructor]
+    internal partial class Inject_AsyncLocal_Should
     {
+        private readonly IAsyncLocalServiceProvider<IFixtureSetUpService> service;
+
         [Test]
         [Repeat(2)]
         public void Case()
         {
-            true.Should().BeTrue();
+            this.service.Value.Should().NotBeNull();
         }
 
         [TestCase(10)]
@@ -24,7 +26,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [Repeat(2)]
         public void Cases(int value)
         {
-            value.Should().BePositive();
+            this.service.Value.Should().NotBeNull();
         }
     }
 }
