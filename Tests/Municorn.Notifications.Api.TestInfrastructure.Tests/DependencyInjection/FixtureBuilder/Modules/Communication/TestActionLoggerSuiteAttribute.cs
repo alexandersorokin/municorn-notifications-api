@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.Modules.Communication
 {
@@ -23,12 +22,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         public void AfterTest(ITest test) => TestActionSuiteOneTimeTearDownExceptionLogger
             .DoInSafeContext(() => this.EnsureHaveContainer(test));
 
-        private void EnsureHaveContainer(ITest test)
-        {
-            var service = test
+        private void EnsureHaveContainer(ITest test) =>
+            test
                 .GetServiceProvider(this.testFixture ?? throw new InvalidOperationException("Fixture is not found"))
-                .GetRequiredService<ILog>();
-            service.Should().NotBeNull();
-        }
+                .GetRequiredService<MockService>()
+                .Should()
+                .NotBeNull();
     }
 }
