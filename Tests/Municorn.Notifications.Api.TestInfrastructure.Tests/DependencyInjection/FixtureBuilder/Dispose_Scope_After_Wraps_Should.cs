@@ -14,7 +14,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [TestFixtureInjectable]
     [TestMethodInjectionModule]
     [TestCommunicationModule]
-    [TimeLoggerScopedCounterModule]
+    [CounterScopedModule]
     internal class Dispose_Scope_After_Wraps_Should
     {
         [Test]

@@ -17,28 +17,16 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         private readonly Counter casesCounter = new();
 
         [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            this.oneTimSetUpCounter.Increment();
-        }
+        public void OneTimeSetUp() => this.oneTimSetUpCounter.Increment();
 
         [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            this.oneTimeTearDownCounter.Increment();
-        }
+        public void OneTimeTearDown() => this.oneTimeTearDownCounter.Increment();
 
         [SetUp]
-        public void SetUp()
-        {
-            this.setUpCounter.Increment();
-        }
+        public void SetUp() => this.setUpCounter.Increment();
 
         [TearDown]
-        public void TearDown()
-        {
-            this.tearDownCounter.Increment();
-        }
+        public void TearDown() => this.tearDownCounter.Increment();
 
         [Test]
         [Repeat(2)]
