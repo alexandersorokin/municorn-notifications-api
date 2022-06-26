@@ -22,13 +22,15 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
         private readonly ConditionalWeakTable<ITest, FixtureServiceProviderMap> scopedServiceProviders = new();
         private readonly ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks = new();
 
+        private readonly ITypeInfo originalTypeInfo;
         private readonly Type originalType;
         private readonly Type wrappedType;
         private readonly object?[] arguments;
 
-        public TypeWrapperDecorator(Type type, object?[] arguments, Type[] typeArgs)
+        public TypeWrapperDecorator(ITypeInfo originalTypeInfo, Type type, object?[] arguments, Type[] typeArgs)
             : base(type)
         {
+            this.originalTypeInfo = originalTypeInfo;
             this.originalType = type;
             if (type.ContainsGenericParameters && !typeArgs.Any())
             {
@@ -65,7 +67,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                 .AddSingleton<IFixtureOneTimeSetUpService, FixtureServiceProviderSaver>()
                 .AddSingleton(this.scopedServiceProviders)
                 .AddScoped<IFixtureSetUpService, ScopeServiceProviderSaver>()
-                .AddFixtureServiceCollectionModuleAttributes(this.originalType));
+                .AddFixtureServiceCollectionModuleAttributes(this.originalTypeInfo));
 
             try
             {
@@ -84,6 +86,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
 
         ITypeInfo ITypeInfo.MakeGenericType(Type[] typeArgs) =>
             new TypeWrapperDecorator(
+                this.originalTypeInfo,
                 this.originalType.MakeGenericType(typeArgs),
                 this.arguments,
                 Array.Empty<Type>());

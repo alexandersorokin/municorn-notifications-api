@@ -28,7 +28,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
             this.CreateImplementation().BuildFrom(this.CreateTypeWrapperDecorator(typeInfo), filter);
 
         private TypeWrapperDecorator CreateTypeWrapperDecorator(ITypeInfo typeInfo) =>
-            new(typeInfo.Type, this.arguments, this.TypeArgs);
+            new(typeInfo, typeInfo.Type, this.arguments, this.TypeArgs);
 
         private TestFixtureAttribute CreateImplementation() => new(this.arguments)
         {
