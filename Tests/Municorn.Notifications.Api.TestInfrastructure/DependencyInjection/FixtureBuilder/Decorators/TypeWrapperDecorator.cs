@@ -216,10 +216,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                 this.map = scopedServiceProviders.GetOrCreateValue(testAccessor.Test);
             }
 
-            public void Run()
-            {
-                this.map.Add(this.fixtureProvider.Fixture, this.serviceProvider);
-            }
+            public void Run() => this.map.Add(this.fixtureProvider.Fixture, this.serviceProvider);
 
             public void Dispose() => this.map.Remove(this.fixtureProvider.Fixture);
         }
@@ -262,7 +259,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                         testFixture,
                         _ => throw new InvalidOperationException($"Service provider for {fixture} fixture is not found"));
 
-                this.frameworks.Remove(testFixture);
+                if (!this.frameworks.Remove(testFixture))
+                {
+                    throw new InvalidOperationException($"Service provider for {fixture} fixture is concurrently removed");
+                }
+
                 return serviceProvider.DisposeAsync().AsTask();
             }
         }
