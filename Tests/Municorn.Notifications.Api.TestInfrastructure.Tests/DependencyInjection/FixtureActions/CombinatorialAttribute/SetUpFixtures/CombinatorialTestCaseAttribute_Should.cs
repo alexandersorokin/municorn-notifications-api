@@ -2,11 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureActions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
-using Municorn.Notifications.Api.TestInfrastructure.Logging;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.CombinatorialAttribute
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.CombinatorialAttribute.SetUpFixtures
 {
     [TestFixture]
     internal class CombinatorialTestCaseAttribute_Should : IFixtureWithServiceProviderFramework
@@ -14,15 +13,15 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddTestMethodInjection()
-                .AddSingleton<NUnitAsyncLocalTextWriterProvider>();
+                .AddSingleton<MockService>();
 
         [CombinatorialTestCase(10, 1.1f, 100, "provided")]
         [CombinatorialTestCase(11, 1.2d, null)]
         public void Integration<T1, T2>(
-            [InjectDependency(typeof(NUnitAsyncLocalTextWriterProvider))] object injectFirst,
+            [InjectDependency(typeof(MockService))] object injectFirst,
             [Values] bool automaticData,
             int testCaseData,
-            [InjectDependency] NUnitAsyncLocalTextWriterProvider injectSecond,
+            [InjectDependency] MockService injectSecond,
             [Values("string", 777)] T1 automaticInfer,
             T2 testCaseInfer,
             int? testCaseDataConversion,
@@ -40,7 +39,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [CombinatorialTestCase("provided")]
         [CombinatorialTestCase]
         public void Process_Optional_With_Container(
-            [InjectDependency] NUnitAsyncLocalTextWriterProvider service,
+            [InjectDependency] MockService service,
             string optional = "default") =>
             optional.Should().NotBeNull();
 
@@ -58,14 +57,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [CombinatorialTestCase(10)]
         [CombinatorialTestCase(11)]
-        public void Inject_From_Container_And_Case([InjectDependency] NUnitAsyncLocalTextWriterProvider service, int value)
+        public void Inject_From_Container_And_Case([InjectDependency] MockService service, int value)
         {
             service.Should().NotBeNull();
             value.Should().BePositive();
         }
 
         [CombinatorialTestCase]
-        public void Inject_From_Container([InjectDependency] NUnitAsyncLocalTextWriterProvider service) => service.Should().NotBeNull();
+        public void Inject_From_Container([InjectDependency] MockService service) => service.Should().NotBeNull();
 
         [CombinatorialTestCase]
         public void Inject_From_Provider([Values(1, 2)] int value) => value.Should().BePositive();

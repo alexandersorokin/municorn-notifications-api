@@ -9,34 +9,38 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions
 {
     [TestFixture]
-    internal sealed class Run_Global_Dispose_Should : IFixtureWithServiceProviderFramework, IDisposable
+    internal sealed class Run_Dispose_PerTest_Should : IFixtureWithServiceProviderFramework, IDisposable
     {
         private readonly Counter counter = new();
 
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddTestMethodInjection()
-                .AddContextualLog()
                 .AddSingleton(this.counter)
-                .AddSingleton<FixtureOneTimeTimeLogger>();
+                .AddScoped<OnDisposeIncrementService>();
 
         [Test]
         [Repeat(2)]
-        public void Case([InjectDependency] FixtureOneTimeTimeLogger fixtureOneTimeTimeLogger)
-        {
-            fixtureOneTimeTimeLogger.Run();
-            true.Should().BeTrue();
-        }
+        public void Case([InjectDependency] OnDisposeIncrementService service) => service.Should().NotBeNull();
 
         [CombinatorialTestCase(10)]
         [CombinatorialTestCase(11)]
         [Repeat(2)]
-        public void Cases(int value, [InjectDependency] FixtureOneTimeTimeLogger fixtureOneTimeTimeLogger)
+        public void Cases(int value, [InjectDependency] OnDisposeIncrementService service)
         {
-            fixtureOneTimeTimeLogger.Run();
+            service.Should().NotBeNull();
             value.Should().BePositive();
         }
 
-        public void Dispose() => this.counter.Value.Should().Be(1);
+        public void Dispose() => this.counter.Value.Should().Be(6);
+
+        internal sealed class OnDisposeIncrementService : IDisposable
+        {
+            private readonly Counter counter;
+
+            public OnDisposeIncrementService(Counter counter) => this.counter = counter;
+
+            public void Dispose() => this.counter.Increment();
+        }
     }
 }

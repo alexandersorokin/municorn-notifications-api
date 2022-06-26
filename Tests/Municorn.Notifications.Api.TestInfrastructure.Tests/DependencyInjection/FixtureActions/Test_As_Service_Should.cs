@@ -8,7 +8,7 @@ using NUnit.Framework.Interfaces;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions
 {
     [TestFixture]
-    internal class Inject_Test_Should : IFixtureWithServiceProviderFramework
+    internal class Test_As_Service_Should : IFixtureWithServiceProviderFramework
     {
         [FieldDependency]
         private readonly ITest service = default!;
