@@ -5,21 +5,20 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.FieldInjection
 {
     internal class Resolve_Singleton_Field_Dependency_Via_AsyncResolver_Should : FrameworkServiceProviderFixtureBase
     {
         [FieldDependency]
-        private readonly IAsyncLocalServiceProvider<SilentLog> service = default!;
+        private readonly IAsyncLocalServiceProvider<MockService> service = default!;
 
         public Resolve_Singleton_Field_Dependency_Via_AsyncResolver_Should()
             : base(serviceCollection => serviceCollection
                 .AddSingleton<ITest>(TestExecutionContext.CurrentContext.CurrentTest)
                 .AddTestCommunication()
                 .AddFieldInjection(typeof(Resolve_Singleton_Field_Dependency_Via_AsyncResolver_Should))
-                .AddSingleton<SilentLog>())
+                .AddSingleton<MockService>())
         {
         }
 

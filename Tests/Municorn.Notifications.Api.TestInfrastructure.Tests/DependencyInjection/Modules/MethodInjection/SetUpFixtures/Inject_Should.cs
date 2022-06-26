@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using NUnit.Framework;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.MethodInjection.SetUpFixtures
 {
@@ -12,12 +11,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         public Inject_Should()
             : base(serviceCollection => serviceCollection
                 .AddTestMethodInjection()
-                .AddSingleton<SilentLog>())
+                .AddSingleton<MockService>())
         {
         }
 
         [Test]
         [Repeat(2)]
-        public void Inject_Service([InjectDependency] SilentLog service) => service.Should().NotBeNull();
+        public void Inject_Service([InjectDependency] MockService service) => service.Should().NotBeNull();
     }
 }

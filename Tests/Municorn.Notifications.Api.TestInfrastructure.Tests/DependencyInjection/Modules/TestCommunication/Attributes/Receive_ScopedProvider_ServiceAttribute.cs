@@ -5,7 +5,6 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal.Commands;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.TestCommunication.Attributes
 {
@@ -20,7 +19,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
                 : base(innerCommand) =>
                 this.BeforeTest = context => context.CurrentTest
                     .GetServiceProvider(context.TestObject)
-                    .GetRequiredService<SilentLog>()
+                    .GetRequiredService<MockService>()
                     .Should()
                     .NotBeNull();
         }

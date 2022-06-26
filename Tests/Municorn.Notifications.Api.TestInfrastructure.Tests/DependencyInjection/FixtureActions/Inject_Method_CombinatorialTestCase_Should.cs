@@ -12,7 +12,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddTestMethodInjection()
-            .AddScoped<Counter>();
+            .AddScoped<MockService>();
 
         [CombinatorialTestCase]
         [Repeat(2)]
@@ -20,11 +20,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [CombinatorialTestCase]
         [Repeat(2)]
-        public void Case([InjectDependency] Counter service) => service.Should().NotBeNull();
+        public void Case([InjectDependency] MockService service) => service.Should().NotBeNull();
 
         [CombinatorialTestCase(10)]
         [CombinatorialTestCase(11)]
         [Repeat(2)]
-        public void Cases(int value, [InjectDependency] Counter service) => service.Should().NotBeNull();
+        public void Cases(int value, [InjectDependency] MockService service) => service.Should().NotBeNull();
     }
 }

@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureActions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
 using NUnit.Framework;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.Modules.Communication
 {
@@ -14,7 +13,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddTestCommunication()
-            .AddScoped<ILog, SilentLog>();
+            .AddScoped<MockService>();
 
         [Test]
         [Repeat(2)]

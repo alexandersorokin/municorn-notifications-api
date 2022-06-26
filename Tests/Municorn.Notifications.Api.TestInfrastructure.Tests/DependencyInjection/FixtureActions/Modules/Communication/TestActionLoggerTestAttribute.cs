@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.Modules.Communication
 {
@@ -26,7 +25,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         private void EnsureHaveContainer(ITest test) =>
             test
                 .GetServiceProvider(this.testFixture ?? throw new InvalidOperationException("Fixture is not found"))
-                .GetRequiredService<ILog>()
+                .GetRequiredService<MockService>()
                 .Should()
                 .NotBeNull();
     }

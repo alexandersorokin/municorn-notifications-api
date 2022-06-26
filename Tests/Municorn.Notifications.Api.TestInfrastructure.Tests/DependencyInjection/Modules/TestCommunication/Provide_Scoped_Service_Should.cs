@@ -4,7 +4,6 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.TestCommunication
 {
@@ -14,7 +13,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
             : base(serviceCollection => serviceCollection
                 .AddTestCommunication()
                 .AddSingleton<ITest>(TestExecutionContext.CurrentContext.CurrentTest)
-                .AddScoped<SilentLog>())
+                .AddScoped<MockService>())
         {
         }
 
@@ -34,7 +33,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         private void EnsureResolved() =>
             TestExecutionContext.CurrentContext.CurrentTest
                 .GetServiceProvider(this)
-                .GetRequiredService<SilentLog>()
+                .GetRequiredService<MockService>()
                 .Should()
                 .NotBeNull();
     }

@@ -11,8 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal class Service_Fixture_Should : IFixtureWithServiceProviderFramework
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
-            .AddTestMethodInjection()
-            .AddSingleton<object>();
+            .AddTestMethodInjection();
 
         [Test]
         [Repeat(2)]

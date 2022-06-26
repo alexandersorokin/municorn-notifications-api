@@ -4,7 +4,6 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FixtureOneTimeActions;
 using NUnit.Framework;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.FieldInjection
 {
@@ -12,12 +11,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal class Attribute_With_OneTimeAction_Get_Service_Should : FrameworkServiceProviderFixtureBase, IOneTimeSetUpAction
     {
         [FieldDependency]
-        private readonly SilentLog service = default!;
+        private readonly MockService service = default!;
 
         public Attribute_With_OneTimeAction_Get_Service_Should()
             : base(serviceCollection => serviceCollection
                 .AddFixtureServiceCollectionModuleAttributes(typeof(Attribute_With_OneTimeAction_Get_Service_Should))
-                .AddSingleton<SilentLog>())
+                .AddSingleton<MockService>())
         {
         }
 

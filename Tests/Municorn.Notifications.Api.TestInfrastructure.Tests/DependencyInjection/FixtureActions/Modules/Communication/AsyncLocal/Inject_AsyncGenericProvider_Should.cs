@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
 using NUnit.Framework;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.Modules.Communication.AsyncLocal
 {
@@ -11,11 +10,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal class Inject_AsyncGenericProvider_Should : IWithFields
     {
         [FieldDependency]
-        private readonly IAsyncLocalServiceProvider<ILog> service = default!;
+        private readonly IAsyncLocalServiceProvider<MockService> service = default!;
 
         public void SetUpServices(IServiceCollection serviceCollection) => serviceCollection
             .AddTestCommunication()
-            .AddScoped<ILog, SilentLog>();
+            .AddScoped<MockService>();
 
         [SetUp]
         public void SetUp() => this.service.Value.Should().NotBeNull();

@@ -6,7 +6,6 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.FieldInjection
 {
@@ -14,7 +13,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     {
         [FieldDependency]
         [RegisterDependency]
-        private readonly IAsyncLocalServiceProvider<SilentLog> service = default!;
+        private readonly IAsyncLocalServiceProvider<MockService> service = default!;
 
         public Register_Scoped_Field_Dependency_Should()
             : base(serviceCollection => serviceCollection

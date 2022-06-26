@@ -4,7 +4,6 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framewor
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
 using NUnit.Framework;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.MethodInjection
 {
@@ -13,7 +12,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         public Inject_To_Methods_Via_Extensions_Should()
             : base(serviceCollection => serviceCollection
                 .AddTestMethodInjection()
-                .AddSingleton<SilentLog>())
+                .AddSingleton<MockService>())
         {
         }
 
@@ -25,21 +24,21 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         public void Plain_TestCase(int value) => value.Should().BePositive();
 
         [Test]
-        public void Simple_Inject([InjectDependency] SilentLog service) => service.Should().NotBeNull();
+        public void Simple_Inject([InjectDependency] MockService service) => service.Should().NotBeNull();
 
         [Test]
         [Repeat(3)]
-        public void Repeat_Inject([InjectDependency] SilentLog service) => service.Should().NotBeNull();
+        public void Repeat_Inject([InjectDependency] MockService service) => service.Should().NotBeNull();
 
         [Test]
-        public void Select_Service([InjectDependency(typeof(SilentLog))] ILog service) => service.Should().NotBeNull();
+        public void Select_Service([InjectDependency(typeof(MockService))] IMockService service) => service.Should().NotBeNull();
 
         [Test]
-        public void Select_Two_Services([InjectDependency(typeof(SilentLog)), InjectDependency(typeof(IFixtureSetUpService))] object service) =>
+        public void Select_Two_Services([InjectDependency(typeof(MockService)), InjectDependency(typeof(IFixtureSetUpService))] object service) =>
             service.Should().NotBeNull();
 
         [Test]
-        public void Case_With_Provider([InjectDependency] SilentLog service, [Values] bool value) =>
+        public void Case_With_Provider([InjectDependency] MockService service, [Values] bool value) =>
             service.Should().NotBeNull();
 
         private static readonly TestCaseData[] CaseValues =
@@ -49,14 +48,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         };
 
         [TestCaseSource(nameof(CaseValues))]
-        public void Cases_With_Marker_Created_Manually(int value, ILog service) => service.Should().NotBeNull();
+        public void Cases_With_Marker_Created_Manually(int value, MockService service) => service.Should().NotBeNull();
 
         [CombinatorialTestCase]
-        public void CombinatorialTestCase_Inject([InjectDependency] SilentLog service) => service.Should().NotBeNull();
+        public void CombinatorialTestCase_Inject([InjectDependency] MockService service) => service.Should().NotBeNull();
 
         [CombinatorialTestCase(1)]
         [CombinatorialTestCase(2)]
-        public void TestCases_Inject([InjectDependency] SilentLog service, int value)
+        public void TestCases_Inject([InjectDependency] MockService service, int value)
         {
             service.Should().NotBeNull();
             value.Should().BePositive();
@@ -69,8 +68,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         };
 
         [CombinatorialTestCaseSource(nameof(CombinatorialCaseSourceValues))]
-        public void Cases(int value, [InjectDependency] SilentLog service) => service.Should().NotBeNull();
+        public void Cases(int value, [InjectDependency] MockService service) => service.Should().NotBeNull();
 
-        private static TestCaseData CreateMarkerCase(int value) => new(value, new InjectedService<SilentLog>());
+        private static TestCaseData CreateMarkerCase(int value) => new(value, new InjectedService<MockService>());
     }
 }

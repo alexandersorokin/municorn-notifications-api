@@ -2,7 +2,6 @@
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using NUnit.Framework;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.SetUpFixtures.Service
 {
@@ -11,9 +10,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     {
         public void SetUpServices(IServiceCollection serviceCollection) => serviceCollection
             .AddTestMethodInjection()
-            .AddSingleton<ILog, SilentLog>();
+            .AddSingleton<MockService>();
 
         [field: FieldDependency]
-        internal ILog Service { get; } = default!;
+        internal MockService Service { get; } = default!;
     }
 }

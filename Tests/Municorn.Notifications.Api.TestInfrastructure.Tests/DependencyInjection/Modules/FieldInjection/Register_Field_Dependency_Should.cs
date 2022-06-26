@@ -2,7 +2,6 @@
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using NUnit.Framework;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.FieldInjection
 {
@@ -10,7 +9,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     {
         [FieldDependency]
         [RegisterDependency]
-        private readonly SilentLog service = default!;
+        private readonly MockService service = default!;
 
         public Register_Field_Dependency_Should()
             : base(serviceCollection => serviceCollection

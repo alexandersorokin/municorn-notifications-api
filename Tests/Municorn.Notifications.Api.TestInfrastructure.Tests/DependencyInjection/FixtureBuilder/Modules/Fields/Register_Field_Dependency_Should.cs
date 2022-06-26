@@ -3,7 +3,6 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureB
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using NUnit.Framework;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.Modules.Fields
 {
@@ -13,7 +12,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal partial class Register_Field_Dependency_Should
     {
         [RegisterDependency]
-        private readonly SilentLog service;
+        private readonly MockService service;
 
         [Test]
         [Repeat(2)]

@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureActions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
 using NUnit.Framework;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.Modules.Communication.AsyncLocal
 {
@@ -12,21 +11,21 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     {
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddTestCommunication()
-            .AddScoped<ILog, SilentLog>();
+            .AddScoped<MockService>();
 
         [SetUp]
-        public void SetUp() => this.GetRequiredService<ILog>().Should().NotBeNull();
+        public void SetUp() => this.GetRequiredService<MockService>().Should().NotBeNull();
 
         [TearDown]
-        public void TearDown() => this.GetRequiredService<ILog>().Should().NotBeNull();
+        public void TearDown() => this.GetRequiredService<MockService>().Should().NotBeNull();
 
         [Test]
         [Repeat(2)]
-        public void Case() => this.GetRequiredService<ILog>().Should().NotBeNull();
+        public void Case() => this.GetRequiredService<MockService>().Should().NotBeNull();
 
         [TestCase(10)]
         [TestCase(11)]
         [Repeat(2)]
-        public void Cases(int value) => this.GetRequiredService<ILog>().Should().NotBeNull();
+        public void Cases(int value) => this.GetRequiredService<MockService>().Should().NotBeNull();
     }
 }
