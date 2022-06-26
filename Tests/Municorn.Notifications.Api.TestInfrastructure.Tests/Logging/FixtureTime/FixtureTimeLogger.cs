@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
 using Vostok.Logging.Abstractions;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.Logging
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.Logging.FixtureTime
 {
     [PrimaryConstructor]
     internal sealed partial class FixtureOneTimeTimeLogger : IFixtureOneTimeSetUpService, IDisposable
