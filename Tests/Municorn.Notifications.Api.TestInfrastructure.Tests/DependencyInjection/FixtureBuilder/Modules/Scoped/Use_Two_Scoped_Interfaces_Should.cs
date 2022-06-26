@@ -1,24 +1,22 @@
 ﻿using FluentAssertions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureBuilder;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
-using Municorn.Notifications.Api.TestInfrastructure.Logging;
 using NUnit.Framework;
-using Vostok.Logging.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.Modules.Scoped
 {
     [TestFixtureInjectable]
     [TestMethodInjectionModule]
     [ScopedInterfaceModule]
-    internal class Use_Two_Scoped_Interfaces_Should : IScoped<ILog>, IScoped<Counter>
+    internal class Use_Two_Scoped_Interfaces_Should : IScoped<IMockService>, IScoped<MockService>
     {
-        ILog IScoped<ILog>.Get() => new TextWriterLog(new NUnitAsyncLocalTextWriterProvider());
+        IMockService IScoped<IMockService>.Get() => new MockService();
 
-        Counter IScoped<Counter>.Get() => new();
+        MockService IScoped<MockService>.Get() => new();
 
         [Test]
         [Repeat(2)]
-        public void Case([InjectDependency] ILog service1, [InjectDependency] Counter service2)
+        public void Case([InjectDependency] IMockService service1, [InjectDependency] MockService service2)
         {
             service1.Should().NotBeNull();
             service2.Should().NotBeNull();
@@ -27,7 +25,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [TestCase(10)]
         [TestCase(11)]
         [Repeat(2)]
-        public void Cases([InjectDependency] ILog service1, int value, [InjectDependency] Counter service2)
+        public void Cases([InjectDependency] IMockService service1, int value, [InjectDependency] MockService service2)
         {
             service1.Should().NotBeNull();
             service2.Should().NotBeNull();

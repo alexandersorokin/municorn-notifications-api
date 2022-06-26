@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
 using NUnit.Framework.Interfaces;
@@ -34,11 +35,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         {
             private readonly ITest test;
 
-            public ScopedProvider(ITest test)
-            {
-                this.test = test;
-            }
+            [UsedImplicitly]
+            public ScopedProvider(ITest test) => this.test = test;
 
+            [UsedImplicitly]
             public TService Get()
             {
                 var fixture = (this.test.Fixture as IScoped<TService>)
