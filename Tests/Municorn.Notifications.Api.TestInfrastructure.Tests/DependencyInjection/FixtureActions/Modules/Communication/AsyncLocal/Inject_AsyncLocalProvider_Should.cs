@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureActions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
 using NUnit.Framework;
@@ -7,13 +8,14 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.Modules.Communication.AsyncLocal
 {
     [TestFixture]
-    internal class Inject_AsyncLocalProvider_Should : IWithFields
+    internal class Inject_AsyncLocalProvider_Should : IFixtureWithServiceProviderFramework
     {
         [FieldDependency]
         private readonly IAsyncLocalServiceProvider provider = default!;
 
-        public void SetUpServices(IServiceCollection serviceCollection) => serviceCollection
+        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddTestCommunication()
+            .AddFieldInjection(this)
             .AddScoped<MockService>();
 
         [SetUp]

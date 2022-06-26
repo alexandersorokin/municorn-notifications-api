@@ -1,17 +1,19 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureActions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions
 {
     [TestFixture]
-    internal class Use_Configure_Services_Should : IWithFields
+    internal class Use_Configure_Services_Should : IFixtureWithServiceProviderFramework
     {
         [FieldDependency]
         private readonly MockService service = default!;
 
-        public void SetUpServices(IServiceCollection serviceCollection) => serviceCollection
+        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
+            .AddFieldInjection(this)
             .AddSingleton<MockService>();
 
         [Test]

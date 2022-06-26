@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureActions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection;
 using NUnit.Framework;
@@ -6,10 +7,11 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.SetUpFixtures.Service
 {
     [SetUpFixture]
-    internal class SetUpFixture : IWithFields
+    internal class SetUpFixture : IFixtureWithServiceProviderFramework
     {
-        public void SetUpServices(IServiceCollection serviceCollection) => serviceCollection
+        public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection
             .AddTestMethodInjection()
+            .AddFieldInjection(this)
             .AddSingleton<MockService>();
 
         [field: FieldDependency]
