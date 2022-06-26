@@ -4,10 +4,10 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureA
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FixtureOneTimeActions;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.Modules
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.Modules.OneTimeActions
 {
     [TestFixture]
-    internal class OneTimeActionsModule_Should : IFixtureWithServiceProviderFramework, IOneTimeSetUpAction
+    internal class Call_OneTimeSetUp_Before_Test_Should : IFixtureWithServiceProviderFramework, IOneTimeSetUpAction
     {
         private readonly Counter counter = new();
 

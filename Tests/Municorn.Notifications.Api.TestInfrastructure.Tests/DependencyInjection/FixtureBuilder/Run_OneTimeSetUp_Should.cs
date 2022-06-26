@@ -2,20 +2,18 @@
 using FluentAssertions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureBuilder;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder
 {
     [TestFixtureInjectable]
     [LogModule]
-    [RegisterConstructorParametersModule]
+    [CounterModule]
     [FixtureModuleService(typeof(IFixtureOneTimeSetUpService), typeof(FixtureOneTimeTimeLogger))]
-    internal sealed class Run_OneTimeSetUp_Should : IDisposable
+    [PrimaryConstructor]
+    internal sealed partial class Run_OneTimeSetUp_Should : IDisposable
     {
         private readonly Counter counter;
-
-        public Run_OneTimeSetUp_Should([RegisterDependency] Counter counter) => this.counter = counter;
 
         [Test]
         [Repeat(2)]
