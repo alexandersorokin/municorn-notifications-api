@@ -1,30 +1,28 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureBuilder;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder
 {
     [TestFixtureInjectable]
-    [LogModule]
     [CounterModule]
-    [FixtureModuleService(typeof(FixtureOneTimeTimeLogger))]
+    [FixtureModuleService(typeof(OnDisposeIncrementService))]
     [PrimaryConstructor]
     internal partial class Run_Global_Dispose_After_TearDown_Should
     {
         private readonly Counter counter;
 
         [OneTimeSetUp]
-        public void OneTimeSetUp(FixtureOneTimeTimeLogger fixtureOneTimeTimeLogger)
+        public void OneTimeSetUp(OnDisposeIncrementService incrementService)
         {
-            fixtureOneTimeTimeLogger.Run();
+            incrementService.Should().NotBeNull();
+            this.counter.Value.Should().Be(0);
         }
 
         [Test]
         [Repeat(2)]
-        public void Case()
-        {
-            true.Should().BeTrue();
-        }
+        public void Case() => this.counter.Value.Should().Be(0);
 
         [TestCase(10)]
         [TestCase(11)]
@@ -32,12 +30,19 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         public void Cases(int value)
         {
             value.Should().BePositive();
+            this.counter.Value.Should().Be(0);
         }
 
         [OneTimeTearDown]
-        public void Before_Container_Dispose()
+        public void Before_Container_Dispose() => this.counter.Value.Should().Be(0);
+
+        internal sealed class OnDisposeIncrementService : IDisposable
         {
-            this.counter.Value.Should().Be(0);
+            private readonly Counter counter;
+
+            public OnDisposeIncrementService(Counter counter) => this.counter = counter;
+
+            public void Dispose() => this.counter.Increment();
         }
     }
 }

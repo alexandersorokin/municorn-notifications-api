@@ -4,7 +4,7 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framewor
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.FixtureTime
 {
     [AttributeUsage(AttributeTargets.Class)]
     internal sealed class TimeLoggerModuleAttribute : Attribute, IFixtureServiceCollectionModule

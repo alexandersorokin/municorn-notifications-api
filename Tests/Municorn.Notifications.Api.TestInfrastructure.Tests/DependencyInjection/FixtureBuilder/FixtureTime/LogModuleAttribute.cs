@@ -5,7 +5,7 @@ using Municorn.Notifications.Api.TestInfrastructure.Logging;
 using NUnit.Framework.Interfaces;
 using Vostok.Logging.Abstractions;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.FixtureTime
 {
     [AttributeUsage(AttributeTargets.Class)]
     internal sealed class LogModuleAttribute : Attribute, IFixtureServiceCollectionModule

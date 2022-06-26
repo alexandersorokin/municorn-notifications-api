@@ -7,9 +7,8 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder
 {
     [TestFixtureInjectable]
-    [LogModule]
     [CounterModule]
-    [FixtureModuleService(typeof(IFixtureOneTimeSetUpService), typeof(FixtureOneTimeTimeLogger))]
+    [FixtureModuleService(typeof(IFixtureOneTimeSetUpService), typeof(IncrementService))]
     [PrimaryConstructor]
     internal sealed partial class Run_OneTimeSetUp_Should : IDisposable
     {
@@ -17,10 +16,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(2)]
-        public void Case()
-        {
-            true.Should().BeTrue();
-        }
+        public void Case() => this.counter.Value.Should().Be(1);
 
         [TestCase(10)]
         [TestCase(11)]
@@ -28,11 +24,18 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         public void Cases(int value)
         {
             value.Should().BePositive();
+            this.counter.Value.Should().Be(1);
         }
 
-        public void Dispose()
+        public void Dispose() => this.counter.Value.Should().Be(1);
+
+        internal sealed class IncrementService : IFixtureOneTimeSetUpService
         {
-            this.counter.Value.Should().Be(1);
+            private readonly Counter counter;
+
+            public IncrementService(Counter counter) => this.counter = counter;
+
+            public void Run() => this.counter.Increment();
         }
     }
 }
