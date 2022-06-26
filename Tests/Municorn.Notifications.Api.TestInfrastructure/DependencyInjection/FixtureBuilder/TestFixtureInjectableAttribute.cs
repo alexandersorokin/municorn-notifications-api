@@ -22,12 +22,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
         public Type[] TypeArgs { get; init; } = Array.Empty<Type>();
 
         public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo) =>
-            this.CreateImplementation().BuildFrom(this.CreateWrapper(typeInfo));
+            this.CreateImplementation().BuildFrom(this.CreateTypeWrapperDecorator(typeInfo));
 
         public IEnumerable<TestSuite> BuildFrom(ITypeInfo typeInfo, IPreFilter filter) =>
-            this.CreateImplementation().BuildFrom(this.CreateWrapper(typeInfo), filter);
+            this.CreateImplementation().BuildFrom(this.CreateTypeWrapperDecorator(typeInfo), filter);
 
-        private TypeInfoDecorator CreateWrapper(ITypeInfo typeInfo) =>
+        private TypeWrapperDecorator CreateTypeWrapperDecorator(ITypeInfo typeInfo) =>
             new(typeInfo.Type, this.arguments, this.TypeArgs);
 
         private TestFixtureAttribute CreateImplementation() => new(this.arguments)

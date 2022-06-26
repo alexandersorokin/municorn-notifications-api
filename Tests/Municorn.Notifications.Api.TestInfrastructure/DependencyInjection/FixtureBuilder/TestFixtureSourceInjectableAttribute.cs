@@ -54,14 +54,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                 }
 
                 var typeArgs = testFixtureData.TypeArgs ?? Array.Empty<Type>();
-                TypeInfoDecorator wrapper = new(type, testFixtureData.Arguments, typeArgs);
+                TypeWrapperDecorator decorator = new(type, testFixtureData.Arguments, typeArgs);
                 TestFixtureAttribute implementation = new(testFixtureData.Arguments)
                 {
                     TypeArgs = typeArgs,
                     TestName = testFixtureData.TestName,
                 };
 
-                yield return (wrapper, implementation);
+                yield return (decorator, implementation);
             }
         }
 

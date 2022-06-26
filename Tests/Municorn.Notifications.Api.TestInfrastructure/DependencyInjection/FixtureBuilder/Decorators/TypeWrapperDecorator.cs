@@ -16,7 +16,7 @@ using NUnit.Framework.Internal.Commands;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureBuilder.Decorators
 {
-    internal sealed class TypeInfoDecorator : TypeWrapper, ITypeInfo
+    internal sealed class TypeWrapperDecorator : TypeWrapper, ITypeInfo
     {
         private readonly FixtureServiceProviderMap globalServiceProviders = new();
         private readonly ConditionalWeakTable<ITest, FixtureServiceProviderMap> scopedServiceProviders = new();
@@ -26,7 +26,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
         private readonly Type wrappedType;
         private readonly object?[] arguments;
 
-        public TypeInfoDecorator(Type type, object?[] arguments, Type[] typeArgs)
+        public TypeWrapperDecorator(Type type, object?[] arguments, Type[] typeArgs)
             : base(type)
         {
             this.originalType = type;
@@ -83,7 +83,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
         }
 
         ITypeInfo ITypeInfo.MakeGenericType(Type[] typeArgs) =>
-            new TypeInfoDecorator(
+            new TypeWrapperDecorator(
                 this.originalType.MakeGenericType(typeArgs),
                 this.arguments,
                 Array.Empty<Type>());
