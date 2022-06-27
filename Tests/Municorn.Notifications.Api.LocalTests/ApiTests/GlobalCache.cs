@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace Municorn.Notifications.Api.Tests.ApiTests
@@ -8,17 +7,13 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
     [SetUpFixture]
     internal class GlobalCache
     {
-        private readonly ConcurrentDictionary<Type, Lazy<Task<object>>> cache = new();
+        private readonly ConcurrentDictionary<Type, Lazy<object>> cache = new();
 
-        internal async Task<T> GetOrCreate<T>(Func<Task<T>> factory)
+        internal T GetOrCreate<T>(Func<T> factory)
             where T : notnull
         {
-            Lazy<Task<object>> lazy = new(async () => await factory().ConfigureAwait(false));
-            var result = await this.cache
-                .GetOrAdd(typeof(T), lazy)
-                .Value
-                .ConfigureAwait(false);
-            return (T)result;
+            Lazy<object> lazy = new(() => factory());
+            return (T)this.cache.GetOrAdd(typeof(T), lazy).Value;
         }
     }
 }
