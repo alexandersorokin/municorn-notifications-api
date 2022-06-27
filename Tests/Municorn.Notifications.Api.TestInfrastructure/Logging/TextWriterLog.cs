@@ -17,10 +17,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Logging
 
         private readonly ITextWriterProvider textWriterProvider;
 
-        public TextWriterLog(ITextWriterProvider textWriterProvider)
-        {
+        public TextWriterLog(ITextWriterProvider textWriterProvider) =>
             this.textWriterProvider = textWriterProvider;
-        }
 
         public void Log(LogEvent? @event)
         {
