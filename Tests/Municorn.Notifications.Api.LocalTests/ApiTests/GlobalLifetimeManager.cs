@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
@@ -13,7 +14,7 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
         [OneTimeTearDown]
         public async Task Dispose()
         {
-            foreach (var disposable in this.disposables)
+            foreach (var disposable in this.disposables.Reverse())
             {
                 await disposable.DisposeAsync().ConfigureAwait(false);
             }
