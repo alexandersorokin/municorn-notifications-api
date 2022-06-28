@@ -2,7 +2,7 @@
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.Modules.Scoped
 {
-    internal interface IScopedWithSp<out TService>
+    internal interface IRegisterScopedWithServiceProvider<out TService>
     {
         TService Get(IServiceProvider serviceProvider);
     }

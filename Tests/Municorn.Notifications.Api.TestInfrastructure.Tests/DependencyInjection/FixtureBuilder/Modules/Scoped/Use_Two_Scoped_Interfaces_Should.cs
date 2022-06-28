@@ -7,12 +7,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixtureInjectable]
     [TestMethodInjectionModule]
-    [ScopedInterfaceModule]
-    internal class Use_Two_Scoped_Interfaces_Should : IScoped<IMockService>, IScoped<MockService>
+    [RegisterScopedInterfaceModule]
+    internal class Use_Two_Scoped_Interfaces_Should : IRegisterScoped<IMockService>, IRegisterScoped<MockService>
     {
-        IMockService IScoped<IMockService>.Get() => new MockService();
+        IMockService IRegisterScoped<IMockService>.Get() => new MockService();
 
-        MockService IScoped<MockService>.Get() => new();
+        MockService IRegisterScoped<MockService>.Get() => new();
 
         [Test]
         [Repeat(2)]

@@ -10,9 +10,9 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     [TestFixtureInjectable]
     [TestMethodInjectionModule]
-    [ScopedInterfaceModule]
+    [RegisterScopedInterfaceModule]
     [MockServiceScopedModule]
-    internal class Use_ScopedWithSp_Interface_Should : IScopedWithSp<List<MockService>>
+    internal class Use_ScopedWithSp_Interface_Should : IRegisterScopedWithServiceProvider<List<MockService>>
     {
         public List<MockService> Get(IServiceProvider serviceProvider) => new()
         {
