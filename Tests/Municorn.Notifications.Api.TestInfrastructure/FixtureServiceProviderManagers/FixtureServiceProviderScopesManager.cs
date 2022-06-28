@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework
+namespace Municorn.Notifications.Api.TestInfrastructure.FixtureServiceProviderManagers
 {
     [PrimaryConstructor]
-    internal sealed partial class ScopesManager
+    internal sealed partial class FixtureServiceProviderScopesManager
     {
         private readonly ConcurrentDictionary<ITest, IAsyncDisposable> scopes = new();
         private readonly IServiceProvider serviceProvider;
