@@ -3,6 +3,7 @@
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.MethodInjection
 {
     public sealed class InjectedService<TService> : IInjectedService
+        where TService : notnull
     {
         public override string ToString() => $"Service<{typeof(TService).Name}>";
 
