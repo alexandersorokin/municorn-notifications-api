@@ -17,11 +17,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
             typeof(IScopedWithSp<>),
         };
 
-        public void ConfigureServices(IServiceCollection serviceCollection, ITypeInfo typeInfo)
+        public void ConfigureServices(IServiceCollection serviceCollection, Type type)
         {
             serviceCollection.AddScoped(typeof(ScopedProvider<>));
 
-            var scopedTypes = typeInfo.Type.GetInterfaces()
+            var scopedTypes = type
+                .GetInterfaces()
                 .Where(i => i.IsConstructedGenericType)
                 .Where(i => SupportedInterfaces.Contains(i.GetGenericTypeDefinition()))
                 .Select(i => i.GetGenericArguments().Single());
@@ -51,7 +52,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
             }
 
             [UsedImplicitly]
-            public TService Get() =>
+            internal TService Get() =>
                 this.test.Fixture switch
                 {
                     IScoped<TService> fixture => fixture.Get(),

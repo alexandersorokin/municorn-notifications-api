@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
@@ -24,6 +25,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         {
             private readonly Type type;
 
+            [UsedImplicitly]
             public OneTimeIncrement(Type type) => this.type = type;
 
             public void Run() => this.type.Should().NotBeNull();

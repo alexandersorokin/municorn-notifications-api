@@ -3,17 +3,16 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
-using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.Modules.RegisterConstructorParameters
 {
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class RegisterConstructorParametersModuleAttribute : Attribute, IFixtureServiceCollectionModule
     {
-        public void ConfigureServices(IServiceCollection serviceCollection, ITypeInfo typeInfo)
+        public void ConfigureServices(IServiceCollection serviceCollection, Type type)
         {
             var serviceTypes =
-                from constructor in typeInfo.Type.GetConstructors()
+                from constructor in type.GetConstructors()
                 from parameter in constructor.GetParameters()
                 from attribute in parameter.GetCustomAttributes<RegisterDependencyAttribute>(false)
                 select (parameter.ParameterType, attribute);
