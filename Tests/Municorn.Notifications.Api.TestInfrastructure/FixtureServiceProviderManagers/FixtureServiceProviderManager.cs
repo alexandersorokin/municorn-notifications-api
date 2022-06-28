@@ -30,7 +30,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.FixtureServiceProviderMa
 
         internal IServiceProvider CreateScope(ITest test) => this.GetScopesManager().CreateScope(test);
 
-        internal async Task DisposeScope(ITest test) => await this.GetScopesManager().DisposeScope(test).ConfigureAwait(false);
+        internal async Task DisposeScopeAsync(ITest test) => await this.GetScopesManager().DisposeScope(test).ConfigureAwait(false);
 
         private FixtureServiceProviderScopesManager GetScopesManager() =>
             this.serviceProvider.GetRequiredService<FixtureServiceProviderScopesManager>();

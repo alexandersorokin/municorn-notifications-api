@@ -29,11 +29,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fram
 
         public async Task RunSetUp(ITest test)
         {
-            var scopedServiceProvider = this.manager.CreateScope(test);
-            scopedServiceProvider.GetRequiredService<TestAccessor>().Test = test;
-            await scopedServiceProvider.GetRequiredService<FixtureSetUpRunner>().RunAsync().ConfigureAwait(false);
+            var serviceProvider = this.manager.CreateScope(test);
+            serviceProvider.GetRequiredService<TestAccessor>().Test = test;
+            await serviceProvider.GetRequiredService<FixtureSetUpRunner>().RunAsync().ConfigureAwait(false);
         }
 
-        public async Task RunTearDown(ITest test) => await this.manager.DisposeScope(test).ConfigureAwait(false);
+        public async Task RunTearDown(ITest test) => await this.manager.DisposeScopeAsync(test).ConfigureAwait(false);
     }
 }
