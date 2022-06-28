@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework.Interfaces;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.FixtureServiceProviderManagers
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureServiceProviderManagers
 {
     [PrimaryConstructor]
     internal sealed partial class FixtureServiceProviderScopesManager

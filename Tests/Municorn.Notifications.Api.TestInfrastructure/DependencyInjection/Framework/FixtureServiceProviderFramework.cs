@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Municorn.Notifications.Api.TestInfrastructure.FixtureServiceProviderManagers;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureServiceProviderManagers;
 using NUnit.Framework.Interfaces;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework
