@@ -6,8 +6,8 @@ using NUnit.Framework;
 namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureBuilder.Modules.Scoped
 {
     [TestFixtureInjectable]
-    [ScopedInterfaceModule]
     [TestMethodInjectionModule]
+    [ScopedInterfaceModule]
     internal class Use_Scoped_Interface_Should : IScoped<MockService>
     {
         public MockService Get() => new();

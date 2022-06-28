@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,13 +11,19 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [AttributeUsage(AttributeTargets.Class)]
     internal sealed class ScopedInterfaceModuleAttribute : Attribute, IFixtureServiceCollectionModule
     {
+        private static readonly IReadOnlySet<Type> SupportedInterfaces = new HashSet<Type>
+        {
+            typeof(IScoped<>),
+            typeof(IScopedWithSp<>),
+        };
+
         public void ConfigureServices(IServiceCollection serviceCollection, ITypeInfo typeInfo)
         {
             serviceCollection.AddScoped(typeof(ScopedProvider<>));
 
             var scopedTypes = typeInfo.Type.GetInterfaces()
                 .Where(i => i.IsConstructedGenericType)
-                .Where(i => i.GetGenericTypeDefinition() == typeof(IScoped<>))
+                .Where(i => SupportedInterfaces.Contains(i.GetGenericTypeDefinition()))
                 .Select(i => i.GetGenericArguments().Single());
 
             foreach (var scopedType in scopedTypes)
@@ -34,17 +41,23 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         private class ScopedProvider<TService>
         {
             private readonly ITest test;
+            private readonly IServiceProvider serviceProvider;
 
             [UsedImplicitly]
-            public ScopedProvider(ITest test) => this.test = test;
-
-            [UsedImplicitly]
-            public TService Get()
+            public ScopedProvider(ITest test, IServiceProvider serviceProvider)
             {
-                var fixture = (this.test.Fixture as IScoped<TService>)
-                              ?? throw new InvalidOperationException($"Fixture do not implement {typeof(IScoped<TService>).FullName}");
-                return fixture.Get();
+                this.test = test;
+                this.serviceProvider = serviceProvider;
             }
+
+            [UsedImplicitly]
+            public TService Get() =>
+                this.test.Fixture switch
+                {
+                    IScoped<TService> fixture => fixture.Get(),
+                    IScopedWithSp<TService> fixture => fixture.Get(this.serviceProvider),
+                    var fixture => throw new InvalidOperationException($"Fixture {fixture} do not implement any scoped interface"),
+                };
         }
     }
 }
