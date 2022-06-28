@@ -1,4 +1,5 @@
-﻿using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
+﻿using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
 using AsyncLocalServiceProvider = Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication.AsyncLocalServiceProvider;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureActions
@@ -7,6 +8,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
     {
         public static TService GetRequiredService<TService>(this IFixtureWithServiceProviderFramework fixture)
             where TService : notnull =>
-            new AsyncLocalServiceProvider<TService>(new AsyncLocalServiceProvider(new Modules.Abstractions.FixtureProvider(fixture))).Value;
+            new AsyncLocalServiceProvider<TService>(new AsyncLocalServiceProvider(new FixtureProvider(fixture))).Value;
     }
 }
