@@ -13,13 +13,24 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
     {
         public static IServiceCollection AddFieldInjection(this IServiceCollection serviceCollection, Type fixtureType)
         {
-            var fields = fixtureType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+            var fields = fixtureType.GetBaseTypes()
+                .Append(fixtureType)
+                .SelectMany(type => type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic))
+                .ToArray();
 
             AddServices(serviceCollection, fields);
 
             return serviceCollection
                 .AddSingleton(new FieldInfoProvider(fields))
                 .AddSingleton<IFixtureOneTimeSetUpService, SingletonFieldInitializer>();
+        }
+
+        private static IEnumerable<Type> GetBaseTypes(this Type type)
+        {
+            while (type.BaseType != null)
+            {
+                yield return type = type.BaseType;
+            }
         }
 
         private static void AddServices(IServiceCollection serviceCollection, IEnumerable<FieldInfo> fields)
