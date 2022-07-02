@@ -67,7 +67,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
             if (fixtureMethods.Contains(typeof(T)))
             {
                 result = result
-                    .Select(method => new FixtureOneTimeActionMethodInfo(this.wrappedType, method.MethodInfo, this.globalServiceProviders))
+                    .Select(methodInfo => new FixtureOneTimeActionMethodInfo(this.wrappedType, methodInfo.MethodInfo, this.globalServiceProviders))
                     .ToArray<IMethodInfo>();
 
                 if (typeof(T) == typeof(OneTimeTearDownAttribute))
@@ -86,7 +86,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
             if (typeMethods.Contains(typeof(T)))
             {
                 result = result
-                    .Select(method => new FixtureActionMethodInfo(this.originalType, method.MethodInfo, this.scopedServiceProviders))
+                    .Select(methodInfo => new FixtureActionMethodInfo(this.scopedServiceProviders, methodInfo))
                     .ToArray<IMethodInfo>();
             }
 
@@ -225,12 +225,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
             }
         }
 
-        private class FixtureActionMethodInfo : MethodWrapper, IMethodInfo
+        private class FixtureActionMethodInfo : MethodInfoDecorator, IMethodInfo
         {
             private readonly ConditionalWeakTable<ITest, FixtureServiceProviderMap> scopedServiceProviders;
 
-            public FixtureActionMethodInfo(Type type, MethodInfo methodInfo, ConditionalWeakTable<ITest, FixtureServiceProviderMap> scopedServiceProviders)
-                : base(type, methodInfo) =>
+            public FixtureActionMethodInfo(
+                ConditionalWeakTable<ITest, FixtureServiceProviderMap> scopedServiceProviders,
+                IMethodInfo methodInfo)
+                : base(methodInfo) =>
                 this.scopedServiceProviders = scopedServiceProviders;
 
             IParameterInfo[] IMethodInfo.GetParameters() => Array.Empty<IParameterInfo>();
