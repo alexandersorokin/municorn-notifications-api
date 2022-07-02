@@ -4,7 +4,7 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection.Other
 {
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field)]
     public sealed class RegisterDependencyAttribute : Attribute, IFieldServiceCollectionModule

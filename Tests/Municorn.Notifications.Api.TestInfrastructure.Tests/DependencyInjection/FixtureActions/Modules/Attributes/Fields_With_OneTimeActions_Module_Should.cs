@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection.Other;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FixtureOneTimeActions;
 using NUnit.Framework;
 
