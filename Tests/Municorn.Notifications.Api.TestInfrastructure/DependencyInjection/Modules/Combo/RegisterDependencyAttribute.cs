@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection.Other
+namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Combo
 {
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field)]
     public sealed class RegisterDependencyAttribute : Attribute, IFieldServiceCollectionModule
