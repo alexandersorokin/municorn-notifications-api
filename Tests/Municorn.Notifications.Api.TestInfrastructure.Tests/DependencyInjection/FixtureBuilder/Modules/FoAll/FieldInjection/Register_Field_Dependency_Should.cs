@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [PrimaryConstructor]
     internal partial class Register_Field_Dependency_Should
     {
-        [RegisterFieldDependency]
+        [RegisterFieldDependencyAsSingleton]
         private readonly MockService service;
 
         [Test]

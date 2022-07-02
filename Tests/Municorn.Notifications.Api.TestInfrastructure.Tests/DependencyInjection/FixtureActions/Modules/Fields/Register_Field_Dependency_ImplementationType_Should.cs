@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal class Register_Field_Dependency_ImplementationType_Should : IFixtureWithServiceProviderFramework
     {
         [FieldDependency]
-        [RegisterFieldDependency(typeof(MockService))]
+        [RegisterFieldDependencyAsSingleton(typeof(MockService))]
         private readonly IMockService service = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) =>
