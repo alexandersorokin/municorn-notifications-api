@@ -11,6 +11,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
         private readonly IFixtureProvider fixtureProvider;
 
         public UseContainerMethodInfo Create(IMethodInfo methodInfo) =>
-            new(methodInfo, this.serviceProvider, this.fixtureProvider);
+            new(this.serviceProvider, this.fixtureProvider, methodInfo);
     }
 }

@@ -51,7 +51,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
 
         IMethodInfo[] ITypeInfo.GetMethods(BindingFlags flags) => this
             .GetMethods(flags)
-            .Select(method => new ModifyAttributesTestMethodWrapperDecorator(method, this.frameworks))
+            .Select(methodInfo => new ModifyAttributesTestMethodWrapperDecorator(this.frameworks, methodInfo))
             .ToArray<IMethodInfo>();
 
         IMethodInfo[] ITypeInfo.GetMethodsWithAttribute<T>(bool inherit)
