@@ -15,10 +15,10 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         }
 
         [Test]
-        public void Simple_Inject([InjectDependency] MockService service) => service.Should().NotBeNull();
+        public void Simple_Inject([InjectParameterDependency] MockService service) => service.Should().NotBeNull();
 
         [Test]
         [Repeat(3)]
-        public void Repeat_Inject([InjectDependency] MockService service) => service.Should().NotBeNull();
+        public void Repeat_Inject([InjectParameterDependency] MockService service) => service.Should().NotBeNull();
     }
 }

@@ -16,7 +16,7 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
             new IosSendNotificationRequest("token", "alert"),
         };
 
-        [FieldDependency]
+        [InjectFieldDependency]
         private readonly ClientFactory clientFactory = default!;
 
         [Test]

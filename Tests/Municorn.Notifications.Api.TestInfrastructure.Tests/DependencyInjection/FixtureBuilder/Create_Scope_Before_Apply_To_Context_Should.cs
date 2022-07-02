@@ -19,13 +19,13 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [Test]
         [Repeat(2)]
         [ApplyToContext]
-        public void Case([InjectDependency] MockService service) => service.Should().NotBeNull();
+        public void Case([InjectParameterDependency] MockService service) => service.Should().NotBeNull();
 
         [TestCase(10)]
         [TestCase(11)]
         [ApplyToContext]
         [Repeat(2)]
-        public void Cases(int value, [InjectDependency] MockService service) => service.Should().NotBeNull();
+        public void Cases(int value, [InjectParameterDependency] MockService service) => service.Should().NotBeNull();
 
         [AttributeUsage(AttributeTargets.Method)]
         private sealed class ApplyToContextAttribute : NUnitAttribute, IApplyToContext

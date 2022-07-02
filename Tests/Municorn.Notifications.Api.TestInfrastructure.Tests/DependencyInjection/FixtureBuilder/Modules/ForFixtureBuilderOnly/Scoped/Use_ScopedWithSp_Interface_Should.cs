@@ -21,11 +21,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(2)]
-        public void Case([InjectDependency] List<MockService> service) => service.Should().HaveCount(1);
+        public void Case([InjectParameterDependency] List<MockService> service) => service.Should().HaveCount(1);
 
         [TestCase(10)]
         [TestCase(11)]
         [Repeat(2)]
-        public void Cases([InjectDependency] List<MockService> service, int value) => service.Should().HaveCount(1);
+        public void Cases([InjectParameterDependency] List<MockService> service, int value) => service.Should().HaveCount(1);
     }
 }

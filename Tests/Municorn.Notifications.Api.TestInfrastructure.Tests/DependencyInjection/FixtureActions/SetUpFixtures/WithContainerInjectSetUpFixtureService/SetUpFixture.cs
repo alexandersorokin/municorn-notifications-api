@@ -14,7 +14,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
             .AddFieldInjection(this)
             .AddSingleton<MockService>();
 
-        [field: FieldDependency]
+        [field: InjectFieldDependency]
         internal MockService Service { get; } = default!;
     }
 }

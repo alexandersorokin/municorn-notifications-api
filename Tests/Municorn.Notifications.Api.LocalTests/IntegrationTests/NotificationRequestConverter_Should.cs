@@ -73,8 +73,8 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
 
         [CombinatorialTestCaseSource(nameof(Cases))]
         public async Task Write_Message_To_Log(
-            [InjectDependency] NotificationRequestConverter notificationRequestConverter,
-            [InjectDependency] LogMessageContainer logMessageContainer,
+            [InjectParameterDependency] NotificationRequestConverter notificationRequestConverter,
+            [InjectParameterDependency] LogMessageContainer logMessageContainer,
             SendNotificationRequest request,
             IEnumerable<string> expectedMessages)
         {

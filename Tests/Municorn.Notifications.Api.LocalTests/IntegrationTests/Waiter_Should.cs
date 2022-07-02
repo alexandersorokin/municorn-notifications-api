@@ -13,7 +13,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     [TestFixture]
     internal class Waiter_Should : IFixtureWithServiceProviderFramework
     {
-        [FieldDependency]
+        [InjectFieldDependency]
         private readonly Waiter waiter = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection

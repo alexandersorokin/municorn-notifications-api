@@ -8,7 +8,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [TestFixture]
     internal class Do_Not_Require_To_Implement_ConfigureServices_Should : IWithFieldInjectionServices
     {
-        [FieldDependency]
+        [InjectFieldDependency]
         private readonly ITest service = default!;
 
         [Test]

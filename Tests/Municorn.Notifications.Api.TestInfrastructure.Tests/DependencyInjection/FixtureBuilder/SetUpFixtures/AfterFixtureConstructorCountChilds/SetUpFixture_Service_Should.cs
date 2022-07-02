@@ -13,11 +13,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     {
         [Test]
         [Repeat(2)]
-        public void Inject_Case([InjectDependency] MockService service) => service.Should().NotBeNull();
+        public void Inject_Case([InjectParameterDependency] MockService service) => service.Should().NotBeNull();
 
         [Test]
         [Repeat(2)]
-        public void SetUpFixture_Case([InjectDependency] SetUpFixture setUpFixture) =>
+        public void SetUpFixture_Case([InjectParameterDependency] SetUpFixture setUpFixture) =>
             setUpFixture.Should().NotBeNull();
 
         [TestCaseSource(nameof(InjectParentServiceCase))]

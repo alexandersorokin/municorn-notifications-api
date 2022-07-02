@@ -16,7 +16,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(2)]
-        public void Case([InjectDependency] IMockService service1, [InjectDependency] MockService service2)
+        public void Case([InjectParameterDependency] IMockService service1, [InjectParameterDependency] MockService service2)
         {
             service1.Should().NotBeNull();
             service2.Should().NotBeNull();
@@ -25,7 +25,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [TestCase(10)]
         [TestCase(11)]
         [Repeat(2)]
-        public void Cases([InjectDependency] IMockService service1, int value, [InjectDependency] MockService service2)
+        public void Cases([InjectParameterDependency] IMockService service1, int value, [InjectParameterDependency] MockService service2)
         {
             service1.Should().NotBeNull();
             service2.Should().NotBeNull();

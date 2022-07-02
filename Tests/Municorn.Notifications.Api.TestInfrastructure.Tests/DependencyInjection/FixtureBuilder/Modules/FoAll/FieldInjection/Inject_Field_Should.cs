@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [MockServiceModule]
     internal class Inject_Field_Should
     {
-        [FieldDependency]
+        [InjectFieldDependency]
         private readonly MockService service = default!;
 
         [Test]

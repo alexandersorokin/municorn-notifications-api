@@ -5,7 +5,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
 {
     [AttributeUsage(AttributeTargets.Field)]
     [MeansImplicitUse(ImplicitUseKindFlags.Assign)]
-    public sealed class FieldDependencyAttribute : Attribute
+    public sealed class InjectFieldDependencyAttribute : Attribute
     {
     }
 }

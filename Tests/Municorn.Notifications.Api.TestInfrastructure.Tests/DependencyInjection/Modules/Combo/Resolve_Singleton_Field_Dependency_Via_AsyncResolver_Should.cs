@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     internal class Resolve_Singleton_Field_Dependency_Via_AsyncResolver_Should : FrameworkServiceProviderFixtureBase
     {
-        [FieldDependency]
+        [InjectFieldDependency]
         private readonly IAsyncLocalServiceProvider<MockService> service = default!;
 
         public Resolve_Singleton_Field_Dependency_Via_AsyncResolver_Should()

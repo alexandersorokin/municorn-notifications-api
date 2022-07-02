@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [TestFixture]
     internal class Register_Combo_Field_Dependency_ImplementationType_Should : IFixtureWithServiceProviderFramework
     {
-        [FieldDependency]
+        [InjectFieldDependency]
         [RegisterDependency(typeof(MockService))]
         private readonly IMockService service = default!;
 

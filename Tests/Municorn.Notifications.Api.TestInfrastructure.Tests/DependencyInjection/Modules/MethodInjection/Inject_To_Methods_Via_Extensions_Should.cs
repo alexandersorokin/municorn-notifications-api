@@ -24,21 +24,21 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         public void Plain_TestCase(int value) => value.Should().BePositive();
 
         [Test]
-        public void Simple_Inject([InjectDependency] MockService service) => service.Should().NotBeNull();
+        public void Simple_Inject([InjectParameterDependency] MockService service) => service.Should().NotBeNull();
 
         [Test]
         [Repeat(3)]
-        public void Repeat_Inject([InjectDependency] MockService service) => service.Should().NotBeNull();
+        public void Repeat_Inject([InjectParameterDependency] MockService service) => service.Should().NotBeNull();
 
         [Test]
-        public void Select_Service([InjectDependency(typeof(MockService))] IMockService service) => service.Should().NotBeNull();
+        public void Select_Service([InjectParameterDependency(typeof(MockService))] IMockService service) => service.Should().NotBeNull();
 
         [Test]
-        public void Select_Two_Services([InjectDependency(typeof(MockService)), InjectDependency(typeof(IFixtureSetUpService))] object service) =>
+        public void Select_Two_Services([InjectParameterDependency(typeof(MockService)), InjectParameterDependency(typeof(IFixtureSetUpService))] object service) =>
             service.Should().NotBeNull();
 
         [Test]
-        public void Case_With_Provider([InjectDependency] MockService service, [Values] bool value) =>
+        public void Case_With_Provider([InjectParameterDependency] MockService service, [Values] bool value) =>
             service.Should().NotBeNull();
 
         private static readonly TestCaseData[] CaseValues =
@@ -51,11 +51,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         public void Cases_With_Marker_Created_Manually(int value, MockService service) => service.Should().NotBeNull();
 
         [CombinatorialTestCase]
-        public void CombinatorialTestCase_Inject([InjectDependency] MockService service) => service.Should().NotBeNull();
+        public void CombinatorialTestCase_Inject([InjectParameterDependency] MockService service) => service.Should().NotBeNull();
 
         [CombinatorialTestCase(1)]
         [CombinatorialTestCase(2)]
-        public void TestCases_Inject([InjectDependency] MockService service, int value)
+        public void TestCases_Inject([InjectParameterDependency] MockService service, int value)
         {
             service.Should().NotBeNull();
             value.Should().BePositive();
@@ -68,7 +68,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         };
 
         [CombinatorialTestCaseSource(nameof(CombinatorialCaseSourceValues))]
-        public void Cases(int value, [InjectDependency] MockService service) => service.Should().NotBeNull();
+        public void Cases(int value, [InjectParameterDependency] MockService service) => service.Should().NotBeNull();
 
         private static TestCaseData CreateMarkerCase(int value) => new(value, new InjectedService<MockService>());
     }

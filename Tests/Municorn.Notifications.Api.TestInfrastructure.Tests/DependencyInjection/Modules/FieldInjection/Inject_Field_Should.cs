@@ -7,7 +7,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     internal class Inject_Field_Should : FrameworkServiceProviderFixtureBase
     {
-        [FieldDependency]
+        [InjectFieldDependency]
         private readonly MockService service = default!;
 
         public Inject_Field_Should()

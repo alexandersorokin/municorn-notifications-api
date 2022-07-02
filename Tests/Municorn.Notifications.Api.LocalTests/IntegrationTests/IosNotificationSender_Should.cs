@@ -17,7 +17,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
     [TestFixture]
     internal class IosNotificationSender_Should : IFixtureWithServiceProviderFramework
     {
-        [FieldDependency]
+        [InjectFieldDependency]
         private readonly IAsyncLocalServiceProvider<IosNotificationSender> iosNotificationSender = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) =>
@@ -57,7 +57,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         }
 
         [Test]
-        public async Task Save_Status_To_Repository([InjectDependency] NotificationStatusRepository notificationStatusRepository)
+        public async Task Save_Status_To_Repository([InjectParameterDependency] NotificationStatusRepository notificationStatusRepository)
         {
             var result = await this.iosNotificationSender.Value
                 .Send(new("token", "alert"))
@@ -69,7 +69,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         }
 
         [Test]
-        public async Task Write_Message_To_Log([InjectDependency] LogMessageContainer logMessageContainer)
+        public async Task Write_Message_To_Log([InjectParameterDependency] LogMessageContainer logMessageContainer)
         {
             var token = Guid.NewGuid().ToString();
             var alert = Guid.NewGuid().ToString();
@@ -96,7 +96,7 @@ namespace Municorn.Notifications.Api.Tests.IntegrationTests
         }
 
         [Test]
-        public async Task Write_Sender_Name_To_Log([InjectDependency] LogMessageContainer logMessageContainer)
+        public async Task Write_Sender_Name_To_Log([InjectParameterDependency] LogMessageContainer logMessageContainer)
         {
             await this.iosNotificationSender.Value
                 .Send(new("token", "alert"))

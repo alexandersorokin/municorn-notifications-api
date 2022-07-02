@@ -32,7 +32,7 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
             },
         };
 
-        [FieldDependency]
+        [InjectFieldDependency]
         private readonly ClientFactory clientFactory = default!;
 
         [Test]

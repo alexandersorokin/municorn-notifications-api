@@ -24,7 +24,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
                 .AddSingleton<IFixtureOneTimeSetUpService, IncrementService>()
                 .AddScoped<IFixtureSetUpService, ScopedIncrementService>();
 
-        [field: FieldDependency]
+        [field: InjectFieldDependency]
         public IMockService Service { get; } = default!;
 
         public void Dispose() => this.counter.Value.Should().Be(14);

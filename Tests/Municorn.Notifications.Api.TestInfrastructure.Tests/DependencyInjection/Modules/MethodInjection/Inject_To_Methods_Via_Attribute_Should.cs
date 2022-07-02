@@ -17,6 +17,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         }
 
         [Test]
-        public void Inject([InjectDependency] MockService service) => service.Should().NotBeNull();
+        public void Inject([InjectParameterDependency] MockService service) => service.Should().NotBeNull();
     }
 }

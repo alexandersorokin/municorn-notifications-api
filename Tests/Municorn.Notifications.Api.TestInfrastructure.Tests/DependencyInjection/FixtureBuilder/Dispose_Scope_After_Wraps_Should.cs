@@ -20,7 +20,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [Test]
         [Repeat(2)]
         [EnsureNotDisposed]
-        public void Case([InjectDependency] Counter service)
+        public void Case([InjectParameterDependency] Counter service)
         {
             service.Increment();
             service.Should().NotBeNull();
@@ -30,7 +30,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [TestCase(11)]
         [EnsureNotDisposed]
         [Repeat(2)]
-        public void Cases(int value, [InjectDependency] Counter service)
+        public void Cases(int value, [InjectParameterDependency] Counter service)
         {
             service.Increment();
             service.Should().NotBeNull();

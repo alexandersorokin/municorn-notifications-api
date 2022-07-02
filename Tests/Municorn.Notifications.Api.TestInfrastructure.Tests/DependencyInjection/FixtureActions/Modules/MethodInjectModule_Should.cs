@@ -15,22 +15,22 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [Test]
         [Repeat(2)]
-        public void Case([InjectDependency] MockService service) => service.Should().NotBeNull();
+        public void Case([InjectParameterDependency] MockService service) => service.Should().NotBeNull();
 
         [Test]
         [Repeat(2)]
-        public void Select_Service([InjectDependency(typeof(MockService))] object service) =>
+        public void Select_Service([InjectParameterDependency(typeof(MockService))] object service) =>
             service.Should().NotBeNull();
 
         [Test]
         [Repeat(2)]
         public void Select_Two_Services(
-            [InjectDependency(typeof(MockService)), InjectDependency(typeof(MethodInjectModule_Should))] object service) =>
+            [InjectParameterDependency(typeof(MockService)), InjectParameterDependency(typeof(MethodInjectModule_Should))] object service) =>
             service.Should().NotBeNull();
 
         [Test]
         [Repeat(2)]
-        public void Case_With_Provider([InjectDependency] MockService service, [Values] bool value) => service.Should().NotBeNull();
+        public void Case_With_Provider([InjectParameterDependency] MockService service, [Values] bool value) => service.Should().NotBeNull();
 
         [TestCaseSource(nameof(CaseValues))]
         [Repeat(2)]

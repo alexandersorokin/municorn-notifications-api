@@ -11,7 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 {
     internal class Register_Scoped_Field_Dependency_ImplementationType_Should : FrameworkServiceProviderFixtureBase
     {
-        [FieldDependency]
+        [InjectFieldDependency]
         [RegisterDependency(typeof(MockService))]
         private readonly IAsyncLocalServiceProvider<IMockService> service = default!;
 

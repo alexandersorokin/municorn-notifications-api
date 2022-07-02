@@ -11,7 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [TestFixture]
     internal sealed class Run_SetUp_Should : IFixtureWithServiceProviderFramework, IDisposable
     {
-        [FieldDependency]
+        [InjectFieldDependency]
         private readonly Counter counter = new();
 
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection

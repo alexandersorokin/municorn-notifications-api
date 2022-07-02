@@ -15,7 +15,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     {
         private readonly ConcurrentDictionary<MockService, bool> services = new();
 
-        [FieldDependency]
+        [InjectFieldDependency]
         [RegisterDependency]
         private readonly IAsyncLocalServiceProvider<MockService> serviceProvider = default!;
 

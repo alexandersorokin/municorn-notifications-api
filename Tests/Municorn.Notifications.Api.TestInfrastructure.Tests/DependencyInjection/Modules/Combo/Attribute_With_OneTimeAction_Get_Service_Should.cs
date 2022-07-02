@@ -11,7 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [FieldInjectionWithFixtureOneTimeActionsModule]
     internal class Attribute_With_OneTimeAction_Get_Service_Should : FrameworkServiceProviderFixtureBase, IOneTimeSetUpAction
     {
-        [FieldDependency]
+        [InjectFieldDependency]
         private readonly MockService service = default!;
 
         public Attribute_With_OneTimeAction_Get_Service_Should()

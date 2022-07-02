@@ -18,15 +18,15 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [CombinatorialTestCase(10, 1.1f, 100, "provided")]
         [CombinatorialTestCase(11, 1.2d, null)]
         public void Integration<T1, T2>(
-            [InjectDependency(typeof(MockService))] object injectFirst,
+            [InjectParameterDependency(typeof(MockService))] object injectFirst,
             [Values] bool automaticData,
             int testCaseData,
-            [InjectDependency] MockService injectSecond,
+            [InjectParameterDependency] MockService injectSecond,
             [Values("string", 777)] T1 automaticInfer,
             T2 testCaseInfer,
             int? testCaseDataConversion,
             [Values(true, null)] bool? valuesConversion,
-            [InjectDependency] SetUpFixture setupFixture,
+            [InjectParameterDependency] SetUpFixture setupFixture,
             string optional = "default") =>
             injectSecond.Should().NotBeNull();
 
@@ -39,7 +39,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         [CombinatorialTestCase("provided")]
         [CombinatorialTestCase]
         public void Process_Optional_With_Container(
-            [InjectDependency] MockService service,
+            [InjectParameterDependency] MockService service,
             string optional = "default") =>
             optional.Should().NotBeNull();
 
@@ -57,14 +57,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [CombinatorialTestCase(10)]
         [CombinatorialTestCase(11)]
-        public void Inject_From_Container_And_Case([InjectDependency] MockService service, int value)
+        public void Inject_From_Container_And_Case([InjectParameterDependency] MockService service, int value)
         {
             service.Should().NotBeNull();
             value.Should().BePositive();
         }
 
         [CombinatorialTestCase]
-        public void Inject_From_Container([InjectDependency] MockService service) => service.Should().NotBeNull();
+        public void Inject_From_Container([InjectParameterDependency] MockService service) => service.Should().NotBeNull();
 
         [CombinatorialTestCase]
         public void Inject_From_Provider([Values(1, 2)] int value) => value.Should().BePositive();

@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [TestFixture]
     internal class Inject_AsyncGenericProvider_Should : IFixtureWithServiceProviderFramework
     {
-        [FieldDependency]
+        [InjectFieldDependency]
         private readonly IAsyncLocalServiceProvider<MockService> service = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) => serviceCollection

@@ -12,11 +12,11 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     {
         [Test]
         [Repeat(2)]
-        public void Case([InjectDependency] IMockService service) => service.Should().NotBeNull();
+        public void Case([InjectParameterDependency] IMockService service) => service.Should().NotBeNull();
 
         [TestCase(10)]
         [TestCase(11)]
         [Repeat(2)]
-        public void Cases([InjectDependency] IMockService service, int value) => service.Should().NotBeNull();
+        public void Cases([InjectParameterDependency] IMockService service, int value) => service.Should().NotBeNull();
     }
 }

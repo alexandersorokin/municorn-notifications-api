@@ -16,7 +16,7 @@ namespace Municorn.Notifications.Api.Tests.ApiTests
             .AddSingleton<ITextWriterProvider, AdHocTextWriterProvider>()
             .AddSingleton<ILog, TextWriterLog>();
 
-        [field: FieldDependency]
+        [field: InjectFieldDependency]
         internal ILog BoundLog { get; } = default!;
     }
 }

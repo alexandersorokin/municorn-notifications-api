@@ -16,7 +16,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
 
         [CombinatorialTestCaseSource(nameof(CaseValues))]
         [Repeat(2)]
-        public void Cases(int value, [InjectDependency] MockService service) => service.Should().NotBeNull();
+        public void Cases(int value, [InjectParameterDependency] MockService service) => service.Should().NotBeNull();
 
         private static readonly TestCaseData[] CaseValues =
         {

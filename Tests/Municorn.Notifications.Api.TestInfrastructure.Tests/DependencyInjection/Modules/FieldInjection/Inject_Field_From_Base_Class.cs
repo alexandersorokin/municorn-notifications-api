@@ -11,7 +11,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
         {
         }
 
-        [field: FieldDependency]
+        [field: InjectFieldDependency]
         protected MockService Service { get; } = default!;
     }
 }
