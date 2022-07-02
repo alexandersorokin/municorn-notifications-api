@@ -15,8 +15,6 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
     {
         private readonly ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks;
 
-        bool IReflectionInfo.IsDefined<T>(bool inherit) => this.IsDefined<T>(inherit);
-
         T[] IReflectionInfo.GetCustomAttributes<T>(bool inherit)
             where T : class
         {
