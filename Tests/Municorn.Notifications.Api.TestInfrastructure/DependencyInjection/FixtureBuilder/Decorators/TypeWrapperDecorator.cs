@@ -20,16 +20,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
         private readonly ConditionalWeakTable<ITest, FixtureServiceProviderMap> scopedServiceProviders = new();
         private readonly ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks = new();
 
-        private readonly ITypeInfo originalTypeInfo;
-        private readonly Type originalType;
+        private readonly ITypeInfo originalType;
         private readonly Type wrappedType;
         private readonly object?[] arguments;
 
-        public TypeWrapperDecorator(ITypeInfo originalTypeInfo, object?[] arguments, Type[] typeArgs)
+        public TypeWrapperDecorator(ITypeInfo originalType, object?[] arguments, Type[] typeArgs)
         {
-            this.originalTypeInfo = originalTypeInfo;
-            this.originalType = originalTypeInfo.Type;
-            if (originalTypeInfo.Type.ContainsGenericParameters && !typeArgs.Any())
+            this.originalType = originalType;
+            if (originalType.Type.ContainsGenericParameters && !typeArgs.Any())
             {
                 arguments = arguments
                     .SkipWhile(arg => arg?.GetType().IsAssignableTo(typeof(Type)) == true)
@@ -37,70 +35,67 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
             }
 
             this.arguments = arguments;
-            this.wrappedType = new LimitingConstructorParametersTypeDecorator(originalTypeInfo.Type, arguments);
+            this.wrappedType = new LimitingConstructorParametersTypeDecorator(originalType.Type, arguments);
         }
+
+        ITypeInfo? ITypeInfo.BaseType => this.originalType.BaseType;
+
+        string ITypeInfo.Name => this.originalType.Name;
+
+        string ITypeInfo.FullName => this.originalType.FullName;
+
+        Assembly ITypeInfo.Assembly => this.originalType.Assembly;
+
+        string ITypeInfo.Namespace => this.originalType.Namespace;
+
+        bool ITypeInfo.IsAbstract => this.originalType.IsAbstract;
+
+        bool ITypeInfo.IsGenericType => this.originalType.IsGenericType;
+
+        bool ITypeInfo.ContainsGenericParameters => this.originalType.ContainsGenericParameters;
+
+        bool ITypeInfo.IsGenericTypeDefinition => this.originalType.IsGenericTypeDefinition;
+
+        bool ITypeInfo.IsSealed => this.originalType.IsSealed;
+
+        bool ITypeInfo.IsStaticClass => this.originalType.IsStaticClass;
+
+        bool ITypeInfo.IsType(Type type) => this.originalType.IsType(type);
+
+        string ITypeInfo.GetDisplayName() => this.originalType.GetDisplayName();
+
+        string ITypeInfo.GetDisplayName(object?[]? args) => this.originalType.GetDisplayName(args);
+
+        Type ITypeInfo.GetGenericTypeDefinition() => this.originalType.GetGenericTypeDefinition();
+
+        T[] IReflectionInfo.GetCustomAttributes<T>(bool inherit) => this.originalType.GetCustomAttributes<T>(inherit);
+
+        bool IReflectionInfo.IsDefined<T>(bool inherit) => this.originalType.IsDefined<T>(inherit);
+
+        bool ITypeInfo.HasMethodWithAttribute(Type attrType) => this.originalType.HasMethodWithAttribute(attrType);
+
+        ConstructorInfo? ITypeInfo.GetConstructor(Type[] argTypes) => this.originalType.GetConstructor(argTypes);
+
+        bool ITypeInfo.HasConstructor(Type[] argTypes) => this.originalType.HasConstructor(argTypes);
 
         Type ITypeInfo.Type => this.wrappedType;
 
-        ITypeInfo? ITypeInfo.BaseType => this.originalTypeInfo.BaseType;
-
-        string ITypeInfo.Name => this.originalTypeInfo.Name;
-
-        string ITypeInfo.FullName => this.originalTypeInfo.FullName;
-
-        Assembly ITypeInfo.Assembly => this.originalTypeInfo.Assembly;
-
-        string ITypeInfo.Namespace => this.originalTypeInfo.Namespace;
-
-        bool ITypeInfo.IsAbstract => this.originalTypeInfo.IsAbstract;
-
-        bool ITypeInfo.IsGenericType => this.originalTypeInfo.IsGenericType;
-
-        bool ITypeInfo.ContainsGenericParameters => this.originalTypeInfo.ContainsGenericParameters;
-
-        bool ITypeInfo.IsGenericTypeDefinition => this.originalTypeInfo.IsGenericTypeDefinition;
-
-        bool ITypeInfo.IsSealed => this.originalTypeInfo.IsSealed;
-
-        bool ITypeInfo.IsStaticClass => this.originalTypeInfo.IsStaticClass;
-
-        bool ITypeInfo.IsType(Type type) => this.originalTypeInfo.IsType(type);
-
-        string ITypeInfo.GetDisplayName() => this.originalTypeInfo.GetDisplayName();
-
-        string ITypeInfo.GetDisplayName(object?[]? args) => this.originalTypeInfo.GetDisplayName(args);
-
-        Type ITypeInfo.GetGenericTypeDefinition() => this.originalTypeInfo.GetGenericTypeDefinition();
-
-        T[] IReflectionInfo.GetCustomAttributes<T>(bool inherit) => this.originalTypeInfo.GetCustomAttributes<T>(inherit);
-
-        bool IReflectionInfo.IsDefined<T>(bool inherit) => this.originalTypeInfo.IsDefined<T>(inherit);
-
         ITypeInfo ITypeInfo.MakeGenericType(Type[] typeArgs) =>
             new TypeWrapperDecorator(
-                this.originalTypeInfo.MakeGenericType(typeArgs),
+                this.originalType.MakeGenericType(typeArgs),
                 this.arguments,
                 Array.Empty<Type>());
 
-        bool ITypeInfo.HasMethodWithAttribute(Type attrType)
-        {
-            return this.originalTypeInfo.HasMethodWithAttribute(attrType);
-        }
-
         IMethodInfo[] ITypeInfo.GetMethods(BindingFlags flags) => this
-            .originalTypeInfo
+            .originalType
             .GetMethods(flags)
             .Select(methodInfo => new ModifyAttributesTestMethodWrapperDecorator(this.frameworks, methodInfo))
             .ToArray<IMethodInfo>();
 
-        ConstructorInfo? ITypeInfo.GetConstructor(Type[] argTypes) => this.originalTypeInfo.GetConstructor(argTypes);
-
-        bool ITypeInfo.HasConstructor(Type[] argTypes) => this.originalTypeInfo.HasConstructor(argTypes);
-
         IMethodInfo[] ITypeInfo.GetMethodsWithAttribute<T>(bool inherit)
             where T : class
         {
-            var result = this.originalTypeInfo.GetMethodsWithAttribute<T>(inherit);
+            var result = this.originalType.GetMethodsWithAttribute<T>(inherit);
 
             HashSet<Type> fixtureMethods = new()
             {
@@ -146,7 +141,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
 
             FixtureServiceProviderFramework framework = new(serviceCollection => serviceCollection
                 .AddSingleton(fixtureAccessor)
-                .AddSingleton(new FixtureFactoryArgs(this.originalType, args ?? Array.Empty<object>()))
+                .AddSingleton(new FixtureFactoryArgs(this.originalType.Type, args ?? Array.Empty<object>()))
                 .AddSingleton<IFixtureOneTimeSetUpService, FixtureFactory>()
                 .AddSingleton<IFixtureProvider>(fixtureAccessor)
                 .AddSingleton<ITest>(currentTest)
@@ -155,7 +150,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                 .AddSingleton<IFixtureOneTimeSetUpService, FixtureServiceProviderSaver>()
                 .AddSingleton(this.scopedServiceProviders)
                 .AddScoped<IFixtureSetUpService, ScopeServiceProviderSaver>()
-                .AddFixtureServiceCollectionModuleAttributes(this.originalTypeInfo));
+                .AddFixtureServiceCollectionModuleAttributes(this.originalType));
 
             try
             {
