@@ -7,19 +7,19 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.FieldInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.Combo
 {
-    internal class Register_Scoped_Field_Dependency_ImplementationType_Should : FrameworkServiceProviderFixtureBase
+    internal class Register_Scoped_Field_Dependency_Should : FrameworkServiceProviderFixtureBase
     {
         [FieldDependency]
-        [RegisterDependency(typeof(MockService))]
-        private readonly IAsyncLocalServiceProvider<IMockService> service = default!;
+        [RegisterDependency]
+        private readonly IAsyncLocalServiceProvider<MockService> service = default!;
 
-        public Register_Scoped_Field_Dependency_ImplementationType_Should()
+        public Register_Scoped_Field_Dependency_Should()
             : base(serviceCollection => serviceCollection
                 .AddSingleton<ITest>(TestExecutionContext.CurrentContext.CurrentTest)
                 .AddTestCommunication()
-                .AddFieldInjection(typeof(Register_Scoped_Field_Dependency_ImplementationType_Should)))
+                .AddFieldInjection(typeof(Register_Scoped_Field_Dependency_Should)))
         {
         }
 

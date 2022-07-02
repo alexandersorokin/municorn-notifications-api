@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureBuilder;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Combo;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using NUnit.Framework;
 
@@ -11,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     [PrimaryConstructor]
     internal partial class Register_Field_Dependency_Should
     {
-        [RegisterDependency]
+        [RegisterFieldDependency]
         private readonly MockService service;
 
         [Test]

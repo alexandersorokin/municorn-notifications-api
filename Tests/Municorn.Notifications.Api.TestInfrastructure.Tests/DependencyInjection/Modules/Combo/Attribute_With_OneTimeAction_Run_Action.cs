@@ -4,7 +4,7 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FixtureOneTimeActions;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.FieldInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.Combo
 {
     [FieldInjectionWithFixtureOneTimeActionsModule]
     internal class Attribute_With_OneTimeAction_Run_Action : FrameworkServiceProviderFixtureBase, IOneTimeSetUpAction

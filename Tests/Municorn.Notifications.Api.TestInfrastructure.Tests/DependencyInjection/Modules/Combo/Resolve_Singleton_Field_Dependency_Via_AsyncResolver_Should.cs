@@ -6,7 +6,7 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.FieldInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.Combo
 {
     internal class Resolve_Singleton_Field_Dependency_Via_AsyncResolver_Should : FrameworkServiceProviderFixtureBase
     {

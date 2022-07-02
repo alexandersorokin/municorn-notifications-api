@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureActions;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Combo;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using NUnit.Framework;
 
@@ -11,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjectio
     internal class Register_Field_Dependency_ImplementationType_Should : IFixtureWithServiceProviderFramework
     {
         [FieldDependency]
-        [RegisterDependency(typeof(MockService))]
+        [RegisterFieldDependency(typeof(MockService))]
         private readonly IMockService service = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) =>

@@ -6,14 +6,14 @@ using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.Modules.Fields
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.FixtureActions.Modules.Combo
 {
     [TestFixture]
-    internal class Register_Scoped_Field_Dependency_ImplementationType_Should : IFixtureWithServiceProviderFramework
+    internal class Register_Scoped_Field_Dependency_Should : IFixtureWithServiceProviderFramework
     {
         [FieldDependency]
-        [RegisterDependency(typeof(MockService))]
-        private readonly IAsyncLocalServiceProvider<IMockService> service = default!;
+        [RegisterDependency]
+        private readonly IAsyncLocalServiceProvider<MockService> service = default!;
 
         public void ConfigureServices(IServiceCollection serviceCollection) =>
             serviceCollection

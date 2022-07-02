@@ -1,18 +1,19 @@
 ﻿using FluentAssertions;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Combo;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 using NUnit.Framework;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.FieldInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.Combo
 {
-    internal class Register_Field_Dependency_Should : FrameworkServiceProviderFixtureBase
+    internal class Register_Combo_Field_Dependency_Should : FrameworkServiceProviderFixtureBase
     {
         [FieldDependency]
-        [RegisterFieldDependency]
+        [RegisterDependency]
         private readonly MockService service = default!;
 
-        public Register_Field_Dependency_Should()
+        public Register_Combo_Field_Dependency_Should()
             : base(serviceCollection => serviceCollection
-                .AddFieldInjection(typeof(Register_Field_Dependency_Should)))
+                .AddFieldInjection(typeof(Register_Combo_Field_Dependency_Should)))
         {
         }
 

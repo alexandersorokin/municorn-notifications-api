@@ -9,7 +9,7 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.FieldInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection.Modules.Combo
 {
     internal sealed class Register_Scoped_Field_Dependency_AsScoped_Should : FrameworkServiceProviderFixtureBase, IDisposable
     {
