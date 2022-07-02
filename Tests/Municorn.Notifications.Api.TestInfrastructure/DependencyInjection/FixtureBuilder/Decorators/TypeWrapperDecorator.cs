@@ -21,20 +21,16 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
         private readonly ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks = new();
 
         private readonly ITypeInfo originalType;
-        private readonly Type wrappedType;
         private readonly object?[] arguments;
+        private readonly Type[] fixtureTypeArgs;
+        private readonly Type wrappedType;
 
-        public TypeWrapperDecorator(ITypeInfo originalType, object?[] arguments, Type[] typeArgs)
+        public TypeWrapperDecorator(ITypeInfo originalType, object?[] arguments, Type[] fixtureTypeArgs)
         {
             this.originalType = originalType;
-            if (originalType.Type.ContainsGenericParameters && !typeArgs.Any())
-            {
-                arguments = arguments
-                    .SkipWhile(arg => arg?.GetType().IsAssignableTo(typeof(Type)) == true)
-                    .ToArray();
-            }
-
             this.arguments = arguments;
+            this.fixtureTypeArgs = fixtureTypeArgs;
+
             this.wrappedType = new LimitingConstructorParametersTypeDecorator(originalType.Type, arguments);
         }
 
@@ -80,11 +76,19 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
 
         Type ITypeInfo.Type => this.wrappedType;
 
-        ITypeInfo ITypeInfo.MakeGenericType(Type[] typeArgs) =>
-            new TypeWrapperDecorator(
+        ITypeInfo ITypeInfo.MakeGenericType(Type[] typeArgs)
+        {
+            var args = this.fixtureTypeArgs.Any()
+                ? this.arguments
+                : this.arguments
+                    .SkipWhile((arg, i) => i < typeArgs.Length && typeArgs[i].Equals(arg))
+                    .ToArray();
+
+            return new TypeWrapperDecorator(
                 this.originalType.MakeGenericType(typeArgs),
-                this.arguments,
+                args,
                 Array.Empty<Type>());
+        }
 
         IMethodInfo[] ITypeInfo.GetMethods(BindingFlags flags) => this
             .originalType
