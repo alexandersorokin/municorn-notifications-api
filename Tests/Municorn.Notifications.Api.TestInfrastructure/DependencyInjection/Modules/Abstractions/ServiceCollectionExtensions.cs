@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework.Interfaces;
-using NUnit.Framework.Internal;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions
 {
@@ -11,18 +11,12 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
         public static IServiceCollection AddFixtureProvider(this IServiceCollection serviceCollection, object fixture) =>
             serviceCollection.AddSingleton<IFixtureProvider>(new FixtureProvider(fixture));
 
-        public static IServiceCollection AddFixtureServiceCollectionModuleAttributes(this IServiceCollection serviceCollection, Type type) =>
-            serviceCollection.AddFixtureServiceCollectionModuleAttributes(new TypeWrapper(type));
-
-        internal static IServiceCollection AddFixtureServiceCollectionModuleAttributes(this IServiceCollection serviceCollection, ITypeInfo typeInfo)
+        public static IServiceCollection AddFixtureServiceCollectionModuleAttributes(this IServiceCollection serviceCollection, Type type)
         {
-            var type = typeInfo.Type;
             var customAttributes = type
                 .GetInterfaces()
-                .SelectMany(interfaceType => interfaceType
-                    .GetCustomAttributes(typeof(IFixtureServiceCollectionModule), false)
-                    .Cast<IFixtureServiceCollectionModule>())
-                .Concat(typeInfo.GetCustomAttributes<IFixtureServiceCollectionModule>(true));
+                .SelectMany(interfaceType => interfaceType.GetAttributes<IFixtureServiceCollectionModule>(false))
+                .Concat(type.GetAttributes<IFixtureServiceCollectionModule>(true));
             foreach (var module in customAttributes)
             {
                 module.ConfigureServices(serviceCollection, type);
@@ -30,5 +24,8 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
 
             return serviceCollection;
         }
+
+        internal static IEnumerable<T> GetAttributes<T>(this ICustomAttributeProvider attributeProvider, bool inherit)
+            where T : class => attributeProvider.GetCustomAttributes(typeof(T), inherit).Cast<T>();
     }
 }

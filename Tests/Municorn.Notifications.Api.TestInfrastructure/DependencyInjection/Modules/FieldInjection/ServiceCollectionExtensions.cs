@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
-using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.TestCommunication;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection
 {
@@ -34,23 +34,14 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
 
         private static void AddServices(IServiceCollection serviceCollection, IEnumerable<FieldInfo> fields)
         {
-            var serviceTypes =
+            var modules =
                 from field in fields
-                from attribute in field.GetCustomAttributes<RegisterDependencyAttribute>()
-                select (field.FieldType, attribute.ImplementationType);
+                from module in field.GetAttributes<IFieldServiceCollectionModule>(false)
+                select (field, module);
 
-            foreach (var (serviceType, implementationType) in serviceTypes)
+            foreach (var (field, module) in modules)
             {
-                if (serviceType.IsConstructedGenericType &&
-                    serviceType.GetGenericTypeDefinition() == typeof(IAsyncLocalServiceProvider<>))
-                {
-                    var genericArgument = serviceType.GenericTypeArguments.Single();
-                    serviceCollection.AddScoped(genericArgument, implementationType ?? genericArgument);
-                }
-                else
-                {
-                    serviceCollection.AddSingleton(serviceType, implementationType ?? serviceType);
-                }
+                module.ConfigureServices(serviceCollection, field);
             }
         }
     }

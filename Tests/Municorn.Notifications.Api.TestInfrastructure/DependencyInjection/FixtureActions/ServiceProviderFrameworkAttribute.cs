@@ -67,7 +67,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
                     .AddFixtureProvider(testFixture)
                     .AddSingleton(test)
                     .AddFixtures(test)
-                    .AddFixtureServiceCollectionModuleAttributes(test.TypeInfo ?? throw new InvalidOperationException("No TypeInfo is found at service collection configuration"));
+                    .AddFixtureServiceCollectionModuleAttributes(test.TypeInfo?.Type ?? throw new InvalidOperationException("No TypeInfo is found at service collection configuration"));
                 testFixture.ConfigureServices(serviceCollection);
             });
 
