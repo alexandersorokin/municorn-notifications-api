@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
 using Municorn.Notifications.Api.TestInfrastructure.NUnitAttributes;
@@ -10,18 +11,46 @@ using NUnit.Framework.Internal.Commands;
 
 namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.FixtureBuilder.Decorators
 {
-    internal class ModifyAttributesTestMethodWrapperDecorator : MethodWrapper, IReflectionInfo
+    [PrimaryConstructor]
+    internal partial class ModifyAttributesTestMethodWrapperDecorator : IMethodInfo
     {
+        private readonly IMethodInfo methodInfo;
         private readonly ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks;
 
-        internal ModifyAttributesTestMethodWrapperDecorator(IMethodInfo methodInfo, ConditionalWeakTable<object, FixtureServiceProviderFramework> frameworks)
-            : base(methodInfo.TypeInfo.Type, methodInfo.MethodInfo) =>
-            this.frameworks = frameworks;
+        bool IReflectionInfo.IsDefined<T>(bool inherit) => this.methodInfo.IsDefined<T>(inherit);
+
+        IParameterInfo[] IMethodInfo.GetParameters() => this.methodInfo.GetParameters();
+
+        Type[] IMethodInfo.GetGenericArguments() => this.methodInfo.GetGenericArguments();
+
+        IMethodInfo IMethodInfo.MakeGenericMethod(params Type[] typeArguments) => this.methodInfo.MakeGenericMethod(typeArguments);
+
+        object? IMethodInfo.Invoke(object? fixture, params object?[]? args) => this.methodInfo.Invoke(fixture, args);
+
+        ITypeInfo IMethodInfo.TypeInfo => this.methodInfo.TypeInfo;
+
+        MethodInfo IMethodInfo.MethodInfo => this.methodInfo.MethodInfo;
+
+        string IMethodInfo.Name => this.methodInfo.Name;
+
+        bool IMethodInfo.IsAbstract => this.methodInfo.IsAbstract;
+
+        bool IMethodInfo.IsPublic => this.methodInfo.IsPublic;
+
+        bool IMethodInfo.IsStatic => this.methodInfo.IsStatic;
+
+        bool IMethodInfo.ContainsGenericParameters => this.methodInfo.ContainsGenericParameters;
+
+        bool IMethodInfo.IsGenericMethod => this.methodInfo.IsGenericMethod;
+
+        bool IMethodInfo.IsGenericMethodDefinition => this.methodInfo.IsGenericMethodDefinition;
+
+        ITypeInfo IMethodInfo.ReturnType => this.methodInfo.ReturnType;
 
         T[] IReflectionInfo.GetCustomAttributes<T>(bool inherit)
             where T : class
         {
-            var customAttributes = this.GetCustomAttributes<T>(inherit);
+            var customAttributes = this.methodInfo.GetCustomAttributes<T>(inherit);
             if (typeof(T) == typeof(IApplyToContext))
             {
                 return customAttributes.Append((T)(object)new FirstSetUpAction(this.frameworks)).ToArray();

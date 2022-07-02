@@ -10,7 +10,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Fixt
         private readonly Type implementation;
         private readonly object?[] arguments;
 
-        internal LimitingConstructorParametersTypeDecorator(Type implementation, object?[] arguments)
+        public LimitingConstructorParametersTypeDecorator(Type implementation, object?[] arguments)
         {
             this.implementation = implementation;
             this.arguments = arguments;
