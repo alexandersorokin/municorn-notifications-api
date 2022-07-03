@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection;
 
-namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.FieldInjection
+namespace Municorn.Notifications.Api.TestInfrastructure.Tests.DependencyInjection
 {
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field)]
     public sealed class RegisterFieldDependencyAsSingletonAttribute : Attribute, IFieldServiceCollectionModule
