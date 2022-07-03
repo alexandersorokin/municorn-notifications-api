@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Framework;
 using Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modules.Abstractions;
@@ -16,7 +15,7 @@ namespace Municorn.Notifications.Api.TestInfrastructure.DependencyInjection.Modu
 
         public void Run()
         {
-            foreach (var field in this.fieldInfoProvider.Fields.Where(field => field.GetCustomAttribute<InjectFieldDependencyAttribute>() != null))
+            foreach (var field in this.fieldInfoProvider.Fields.Where(field => field.GetAttributes<IInjectFieldDependency>(true).Any()))
             {
                 var value = this.serviceProvider.GetRequiredService(field.FieldType);
                 field.SetValue(this.fixtureProvider.Fixture, value);
